@@ -2,18 +2,6 @@ package org.atriasoft.etk.math;
 
 public class Transform3D {
 	protected Vector3f position; //! Position
-	public Vector3f getPosition() {
-		return position;
-	}
-	public void setPosition(Vector3f position) {
-		this.position = position;
-	}
-	public Quaternion getOrientation() {
-		return orientation;
-	}
-	public void setOrientation(Quaternion orientation) {
-		this.orientation = orientation;
-	}
 	protected Quaternion orientation; //!< Orientation
 	public Transform3D() {
 		this.position = Vector3f.zero();
@@ -34,6 +22,19 @@ public class Transform3D {
 	public Transform3D(Transform3D transform3d) {
 		this.position = transform3d.position.clone();
 		this.orientation = transform3d.orientation.clone();
+	}
+	
+	public Vector3f getPosition() {
+		return position;
+	}
+	public void setPosition(Vector3f position) {
+		this.position = position;
+	}
+	public Quaternion getOrientation() {
+		return orientation;
+	}
+	public void setOrientation(Quaternion orientation) {
+		this.orientation = orientation;
 	}
 	/**
 	 * @brief Get the identity of the transformation
@@ -58,23 +59,6 @@ public class Transform3D {
 	public Matrix4f getOpenGLMatrix() {
 		Matrix4f out = new Matrix4f();
 		Matrix3f tmpMatrix = this.orientation.getMatrix();
-		// version transposer...
-//		out.mat[0] = tmpMatrix.mat[0];
-//		out.mat[1] = tmpMatrix.mat[3];
-//		out.mat[2] = tmpMatrix.mat[6];
-//		out.mat[3] = 0.0f;
-//		out.mat[4] = tmpMatrix.mat[1];
-//		out.mat[5] = tmpMatrix.mat[4];
-//		out.mat[6] = tmpMatrix.mat[7];
-//		out.mat[7] = 0.0f;
-//		out.mat[8] = tmpMatrix.mat[2];
-//		out.mat[9] = tmpMatrix.mat[5];
-//		out.mat[10] = tmpMatrix.mat[8];
-//		out.mat[11] = 0.0f;
-//		out.mat[12] = this.position.x;
-//		out.mat[13] = this.position.y;
-//		out.mat[14] = this.position.z;
-//		out.mat[15] = 1.0f;
 		out.mat[0] = tmpMatrix.mat[0];
 		out.mat[1] = tmpMatrix.mat[1];
 		out.mat[2] = tmpMatrix.mat[2];
@@ -93,29 +77,59 @@ public class Transform3D {
 		out.mat[15] = 1.0f;
 		return out;
 	}
+	/// Get the OpenGL matrix of the transform
+	public Matrix4f getOpenGLMatrixTransposed() {
+		Matrix4f out = new Matrix4f();
+		Matrix3f tmpMatrix = this.orientation.getMatrix();
+		// version transposer...
+		out.mat[0] = tmpMatrix.mat[0];
+		out.mat[1] = tmpMatrix.mat[3];
+		out.mat[2] = tmpMatrix.mat[6];
+		out.mat[3] = 0.0f;
+		out.mat[4] = tmpMatrix.mat[1];
+		out.mat[5] = tmpMatrix.mat[4];
+		out.mat[6] = tmpMatrix.mat[7];
+		out.mat[7] = 0.0f;
+		out.mat[8] = tmpMatrix.mat[2];
+		out.mat[9] = tmpMatrix.mat[5];
+		out.mat[10] = tmpMatrix.mat[8];
+		out.mat[11] = 0.0f;
+		out.mat[12] = this.position.x;
+		out.mat[13] = this.position.y;
+		out.mat[14] = this.position.z;
+		out.mat[15] = 1.0f;
+		return out;
+	}
 	/// Return the inverse of the transform
 	public Transform3D inverseNew() {
 		Quaternion invQuaternion = this.orientation.inverseNew();
 		Matrix3f invMatrix = invQuaternion.getMatrix();
-		return new Transform3D(invMatrix.multiply(this.position.multiplyNew(-1)), invQuaternion);
+		return new Transform3D(invMatrix.multiplyNew(this.position.multiplyNew(-1)), invQuaternion);
 	}
 	/// Return an interpolated transform
-	public Transform3D interpolateTransforms(Transform3D old,
-			Transform3D newOne,
-			float interpolationFactor) {
-		Vector3f interPosition = old.position.multiplyNew(1.0f - interpolationFactor)
-				.add(newOne.position.multiplyNew(interpolationFactor));
-		Quaternion interOrientation = Quaternion.slerp(old.orientation,
-				newOne.orientation, interpolationFactor);
+	public Transform3D interpolateTransforms(Transform3D newOne, float interpolationFactor) {
+		Vector3f interPosition = this.position.multiplyNew(1.0f - interpolationFactor).add(newOne.position.multiplyNew(interpolationFactor));
+		Quaternion interOrientation = this.orientation.slerp(newOne.orientation, interpolationFactor);
 		return new Transform3D(interPosition, interOrientation);
 	}
 	/// Return the transformed vector
 	public Vector3f multiply(Vector3f vector) {
-		return this.orientation.getMatrix().multiply(vector).add(this.position);
+		return this.orientation.getMatrix().multiplyNew(vector).add(this.position);
+	}
+	/// Return the transformed vector
+	public Vector3f multiplyNew(Vector3f vector) {
+		return new Matrix3f(this.orientation.getMatrix()).multiplyNew(vector).add(this.position);
 	}
 	/// Operator of multiplication of a transform with another one
+	/*
+	public Transform3D multiply(Transform3D transform2) {
+		this.position = this.orientation.getMatrix().multiply(transform2.position).add(this.position);
+		this.orientation.multiply(transform2.orientation);
+	}
+	*/
+	/// Operator of multiplication of a transform with another one
 	public Transform3D multiplyNew(Transform3D transform2) {
-		return new Transform3D(this.orientation.getMatrix().multiply(transform2.position).add(this.position),
+		return new Transform3D(this.orientation.getMatrix().multiplyNew(transform2.position).add(this.position),
 		                       this.orientation.multiplyNew(transform2.orientation));
 	}
 	/// Return true if the two transforms are equal
@@ -145,5 +159,28 @@ public class Transform3D {
 	}
 	public void applyRotation(Quaternion rotation) {
 		this.orientation = this.orientation.multiply(rotation);
+	}
+	
+	@Override
+	public int hashCode() {
+		int hash = 38542;
+		hash += this.position.hashCode();
+		hash += this.orientation.hashCode();
+		return hash;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Transform3D other = (Transform3D) obj;
+		if (!this.position.equals(position)) {
+			return false;
+		}
+		return this.orientation.equals(other.orientation);
 	}
 }

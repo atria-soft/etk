@@ -3,7 +3,7 @@ package org.atriasoft.etk.internal;
 import io.scenarium.logger.LogLevel;
 import io.scenarium.logger.Logger;
 
-public class Log {
+class Log {
 	private static final String LIB_NAME = "etk";
 	private static final String LIB_NAME_DRAW = Logger.getDrawableName(LIB_NAME);
 	private static final boolean PRINT_CRITICAL = Logger.getNeedPrint(LIB_NAME, LogLevel.CRITICAL);

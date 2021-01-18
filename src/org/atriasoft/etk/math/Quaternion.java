@@ -307,6 +307,40 @@ public class Quaternion {
 		this.w = w;
 		return this;
 	}
+	/**
+	 * @brief Constructor from scalars.
+	 * @param xxx X value
+	 * @param yyy Y value
+	 * @param zzz Z value
+	 * @param www W value */
+	public Quaternion set(float xxx, float yyy, float zzz, float www) {
+		this.x = xxx;
+		this.y = yyy;
+		this.z = zzz;
+		this.w = www;
+		return this;
+	}
+	
+	public Quaternion set(Quaternion obj) {
+		x = obj.x;
+		y = obj.y;
+		z = obj.z;
+		w = obj.w;
+		return this;
+	}
+	
+	/**
+	 * @brief Constructor with the component w and a vector 3D.
+	 * @param www W value
+	 * @param vec 3D vector value
+	 */
+	public Quaternion set(float www, Vector3f obj) {
+		x = obj.x;
+		y = obj.y;
+		z = obj.z;
+		this.w = www;
+		return this;
+	}
 
 	/** @brief Equality compare operator with an other object.
 	 * @param obj Reference on the comparing object
@@ -434,12 +468,13 @@ public class Quaternion {
 	}
 
 	/** @brief Inverse the quaternion */
-	public void inverse() {
+	public Quaternion inverse() {
 		float invLengthSquare = 1.0f / length2();
 		this.x *= -invLengthSquare;
 		this.y *= -invLengthSquare;
 		this.z *= -invLengthSquare;
 		this.w *= invLengthSquare;
+		return this;
 	}
 
 	/** @brief Return the inverse of the quaternion
@@ -457,10 +492,11 @@ public class Quaternion {
 	}
 
 	/** @brief Conjugate the quaternion */
-	public void conjugate() {
+	public Quaternion conjugate() {
 		this.x *= -1.0f;
 		this.y *= -1.0f;
 		this.z *= -1.0f;
+		return this;
 	}
 
 	/** @brief Return the conjugate of the quaternion
@@ -504,6 +540,26 @@ public class Quaternion {
 		float zzs = this.z * zs;
 		return new Matrix3f(1.0f - yys - zzs, xys - wzs, xzs + wys, xys + wzs, 1.0f - xxs - zzs, yzs - wxs, xzs - wys, yzs + wxs, 1.0f - xxs - yys);
 	}
+	public void getMatrixTo(Matrix3f out) {
+		float nQ = this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w;
+		float sss = 0.0f;
+		if (nQ > 0.0f) {
+			sss = 2.0f / nQ;
+		}
+		float xs = this.x * sss;
+		float ys = this.y * sss;
+		float zs = this.z * sss;
+		float wxs = this.w * xs;
+		float wys = this.w * ys;
+		float wzs = this.w * zs;
+		float xxs = this.x * xs;
+		float xys = this.x * ys;
+		float xzs = this.x * zs;
+		float yys = this.y * ys;
+		float yzs = this.y * zs;
+		float zzs = this.z * zs;
+		out.set(1.0f - yys - zzs, xys - wzs, xzs + wys, xys + wzs, 1.0f - xxs - zzs, yzs - wxs, xzs - wys, yzs + wxs, 1.0f - xxs - yys);
+	}
 
 	public Matrix4f getMatrix4() {
 
@@ -531,22 +587,22 @@ public class Quaternion {
 	 * @param obj1 First quaternion
 	 * @param obj2 Second quaternion
 	 * @param ttt linar coefficient interpolation to be such that [0..1] */
-	public static Quaternion slerp(Quaternion obj1, Quaternion obj2, float ttt) {
+	public Quaternion slerp(Quaternion obj2, float ttt) {
 		// TKASSERT(ttt >= 0.0f ttt <= 1.0f, "wrong intermolation");
 		float invert = 1.0f;
-		float cosineTheta = obj1.dot(obj2);
+		float cosineTheta = this.dot(obj2);
 		if (cosineTheta < 0.0f) {
 			cosineTheta = -cosineTheta;
 			invert = -1.0f;
 		}
 		if (1 - cosineTheta < 0.00001f) {
-			return obj1.multiplyNew(1.0f - ttt).add(obj2.multiplyNew(ttt * invert));
+			return this.multiplyNew(1.0f - ttt).add(obj2.multiplyNew(ttt * invert));
 		}
 		float theta = (float) Math.acos(cosineTheta);
 		float sineTheta = (float) Math.sin(theta);
 		float coeff1 = (float) Math.sin((1.0f - ttt) * theta) / sineTheta;
 		float coeff2 = (float) Math.sin(ttt * theta) / sineTheta * invert;
-		return obj1.multiplyNew(coeff1).add(obj2.multiplyNew(coeff2));
+		return this.multiplyNew(coeff1).add(obj2.multiplyNew(coeff2));
 	}
 
 	/** @brief Configure the quaternion with euler angles.
@@ -572,6 +628,33 @@ public class Quaternion {
 		normalize();
 	}
 
+
+	// Compute the rotation angle (in radians) and the rotation axis
+	// This method is used to get the rotation angle (in radian) and the unit
+	// rotation axis of an orientation quaternion.
+	/*
+	public Vector3f getRotationAngleAxis(Vector3f axis, float[] angle) {
+		Quaternion quaternion;
+		// If the quaternion is unit
+		if (length() == 1.0) {
+			quaternion = this;
+		} else {
+			// We compute the unit quaternion
+			quaternion = new Quaternion(this).normalize();
+		}
+		// Compute the roation angle
+		angle[0] = Mathematics.ArcCos(quaternion.w) * 2.0f;
+		// Compute the 3D rotation axis
+		Vector3f rotationAxis = new Vector3f(quaternion.x, quaternion.y, quaternion.z);
+		// Normalize the rotation axis
+		rotationAxis.normalize();
+		// Set the rotation axis values
+		return axis.set(rotationAxis);
+	}
+	*/
+
+
+
 	/** @brief Clone the current Quaternion.
 	 * @return New Quaternion containing the value */
 	@Override
@@ -589,5 +672,35 @@ public class Quaternion {
 		// Log.info("diff " + a + " " + b);
 		Quaternion inv = a.inverseNew();
 		return inv.multiply(b);
+	}
+	@Override
+	public int hashCode() {
+		int hash = 7564;
+		hash += Float.floatToIntBits(this.x);
+		hash += Float.floatToIntBits(this.y);
+		hash += Float.floatToIntBits(this.z);
+		hash += Float.floatToIntBits(this.w);
+		return hash;
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj == null) {
+			return false;
+		}
+		if (getClass() != obj.getClass()) {
+			return false;
+		}
+		final Quaternion other = (Quaternion) obj;
+		if (Float.floatToIntBits(this.x) != Float.floatToIntBits(other.x)) {
+			return false;
+		}
+		if (Float.floatToIntBits(this.y) != Float.floatToIntBits(other.y)) {
+			return false;
+		}
+		if (Float.floatToIntBits(this.z) != Float.floatToIntBits(other.z)) {
+			return false;
+		}
+		return Float.floatToIntBits(this.w) == Float.floatToIntBits(other.w);
 	}
 }
