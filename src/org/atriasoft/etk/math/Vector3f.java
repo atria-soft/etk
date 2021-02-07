@@ -58,9 +58,9 @@ public class Vector3f {
 	 * @param obj The vector to add to this one
 	 */
 	public Vector3f(final Vector3f obj) {
-		this.x += obj.x;
-		this.y += obj.y;
-		this.z += obj.z;
+		this.x = obj.x;
+		this.y = obj.y;
+		this.z = obj.z;
 	}
 	
 	/**
@@ -573,9 +573,7 @@ public class Vector3f {
 	 * @return New vector containing the value
 	 */
 	public Vector3f normalizeNew() {
-		final Vector3f out = new Vector3f(this);
-		out.normalize();
-		return out;
+		return clone().normalize();
 	}
 	
 	/**
@@ -639,9 +637,9 @@ public class Vector3f {
 	 * @param obj The vector to add to this one
 	 */
 	public Vector3f set(final Vector3f obj) {
-		this.x += obj.x;
-		this.y += obj.y;
-		this.z += obj.z;
+		this.x = obj.x;
+		this.y = obj.y;
+		this.z = obj.z;
 		return this;
 	}
 	
