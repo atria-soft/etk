@@ -1,5 +1,7 @@
 package org.atriasoft.etk.math;
 
+import java.text.DecimalFormat;
+
 public class FMath {
 	public static float abs(final float a) {
 		if (a < 0.0f) {
@@ -15,7 +17,7 @@ public class FMath {
 	 * @return true if it is in the range
 	 */
 	public static boolean approxEqual(final float a, final float b) {
-		return approxEqual(a, b, Constant.MACHINE_EPSILON);
+		return approxEqual(a, b, Constant.FLOAT_EPSILON);
 	}
 	
 	/**
@@ -55,6 +57,10 @@ public class FMath {
 	public static long clamp(final long value, final long lowerLimit, final long upperLimit) {
 		assert (lowerLimit <= upperLimit);
 		return FMath.min(FMath.max(value, lowerLimit), upperLimit);
+	}
+	
+	public static String floatToString(final float value) {
+		return new DecimalFormat("#0.0000000000").format(value);
 	}
 	
 	// TODO check this basic function ...

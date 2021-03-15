@@ -349,23 +349,22 @@ public class Matrix4f {
 			return clone();
 		}
 		final Matrix4f temp = new Matrix4f();
-		final float iDet = 1.0f / det;
-		temp.mat[0] = coFactor(0, 0) * iDet;
-		temp.mat[1] = coFactor(0, 1) * iDet;
-		temp.mat[2] = coFactor(0, 2) * iDet;
-		temp.mat[3] = coFactor(0, 3) * iDet;
-		temp.mat[4] = coFactor(1, 0) * iDet;
-		temp.mat[5] = coFactor(1, 1) * iDet;
-		temp.mat[6] = coFactor(1, 2) * iDet;
-		temp.mat[7] = coFactor(1, 3) * iDet;
-		temp.mat[8] = coFactor(2, 0) * iDet;
-		temp.mat[9] = coFactor(2, 1) * iDet;
-		temp.mat[10] = coFactor(2, 2) * iDet;
-		temp.mat[11] = coFactor(2, 3) * iDet;
-		temp.mat[12] = coFactor(3, 0) * iDet;
-		temp.mat[13] = coFactor(3, 1) * iDet;
-		temp.mat[14] = coFactor(3, 2) * iDet;
-		temp.mat[15] = coFactor(3, 3) * iDet;
+		temp.mat[0] = coFactor(0, 0) / det;
+		temp.mat[1] = coFactor(0, 1) / det;
+		temp.mat[2] = coFactor(0, 2) / det;
+		temp.mat[3] = coFactor(0, 3) / det;
+		temp.mat[4] = coFactor(1, 0) / det;
+		temp.mat[5] = coFactor(1, 1) / det;
+		temp.mat[6] = coFactor(1, 2) / det;
+		temp.mat[7] = coFactor(1, 3) / det;
+		temp.mat[8] = coFactor(2, 0) / det;
+		temp.mat[9] = coFactor(2, 1) / det;
+		temp.mat[10] = coFactor(2, 2) / det;
+		temp.mat[11] = coFactor(2, 3) / det;
+		temp.mat[12] = coFactor(3, 0) / det;
+		temp.mat[13] = coFactor(3, 1) / det;
+		temp.mat[14] = coFactor(3, 2) / det;
+		temp.mat[15] = coFactor(3, 3) / det;
 		return temp;
 	}
 	

@@ -1,5 +1,7 @@
 package org.atriasoft.etk.math;
 
+import org.atriasoft.etk.internal.Log;
+
 public class Vector3f {
 	/**
 	 * @brief Get the length square between the 2 vectors
@@ -14,12 +16,48 @@ public class Vector3f {
 		return x * x + y * y + z * z;
 	}
 	
+	public static Vector3f valueOf(String value) {
+		float val1 = 0;
+		float val2 = 0;
+		float val3 = 0;
+		// copy to permit to modify it :
+		while (value.length() > 0 && value.charAt(0) == '(') {
+			value = value.substring(1);
+		}
+		while (value.length() > 0 && value.charAt(0) == ')') {
+			value = value.substring(0, value.length() - 1);
+		}
+		final String[] values = value.split(",");
+		if (values.length > 3) {
+			Log.error("Can not parse Vector3f with more than 3 values: '" + value + "'");
+		}
+		if (values.length == 1) {
+			// no coma ...
+			// in every case, we parse the first element :
+			val1 = Float.valueOf(values[0]);
+			val2 = val1;
+			val3 = val1;
+		} else if (values.length == 1) {
+			// no coma ...
+			// in every case, we parse the first element :
+			val1 = Float.valueOf(values[0]);
+			val2 = Float.valueOf(values[1]);
+			val3 = val2;
+		} else {
+			val1 = Float.valueOf(values[0]);
+			val2 = Float.valueOf(values[1]);
+			val3 = Float.valueOf(values[2]);
+		}
+		return new Vector3f(val1, val2, val3);
+	}
+	
 	public static Vector3f zero() {
 		return new Vector3f(0, 0, 0);
 	}
 	
 	public float x;
 	public float y;
+	
 	public float z;
 	
 	/**
@@ -195,10 +233,9 @@ public class Vector3f {
 	 */
 	public Vector3f divide(final float val) {
 		if (val != 0.0f) {
-			final float tmpVal = 1.0f / val;
-			this.x *= tmpVal;
-			this.y *= tmpVal;
-			this.z *= tmpVal;
+			this.x /= val;
+			this.y /= val;
+			this.z /= val;
 			return this;
 		}
 		throw new IllegalArgumentException("divice by 0 (vector3f)");
@@ -221,8 +258,7 @@ public class Vector3f {
 	 */
 	public Vector3f divideNew(final float val) {
 		if (val != 0.0f) {
-			final float tmpVal = 1.0f / val;
-			return new Vector3f(this.x * tmpVal, this.y * tmpVal, this.z * tmpVal);
+			return new Vector3f(this.x / val, this.y / val, this.z / val);
 		}
 		throw new IllegalArgumentException("divice by 0 (vector3f)");
 	}
@@ -326,14 +362,14 @@ public class Vector3f {
 		final Vector3f vectorAbs = new Vector3f(Math.abs(this.x), Math.abs(this.y), Math.abs(this.z));
 		final int minElement = vectorAbs.getMinAxis();
 		if (minElement == 0) {
-			final float devider = 1.0f / (float) Math.sqrt(this.y * this.y + this.z * this.z);
-			return new Vector3f(0.0f, -this.z * devider, this.y * devider);
+			final float devider = (float) Math.sqrt(this.y * this.y + this.z * this.z);
+			return new Vector3f(0.0f, -this.z / devider, this.y / devider);
 		} else if (minElement == 1) {
-			final float devider = 1.0f / (float) Math.sqrt(this.x * this.x + this.z * this.z);
-			return new Vector3f(-this.z * devider, 0.0f, this.x * devider);
+			final float devider = (float) Math.sqrt(this.x * this.x + this.z * this.z);
+			return new Vector3f(-this.z / devider, 0.0f, this.x / devider);
 		}
-		final float devider = 1.0f / (float) Math.sqrt(this.x * this.x + this.y * this.y);
-		return new Vector3f(-this.y * devider, this.x * devider, 0.0f);
+		final float devider = (float) Math.sqrt(this.x * this.x + this.y * this.y);
+		return new Vector3f(-this.y / devider, this.x / devider, 0.0f);
 	}
 	
 	/**
@@ -726,7 +762,7 @@ public class Vector3f {
 	
 	@Override
 	public String toString() {
-		return "Vector3f(" + this.x + "," + this.y + "," + this.z + ")";
+		return "Vector3f(" + FMath.floatToString(this.x) + "," + FMath.floatToString(this.y) + "," + FMath.floatToString(this.z) + ")";
 	}
 	
 	/**

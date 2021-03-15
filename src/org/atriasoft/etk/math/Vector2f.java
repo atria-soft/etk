@@ -1,11 +1,40 @@
 package org.atriasoft.etk.math;
 
+import org.atriasoft.etk.internal.Log;
+
 public class Vector2f {
+	public static Vector2f valueOf(String value) {
+		float val1 = 0;
+		float val2 = 0;
+		// copy to permit to modify it :
+		while (value.length() > 0 && value.charAt(0) == '(') {
+			value = value.substring(1);
+		}
+		while (value.length() > 0 && value.charAt(0) == ')') {
+			value = value.substring(0, value.length() - 1);
+		}
+		final String[] values = value.split(",");
+		if (values.length > 2) {
+			Log.error("Can not parse Vector2f with more than 2 values: '" + value + "'");
+		}
+		if (values.length == 1) {
+			// no coma ...
+			// in every case, we parse the first element :
+			val1 = Float.valueOf(values[0]);
+			val2 = val1;
+		} else {
+			val1 = Float.valueOf(values[0]);
+			val2 = Float.valueOf(values[1]);
+		}
+		return new Vector2f(val1, val2);
+	}
+	
 	public static Vector2f zero() {
 		return new Vector2f(0, 0);
 	}
 	
 	public float x = 0;
+	
 	public float y = 0;
 	
 	/* ****************************************************
@@ -69,6 +98,14 @@ public class Vector2f {
 		return this;
 	}
 	
+	public Vector2f addNew(final float val) {
+		return new Vector2f(this.x + val, this.y + val);
+	}
+	
+	public Vector2f addNew(final Vector2f obj) {
+		return new Vector2f(this.x + obj.x, this.y + obj.y);
+	}
+	
 	@Override
 	public Vector2f clone() {
 		return new Vector2f(this);
@@ -120,6 +157,14 @@ public class Vector2f {
 		return this;
 	}
 	
+	public Vector2f devideNew(final float val) {
+		return new Vector2f(this.x / val, this.y / val);
+	}
+	
+	public Vector2f devideNew(final Vector2f obj) {
+		return new Vector2f(this.x / obj.x, this.y / obj.y);
+	}
+	
 	/**
 	 * @brief Return the distance between the ends of this and another vector
 	 * This is semantically treating the vector like a point
@@ -163,10 +208,10 @@ public class Vector2f {
 		// cast object
 		final Vector2f other = (Vector2f) obj;
 		// checks values
-		if (Float.floatToIntBits(this.x) != Float.floatToIntBits(other.x)) {
+		if (this.x != other.x) {
 			return false;
 		}
-		return Float.floatToIntBits(this.y) == Float.floatToIntBits(other.y);
+		return this.y == other.y;
 	}
 	
 	/**
@@ -320,6 +365,14 @@ public class Vector2f {
 		return this;
 	}
 	
+	public Vector2f lessNew(final float val) {
+		return new Vector2f(this.x - val, this.y - val);
+	}
+	
+	public Vector2f lessNew(final Vector2f obj) {
+		return new Vector2f(this.x - obj.x, this.y - obj.y);
+	}
+	
 	/**
 	 * @brief Return the axis with the largest value
 	 * @return values are 0,1 for x or y
@@ -354,10 +407,14 @@ public class Vector2f {
 		this.x *= obj.x;
 		this.y *= obj.y;
 		return this;
-	}
+	};
 	
 	public Vector2f multiplyNew(final float val) {
 		return new Vector2f(this.x * val, this.y * val);
+	};
+	
+	public Vector2f multiplyNew(final Vector2f obj) {
+		return new Vector2f(this.x * obj.x, this.y * obj.y);
 	};
 	
 	/**
@@ -366,7 +423,7 @@ public class Vector2f {
 	public Vector2f normalize() {
 		this.devide(length());
 		return this;
-	};
+	}
 	
 	/**
 	 * @brief Return a normalized version of this vector
@@ -489,7 +546,7 @@ public class Vector2f {
 	
 	@Override
 	public String toString() {
-		return "Vector2f(" + this.x + "," + this.y + ")";
+		return "(" + this.x + "," + this.y + ")";
 	}
 	
 }

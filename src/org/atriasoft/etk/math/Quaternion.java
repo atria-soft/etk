@@ -515,11 +515,19 @@ public class Quaternion {
 			this.w = 1.0f;
 			return this;
 		}
-		final float invLength = 1.0f / lengthTmp;
-		this.x *= invLength;
-		this.y *= invLength;
-		this.z *= invLength;
-		this.w *= invLength;
+		
+		final double invLength = 1.0 / lengthTmp;
+		this.x = (float) (this.x * invLength);
+		this.y = (float) (this.y * invLength);
+		this.z = (float) (this.z * invLength);
+		this.w = (float) (this.w * invLength);
+		
+		/*
+		this.x /= lengthTmp;
+		this.y /= lengthTmp;
+		this.z /= lengthTmp;
+		this.w /= lengthTmp;
+		*/
 		return this;
 	}
 	
@@ -705,6 +713,6 @@ public class Quaternion {
 	
 	@Override
 	public String toString() {
-		return "Quaternion(" + this.x + "," + this.y + "," + this.z + "," + this.w + ")";
+		return "Quaternion(" + FMath.floatToString(this.x) + "," + FMath.floatToString(this.y) + "," + FMath.floatToString(this.z) + "," + FMath.floatToString(this.w) + ")";
 	}
 }

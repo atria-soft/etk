@@ -192,6 +192,23 @@ public class Matrix3f {
 				+ this.mat[2] * (this.mat[3] * this.mat[7] - this.mat[6] * this.mat[4]);
 	}
 	
+	/**
+	 * @brief devide a value
+	 * @param value value to devide all the matrix
+	 */
+	public Matrix3f devide(final float value) {
+		this.mat[0] /= value;
+		this.mat[1] /= value;
+		this.mat[2] /= value;
+		this.mat[3] /= value;
+		this.mat[4] /= value;
+		this.mat[5] /= value;
+		this.mat[6] /= value;
+		this.mat[7] /= value;
+		this.mat[8] /= value;
+		return this;
+	}
+	
 	@Override
 	public boolean equals(final Object obj) {
 		if (obj == null) {
@@ -280,11 +297,10 @@ public class Matrix3f {
 	public Matrix3f inverse() {
 		final float det = determinant();
 		//assert(Math.abs(det) > MACHINEEPSILON);
-		final float invDet = 1.0f / det;
 		this.set((this.mat[4] * this.mat[8] - this.mat[7] * this.mat[5]), -(this.mat[1] * this.mat[8] - this.mat[7] * this.mat[2]), (this.mat[1] * this.mat[5] - this.mat[2] * this.mat[4]),
 				-(this.mat[3] * this.mat[8] - this.mat[6] * this.mat[5]), (this.mat[0] * this.mat[8] - this.mat[6] * this.mat[2]), -(this.mat[0] * this.mat[5] - this.mat[3] * this.mat[2]),
 				(this.mat[3] * this.mat[7] - this.mat[6] * this.mat[4]), -(this.mat[0] * this.mat[7] - this.mat[6] * this.mat[1]), (this.mat[0] * this.mat[4] - this.mat[1] * this.mat[3]));
-		this.multiply(invDet);
+		devide(det);
 		return this;
 	}
 	
@@ -538,8 +554,9 @@ public class Matrix3f {
 	
 	@Override
 	public String toString() {
-		return "Matrix3f(" + this.mat[0] + "," + this.mat[1] + "," + this.mat[2] + "," + this.mat[3] + "," + this.mat[4] + "," + this.mat[5] + "," + this.mat[6] + "," + this.mat[7] + "," + this.mat[8]
-				+ ")";
+		return "Matrix3f(" + FMath.floatToString(this.mat[0]) + "," + FMath.floatToString(this.mat[1]) + "," + FMath.floatToString(this.mat[2]) + "," + FMath.floatToString(this.mat[3]) + ","
+				+ FMath.floatToString(this.mat[4]) + "," + FMath.floatToString(this.mat[5]) + "," + FMath.floatToString(this.mat[6]) + "," + FMath.floatToString(this.mat[7]) + ","
+				+ FMath.floatToString(this.mat[8]) + ")";
 	}
 	
 	/**
