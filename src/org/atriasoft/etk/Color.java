@@ -4,8 +4,15 @@ import java.util.Map;
 
 import org.atriasoft.etk.math.FMath;
 
-// TODO transform in record ...
-public class Color {
+@SuppressWarnings("preview")
+
+//@formatter:off
+public record Color(
+		float r,
+		float g,
+		float b,
+		float a) {
+//@formatter:on
 	public static final Color NONE = new Color(0x00, 0x00, 0x00, 0x00);
 	public static final Color ALICE_BLUE = new Color(0xF0, 0xF8, 0xFF, 0xFF);
 	public static final Color ANTIQUE_WHITE = new Color(0xFA, 0xEB, 0xD7, 0xFF);
@@ -155,8 +162,8 @@ public class Color {
 	public static final Color YELLOW = new Color(0xFF, 0xFF, 0x00, 0xFF);
 	public static final Color YELLOW_GREEN = new Color(0x9A, 0xCD, 0x32, 0xFF);
 	
-	private static final Map<String, Color> NAMED_COLORS = Map.ofEntries(
-	//@formatter:off
+	private static final Map<String, Color> NAMED_COLORS = Map.<String, Color>ofEntries(
+			//@formatter:off
     	Map.entry("none",				NONE),
     	Map.entry("aliceblue",			ALICE_BLUE),
     	Map.entry("antiquewhite",		ANTIQUE_WHITE),
@@ -177,7 +184,7 @@ public class Color {
     	Map.entry("coral",				CORAL),
     	Map.entry("cornflowerblue",		CORNFLOWER_BLUE),
     	Map.entry("cornsilk",			CORNSILK),
-    	Map.entry("crimson",			CRIMSON),
+    	Map.entry("crimson",				CRIMSON),
     	Map.entry("cyan",				CYAN),
     	Map.entry("darkblue",			DARK_BLUE),
     	Map.entry("darkcyan",			DARK_CYAN),
@@ -186,11 +193,11 @@ public class Color {
     	Map.entry("darkgrey",			DARK_GREY),
     	Map.entry("darkgreen",			DARK_GREEN),
     	Map.entry("darkkhaki",			DARK_KHAKI),
-    	Map.entry("darkmagenta",		DARK_MAGENTA),
+    	Map.entry("darkmagenta",			DARK_MAGENTA),
     	Map.entry("darkolivegreen",		DARK_OLIVEGREEN),
     	Map.entry("darkorange",			DARK_ORANGE),
     	Map.entry("darkorchid",			DARK_ORCHID),
-    	Map.entry("darkred",			DARK_RED),
+    	Map.entry("darkred",				DARK_RED),
     	Map.entry("darksalmon",			DARK_SALMON),
     	Map.entry("darkseagreen",		DARK_SEAGREEN),
     	Map.entry("darkslateblue",		DARK_SLATE_BLUE),
@@ -199,14 +206,14 @@ public class Color {
     	Map.entry("darkturquoise",		DARK_TURQUOISE),
     	Map.entry("darkviolet",			DARK_VIOLET),
     	Map.entry("deeppink",			DEEP_PINK),
-    	Map.entry("deepskyblue",		DEEP_SKY_BLUE),
-    	Map.entry("dimgray",			DIM_GRAY),
-    	Map.entry("dimgrey",			DIM_GREY),
+    	Map.entry("deepskyblue",			DEEP_SKY_BLUE),
+    	Map.entry("dimgray",				DIM_GRAY),
+    	Map.entry("dimgrey",				DIM_GREY),
     	Map.entry("dodgerblue",			DODGER_BLUE),
     	Map.entry("firebrick",			FIRE_BRICK),
-    	Map.entry("floralwhite",		FLORAL_WHITE),
-    	Map.entry("forestgreen",		FOREST_GREEN),
-    	Map.entry("fuchsia",			FUCHSIA),
+    	Map.entry("floralwhite",			FLORAL_WHITE),
+    	Map.entry("forestgreen",			FOREST_GREEN),
+    	Map.entry("fuchsia",				FUCHSIA),
     	Map.entry("gainsboro",			GAINSBORO),
     	Map.entry("ghostwhite",			GHOST_WHITE),
     	Map.entry("gold",				GOLD),
@@ -214,9 +221,9 @@ public class Color {
     	Map.entry("gray",				GRAY),
     	Map.entry("grey",				GREY),
     	Map.entry("green",				GREEN),
-    	Map.entry("greenyellow",		GREEN_YELLOW),
+    	Map.entry("greenyellow",			GREEN_YELLOW),
     	Map.entry("honeydew",			HONEY_DEW),
-    	Map.entry("hotpink",			HOT_PINK),
+    	Map.entry("hotpink",				HOT_PINK),
     	Map.entry("indianred",			INDIAN_RED),
     	Map.entry("indigo",				INDIGO),
     	Map.entry("ivory",				IVORY),
@@ -233,34 +240,34 @@ public class Color {
     	Map.entry("lightgrey",			LIGHT_GREY),
     	Map.entry("lightgreen",			LIGHT_GREEN),
     	Map.entry("lightpink",			LIGHT_PINK),
-    	Map.entry("lightsalmon",		LIGHT_SALMON),
+    	Map.entry("lightsalmon",			LIGHT_SALMON),
     	Map.entry("lightseagreen",		LIGHT_SEA_GREEN),
     	Map.entry("lightskyblue",		LIGHT_SKY_BLUE),
     	Map.entry("lightslategray",		LIGHT_SLATE_GRAY),
     	Map.entry("lightslategrey",		LIGHT_SLATE_GREY),
     	Map.entry("lightsteelblue",		LIGHT_STEEL_BLUE),
-    	Map.entry("lightyellow",		LIGHT_YELLOW),
+    	Map.entry("lightyellow",			LIGHT_YELLOW),
     	Map.entry("lime",				LIME),
     	Map.entry("limegreen",			LIME_GREEN),
     	Map.entry("linen",				LINEN),
-    	Map.entry("magenta",			MAGENTA),
+    	Map.entry("magenta",				MAGENTA),
     	Map.entry("maroon",				MAROON),
     	Map.entry("mediumaquamarine",	MEDIUM_AQUA_MARINE),
     	Map.entry("mediumblue",			MEDIUM_BLUE),
     	Map.entry("mediumorchid",		MEDIUM_ORCHID),
     	Map.entry("mediumpurple",		MEDIUM_PURPLE),
     	Map.entry("mediumseagreen",		MEDIUM_SEA_GREEN),
-    	Map.entry("mediumslateblue",	MEDIUM_SLATE_BLUE),
+    	Map.entry("mediumslateblue",		MEDIUM_SLATE_BLUE),
     	Map.entry("mediumspringgreen",	MEDIUM_SPRING_GREEN),
-    	Map.entry("mediumturquoise",	MEDIUM_TURQUOISE),
-    	Map.entry("mediumvioletred",	MEDIUM_VIOLET_RED),
+    	Map.entry("mediumturquoise",		MEDIUM_TURQUOISE),
+    	Map.entry("mediumvioletred",		MEDIUM_VIOLET_RED),
     	Map.entry("midnightblue",		MIDNIGHT_BLUE),
     	Map.entry("mintcream",			MINT_CREAM),
     	Map.entry("mistyrose",			MISTY_ROSE),
     	Map.entry("moccasin",			MOCCASIN),
-    	Map.entry("navajowhite",		NAVAJO_WHITE),
+    	Map.entry("navajowhite",			NAVAJO_WHITE),
     	Map.entry("navy",				NAVY),
-    	Map.entry("oldlace",			OLDLACE),
+    	Map.entry("oldlace",				OLDLACE),
     	Map.entry("olive",				OLIVE),
     	Map.entry("olivedrab",			OLIVE_DRAB),
     	Map.entry("orange",				ORANGE),
@@ -277,26 +284,26 @@ public class Color {
     	Map.entry("plum",				PLUM),
     	Map.entry("powderblue",			POWDER_BLUE),
     	Map.entry("purple",				PURPLE),
-    	Map.entry("red",				RED),
+    	Map.entry("red",					RED),
     	Map.entry("rosybrown",			ROSY_BROWN),
     	Map.entry("royalblue",			ROYAL_BLUE),
-    	Map.entry("saddlebrown",		SADDLE_BROWN),
+    	Map.entry("saddlebrown",			SADDLE_BROWN),
     	Map.entry("salmon",				SALMON),
     	Map.entry("sandybrown",			SANDY_BROWN),
     	Map.entry("seagreen",			SEA_GREEN),
     	Map.entry("seashell",			SEA_SHELL),
     	Map.entry("sienna",				SIENNA),
     	Map.entry("silver",				SILVER),
-    	Map.entry("skyblue",			SKY_BLUE),
+    	Map.entry("skyblue",				SKY_BLUE),
     	Map.entry("slateblue",			SLATE_BLUE),
     	Map.entry("slategray",			SLATE_GRAY),
     	Map.entry("slategrey",			SLATE_GREY),
     	Map.entry("snow",				SNOW),
-    	Map.entry("springgreen",		SPRING_GREEN),
+    	Map.entry("springgreen",			SPRING_GREEN),
     	Map.entry("steelblue",			STEEL_BLUE),
-    	Map.entry("tan",				TAN),
+    	Map.entry("tan",					TAN),
     	Map.entry("teal",				TEAL),
-    	Map.entry("thistle",			THISTLE),
+    	Map.entry("thistle",				THISTLE),
     	Map.entry("tomato",				TOMATO),
     	Map.entry("turquoise",			TURQUOISE),
     	Map.entry("violet",				VIOLET),
@@ -304,7 +311,7 @@ public class Color {
     	Map.entry("white",				WHITE),
     	Map.entry("whitesmoke",			WHITE_SMOKE),
     	Map.entry("yellow",				YELLOW),
-    	Map.entry("yellowgreen",		YELLOW_GREEN)
+    	Map.entry("yellowgreen",			YELLOW_GREEN)
 		//@formatter:on
 	);
 	
@@ -315,46 +322,45 @@ public class Color {
 	public static Color valueOf(final String colorBase) throws Exception {
 		// remove all white space...
 		String color = colorBase.replace(" \r\n\t\\(\\)", "");
-		if (color.isEmpty() == true) {
+		if (color.isEmpty()) {
 			return new Color(0, 0, 0, 1.0f);
 		}
 		final Color named = get(colorBase);
 		if (named != null) {
-			return named.clone();
+			return named;
 		} else if (color.charAt(0) == '#') {
 			// MODEL: #RGB
 			//        #RGBA
 			//        #RRGGBB
 			//        #RRGGBBAA
 			switch (color.length()) {
-				case 4: {
+				case 4 -> {
 					final float r = Integer.parseInt(color.substring(1, 2), 16) * 255.0f * 16.0f;
 					final float g = Integer.parseInt(color.substring(2, 3), 16) * 255.0f * 16.0f;
 					final float b = Integer.parseInt(color.substring(3, 4), 16) * 255.0f * 16.0f;
 					return new Color(r, g, b);
 				}
-				case 5: {
+				case 5 -> {
 					final float r = Integer.parseInt(color.substring(1, 2), 16) * 255.0f * 16.0f;
 					final float g = Integer.parseInt(color.substring(2, 3), 16) * 255.0f * 16.0f;
 					final float b = Integer.parseInt(color.substring(3, 4), 16) * 255.0f * 16.0f;
 					final float a = Integer.parseInt(color.substring(4, 5), 16) * 255.0f * 16.0f;
 					return new Color(r, g, b, a);
 				}
-				case 7: {
+				case 7 -> {
 					final float r = Integer.parseInt(color.substring(1, 3), 16) * 255.0f;
 					final float g = Integer.parseInt(color.substring(3, 5), 16) * 255.0f;
 					final float b = Integer.parseInt(color.substring(5, 7), 16) * 255.0f;
 					return new Color(r, g, b);
 				}
-				case 9: {
+				case 9 -> {
 					final float r = Integer.parseInt(color.substring(1, 3), 16) * 255.0f;
 					final float g = Integer.parseInt(color.substring(3, 5), 16) * 255.0f;
 					final float b = Integer.parseInt(color.substring(5, 7), 16) * 255.0f;
 					final float a = Integer.parseInt(color.substring(7, 9), 16) * 255.0f;
 					return new Color(r, g, b, a);
 				}
-				default:
-					throw new Exception("Can not parse color ... '" + colorBase + "'");
+				default -> throw new Exception("Can not parse color ... '" + colorBase + "'");
 			}
 		} else {
 			// Model: r.r,g.g,b.b
@@ -364,7 +370,7 @@ public class Color {
 			//       rgb(r.r,g.g,b.b)
 			//       rgba(r.r,g.g,b.b,a.a)
 			//       argb(a.a,r.r,g.g,b.b)
-			if (color.startsWith("argb") == true) {
+			if (color.startsWith("argb")) {
 				color = color.replace("argb", "");
 				final String[] vals = color.split(",");
 				if (vals.length == 4) {
@@ -397,17 +403,8 @@ public class Color {
 		}
 	}
 	
-	public float r;
-	public float g;
-	public float b;
-	public float a;
-	
 	public Color(final float r, final float g, final float b) {
-		super();
-		this.r = r;
-		this.g = g;
-		this.b = b;
-		this.a = 1.0f;
+		this(r, g, b, 1.0f);
 	}
 	
 	public Color(final float r, final float g, final float b, final float a) {
@@ -415,23 +412,6 @@ public class Color {
 		this.g = g;
 		this.b = b;
 		this.a = a;
-	}
-	
-	@Override
-	public Color clone() {
-		return new Color(this.r, this.g, this.b, this.a);
-	}
-	
-	@Override
-	public boolean equals(final Object obj) {
-		if (obj == this) {
-			return true;
-		}
-		if (!(obj instanceof Color)) {
-			return false;
-		}
-		final Color other = (Color) obj;
-		return other.r == this.r && other.g == this.g && other.b == this.b && other.a == this.a;
 	}
 	
 	@Override

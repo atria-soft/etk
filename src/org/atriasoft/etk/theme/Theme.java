@@ -8,79 +8,81 @@ import java.util.Set;
 import org.atriasoft.etk.internal.Log;
 
 public class Theme {
-	private static Map<String, Path> g_listTheme = new HashMap<>();
-	private static Map<String, Path> g_listThemeDefault = new HashMap<>();
+	private static Map<String, Path> globalListTheme = new HashMap<>();
+	private static Map<String, Path> globalListThemeDefault = new HashMap<>();
 	
 	/**
-	 * @brief get the folder from a Reference theme
-	 * @param[in] _refName Theme cathegorie ex : "GUI" "SHADER" "DEFAULT" 
+	 * get the folder from a Reference theme
+	 * @param refName Theme cathegorie ex : "GUI" "SHADER" "DEFAULT" 
 	 * @return the path of the theme
 	 */
-	public static Path getName(final String _refName) {
-		return g_listTheme.get(_refName);
+	public static Path getName(final String refName) {
+		return globalListTheme.get(refName);
 	}
 	
 	/**
-	 * @brief get the default folder from a Reference theme 
-	 * @param[in] _refName Theme cathegorie ex : "GUI" "SHADER" "DEFAULT" 
+	 * get the default folder from a Reference theme 
+	 * @param refName Theme cathegorie ex : "GUI" "SHADER" "DEFAULT" 
 	 * @return the path of the theme
 	 */
-	public static Path getNameDefault(final String _refName) {
-		return g_listThemeDefault.get(_refName);
-	};
+	public static Path getNameDefault(final String refName) {
+		return globalListThemeDefault.get(refName);
+	}
 	
 	/**
-	 * @brief initialize the theme system
+	 * initialize the theme system
 	 */
 	public static void init() {
 		
 	};
 	
 	/**
-	 * @brief Get the list of all the theme folder availlable in the user Home/appl
+	 * Get the list of all the theme folder availlable in the user Home/appl
 	 * @return The list of elements
 	 */
 	public static Set<String> list() {
-		return g_listTheme.keySet();
-	}
+		return globalListTheme.keySet();
+	};
 	
 	/**
-	 * @brief Set the Folder of a subset of a theme ...
-	 * @param[in] _refName Theme cathegorie ex : "GUI" "SHADER" "DEFAULT" 
-	 * @param[in] _folderName The associated folder of the Theme (like "myTheme/folder/folder2/")
+	 * Set the Folder of a subset of a theme ...
+	 * @param refName Theme cathegorie ex : "GUI" "SHADER" "DEFAULT" 
+	 * @param folderName The associated folder of the Theme (like "myTheme/folder/folder2/")
 	 */
-	public static void setName(final String _refName, final Path _folderName) {
-		Log.warning("Change theme : '" + _refName + "' : '" + _folderName + "'");
-		g_listTheme.put(_refName, _folderName);
-		updateProvider(_refName);
+	public static void setName(final String refName, final Path folderName) {
+		Log.warning("Change theme : '" + refName + "' : '" + folderName + "'");
+		globalListTheme.put(refName, folderName);
+		updateProvider(refName);
 	}
 	
 	/**
-	 * @brief Set the default folder of a subset of a theme ...
-	 * @param[in] _refName Theme cathegorie ex : "GUI" "SHADER" "DEFAULT" 
-	 * @param[in] _folderName The associated default folder of the Theme (like "myTheme/color/default/")
+	 * Set the default folder of a subset of a theme ...
+	 * @param _refName Theme cathegorie ex : "GUI" "SHADER" "DEFAULT" 
+	 * @param _folderName The associated default folder of the Theme (like "myTheme/color/default/")
 	 */
-	public static void setNameDefault(final String _refName, final Path _folderName) {
-		g_listThemeDefault.put(_refName, _folderName);
-		updateProvider(_refName);
+	public static void setNameDefault(final String refName, final Path folderName) {
+		globalListThemeDefault.put(refName, folderName);
+		updateProvider(refName);
 	}
 	
 	/**
-	 * @brief un-initialize the theme system
+	 * un-initialize the theme system
 	 */
 	public static void unInit() {
-		g_listTheme.clear();
-		g_listThemeDefault.clear();
+		globalListTheme.clear();
+		globalListThemeDefault.clear();
 	}
 	
-	public static void updateProvider(final String _refName) {
-		final Path base = getName(_refName);
-		final Path baseDefault = getNameDefault(_refName);
+	public static void updateProvider(final String refName) {
+		final Path base = getName(refName);
+		final Path baseDefault = getNameDefault(refName);
 		if (base == null) {
-			//etk::uri::provider::add("THEME_" + _refName, new ProviderTheme(new Path("theme") / baseDefault, Path("theme") / base));
+			//etk::uri::provider::add("THEME_" + refName, new ProviderTheme(new Path("theme") / baseDefault, Path("theme") / base));
 		} else {
-			//etk::uri::provider::add("THEME_" + _refName, new ProviderTheme(Path("theme") / base, Path("theme") / baseDefault));
+			//etk::uri::provider::add("THEME_" + refName, new ProviderTheme(Path("theme") / base, Path("theme") / baseDefault));
 		}
-	};
+	}
+	
+	private Theme() {};
 	
 }

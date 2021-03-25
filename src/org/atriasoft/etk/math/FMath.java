@@ -3,6 +3,8 @@ package org.atriasoft.etk.math;
 import java.text.DecimalFormat;
 
 public class FMath {
+	public static final float PI = (float) Math.PI;
+	
 	public static float abs(final float a) {
 		if (a < 0.0f) {
 			return -a;
@@ -12,6 +14,7 @@ public class FMath {
 	
 	/**
 	 * Test if the value id in the correct range
+	 * 
 	 * @param a fist value
 	 * @param b second value (a-b)
 	 * @return true if it is in the range
@@ -22,14 +25,19 @@ public class FMath {
 	
 	/**
 	 * Test if the value id in the correct range
-	 * @param a fist value
-	 * @param b second value (a-b)
+	 * 
+	 * @param a       fist value
+	 * @param b       second value (a-b)
 	 * @param epsilon delta to check
 	 * @return true if it is in the range
 	 */
 	public static boolean approxEqual(final float a, final float b, final float epsilon) {
 		final float difference = a - b;
 		return (abs(difference) < epsilon);
+	}
+	
+	public static float atan(final float value) {
+		return (float) Math.atan(value);
 	}
 	
 	public static float atan2(final float sinHalfAngleAbs, final float cosHalfAngle) {
@@ -57,6 +65,10 @@ public class FMath {
 	public static long clamp(final long value, final long lowerLimit, final long upperLimit) {
 		assert (lowerLimit <= upperLimit);
 		return FMath.min(FMath.max(value, lowerLimit), upperLimit);
+	}
+	
+	public static float cos(final float value) {
+		return (float) Math.cos(value);
 	}
 	
 	public static String floatToString(final float value) {
@@ -89,7 +101,7 @@ public class FMath {
 	}
 	
 	public static Vector3f max(final Vector3f a, final Vector3f b) {
-		return new Vector3f(Math.max(a.x, b.x), Math.max(a.y, b.y), Math.max(a.z, b.z));
+		return new Vector3f(Math.max(a.x(), b.x()), Math.max(a.y(), b.y()), Math.max(a.z(), b.z()));
 	}
 	
 	public static float min(final float a, final float b) {
@@ -113,7 +125,7 @@ public class FMath {
 	}
 	
 	public static Vector3f min(final Vector3f a, final Vector3f b) {
-		return new Vector3f(Math.min(a.x, b.x), Math.min(a.y, b.y), Math.min(a.z, b.z));
+		return new Vector3f(Math.min(a.x(), b.x()), Math.min(a.y(), b.y()), Math.min(a.z(), b.z()));
 	}
 	
 	public static float mod(final float value, final float modulo) {
@@ -131,7 +143,17 @@ public class FMath {
 		return a * b >= 0.0f;
 	}
 	
+	public static float sin(final float value) {
+		return (float) Math.sin(value);
+	}
+	
 	public static float sqrt(final float value) {
 		return (float) Math.sqrt(value);
 	}
+	
+	public static float tan(final float value) {
+		return (float) Math.tan(value);
+	}
+	
+	private FMath() {}
 }

@@ -8,4 +8,5 @@ open module org.atriasoft.etk {
 	exports org.atriasoft.etk.util;
 	
 	requires transitive io.scenarium.logger;
+	requires com.github.spotbugs.annotations;
 }

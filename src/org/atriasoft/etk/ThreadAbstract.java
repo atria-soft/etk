@@ -5,57 +5,62 @@ public abstract class ThreadAbstract {
 	private boolean threadStopRequested = false;
 	private Thread threadInstance = null;
 	private final String threadName;
-	public ThreadAbstract(String name) {
+	
+	public ThreadAbstract(final String name) {
 		this.threadName = name;
 	}
-
+	
+	protected abstract void birth();
+	
+	protected abstract void death();
+	
+	protected abstract void runPeriodic();
+	
+	private void threadRun() {
+		System.out.println("INFO: Thread Start: " + this.threadName);
+		birth();
+		while (!this.threadStopRequested) {
+			try {
+				runPeriodic();
+			} catch (Exception eee) {
+				eee.printStackTrace();
+			}
+		}
+		death();
+		System.out.println("INFO: Thread Stop: " + this.threadName);
+	}
+	
 	public void threadStart() {
 		System.out.println("INFO: Start the thread : " + this.threadName);
-		if (threadInstance != null) {
+		if (this.threadInstance != null) {
 			threadStop();
 		}
-		threadStopRequested = false;
-		threadInstance = new Thread() {
+		this.threadStopRequested = false;
+		this.threadInstance = new Thread() {
+			@Override
 			public void run() {
 				threadRun();
 			}
 		};
-		threadInstance.setName(threadName);
-		threadInstance.start();
+		this.threadInstance.setName(this.threadName);
+		this.threadInstance.start();
 	}
 	
-	private void threadRun() {
-		System.out.println("INFO: Thread Start: " + threadName);
-		birth();
-		while (threadStopRequested == false) {
-	        try {
-	        	runPeriodic();
-	        } catch (Exception eee) {
-	        	eee.printStackTrace();
-	        }
-		}
-		death();
-		System.out.println("INFO: Thread Stop: " + threadName);
-	}
-	protected abstract void birth();
-	protected abstract void runPeriodic();
-	protected abstract void death();
-
 	public void threadStop() {
-		if (threadStopRequested == true) {
+		if (this.threadStopRequested) {
 			return;
 		}
-		threadStopRequested = true;
-		if (threadInstance == null) {
+		this.threadStopRequested = true;
+		if (this.threadInstance == null) {
 			return;
 		}
-		threadInstance.interrupt();
+		this.threadInstance.interrupt();
 		try {
-			threadInstance.join();
+			this.threadInstance.join();
 		} catch (InterruptedException eee) {
 			// nothing to do
 		}
-		threadInstance = null;
+		this.threadInstance = null;
 	}
-
+	
 }
