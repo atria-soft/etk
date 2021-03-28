@@ -2,6 +2,7 @@ package org.atriasoft.etk.math;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
+@SuppressWarnings("preview")
 public record Matrix4f(
 		float a1,
 		float b1,
@@ -30,34 +31,24 @@ public record Matrix4f(
 	* @return New matrix of the transformation requested
 	*/
 	public static Matrix4f createMatrixFrustum(final float xmin, final float xmax, final float ymin, final float ymax, final float zNear, final float zFar) {
-		float a1 = 0;
+		float a1 = (2.0f * zNear) / (xmax - xmin);
 		float b1 = 0;
-		float c1 = 0;
+		float c1 = (xmax + xmin) / (xmax - xmin);
 		float d1 = 0;
 		float a2 = 0;
-		float b2 = 0;
-		float c2 = 0;
+		float b2 = (2.0f * zNear) / (ymax - ymin);
+		float c2 = (ymax + ymin) / (ymax - ymin);
 		float d2 = 0;
 		float a3 = 0;
 		float b3 = 0;
-		float c3 = 0;
-		float d3 = 0;
+		float c3 = -(zFar + zNear) / (zFar - zNear);
+		float d3 = -(2.0f * zFar * zNear) / (zFar - zNear);
 		float a4 = 0;
 		float b4 = 0;
-		float c4 = 0;
+		float c4 = -1.0f;
 		float d4 = 0;
-		//  0  1  2  3
-		//  4  5  6  7
-		//  8  9 10 11
-		// 12 13 14 15
-		a1 = (2.0f * zNear) / (xmax - xmin);
-		b2 = (2.0f * zNear) / (ymax - ymin);
-		c3 = -(zFar + zNear) / (zFar - zNear);
-		c1 = (xmax + xmin) / (xmax - xmin);
-		c2 = (ymax + ymin) / (ymax - ymin);
-		c4 = -1.0f;
-		d3 = -(2.0f * zFar * zNear) / (zFar - zNear);
 		return new Matrix4f(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4);
+		//return new Matrix4f(a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4);
 	}
 	
 	/**
@@ -107,29 +98,24 @@ public record Matrix4f(
 	* @return New matrix of the transformation requested
 	*/
 	public static Matrix4f createMatrixOrtho(final float left, final float right, final float bottom, final float top, final float nearVal, final float farVal) {
-		float a1 = 1.0f;
+		float a1 = 2.0f / (right - left);
 		float b1 = 0;
 		float c1 = 0;
-		float d1 = 0;
+		float d1 = -1.0f * (right + left) / (right - left);
 		float a2 = 0;
-		float b2 = 1.0f;
+		float b2 = 2.0f / (top - bottom);
 		float c2 = 0;
-		float d2 = 0;
+		float d2 = -1.0f * (top + bottom) / (top - bottom);
 		float a3 = 0;
 		float b3 = 0;
-		float c3 = 1.0f;
-		float d3 = 0;
+		float c3 = -2.0f / (farVal - nearVal);
+		float d3 = -1.0f * (farVal + nearVal) / (farVal - nearVal);
 		float a4 = 0;
 		float b4 = 0;
 		float c4 = 0;
 		float d4 = 1.0f;
-		a1 = 2.0f / (right - left);
-		b2 = 2.0f / (top - bottom);
-		c3 = -2.0f / (farVal - nearVal);
-		d1 = -1 * (right + left) / (right - left);
-		d2 = -1 * (top + bottom) / (top - bottom);
-		d3 = -1 * (farVal + nearVal) / (farVal - nearVal);
-		return new Matrix4f(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4);
+		//return new Matrix4f(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4);
+		return new Matrix4f(a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4);
 		
 	}
 	
@@ -235,6 +221,7 @@ public record Matrix4f(
 		float c4 = 0;
 		float d4 = 1.0f;
 		return new Matrix4f(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4);
+		//return new Matrix4f(a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4);
 	}
 	
 	/**
@@ -494,6 +481,7 @@ public record Matrix4f(
 	 */
 	@CheckReturnValue
 	public Matrix4f multiply(final Matrix4f obj) {
+		/*
 		float a1 = this.a1 * obj.a1 + this.a2 * obj.b1 + this.a3 * obj.c1 + this.a3 * obj.d1;
 		float b1 = this.b1 * obj.a1 + this.b2 * obj.b1 + this.b3 * obj.c1 + this.b3 * obj.d1;
 		float c1 = this.c1 * obj.a1 + this.c2 * obj.b1 + this.c3 * obj.c1 + this.c3 * obj.d1;
@@ -513,6 +501,27 @@ public record Matrix4f(
 		float b4 = this.b1 * obj.a4 + this.b2 * obj.b4 + this.b3 * obj.c4 + this.b3 * obj.d4;
 		float c4 = this.c1 * obj.a4 + this.c2 * obj.b4 + this.c3 * obj.c4 + this.c3 * obj.d4;
 		float d4 = this.d1 * obj.a4 + this.d2 * obj.b4 + this.d3 * obj.c4 + this.d3 * obj.d4;
+		*/
+		float a1 = this.a1 * obj.a1 + this.b1 * obj.a2 + this.c1 * obj.a3 + this.d1 * obj.a4;
+		float b1 = this.a1 * obj.b1 + this.b1 * obj.b2 + this.c1 * obj.b3 + this.d1 * obj.b4;
+		float c1 = this.a1 * obj.c1 + this.b1 * obj.c2 + this.c1 * obj.c3 + this.d1 * obj.c4;
+		float d1 = this.a1 * obj.d1 + this.b1 * obj.d2 + this.c1 * obj.d3 + this.d1 * obj.d4;
+		
+		float a2 = this.a2 * obj.a1 + this.b2 * obj.a2 + this.c2 * obj.a3 + this.d2 * obj.a4;
+		float b2 = this.a2 * obj.b1 + this.b2 * obj.b2 + this.c2 * obj.b3 + this.d2 * obj.b4;
+		float c2 = this.a2 * obj.c1 + this.b2 * obj.c2 + this.c2 * obj.c3 + this.d2 * obj.c4;
+		float d2 = this.a2 * obj.d1 + this.b2 * obj.d2 + this.c2 * obj.d3 + this.d2 * obj.d4;
+		
+		float a3 = this.a3 * obj.a1 + this.b3 * obj.a2 + this.c3 * obj.a3 + this.d3 * obj.a4;
+		float b3 = this.a3 * obj.b1 + this.b3 * obj.b2 + this.c3 * obj.b3 + this.d3 * obj.b4;
+		float c3 = this.a3 * obj.c1 + this.b3 * obj.c2 + this.c3 * obj.c3 + this.d3 * obj.c4;
+		float d3 = this.a3 * obj.d1 + this.b3 * obj.d2 + this.c3 * obj.d3 + this.d3 * obj.d4;
+		
+		float a4 = this.a4 * obj.a1 + this.b4 * obj.a2 + this.c4 * obj.a3 + this.d4 * obj.a4;
+		float b4 = this.a4 * obj.b1 + this.b4 * obj.b2 + this.c4 * obj.b3 + this.d4 * obj.b4;
+		float c4 = this.a4 * obj.c1 + this.b4 * obj.c2 + this.c4 * obj.c3 + this.d4 * obj.c4;
+		float d4 = this.a4 * obj.d1 + this.b4 * obj.d2 + this.c4 * obj.d3 + this.d4 * obj.d4;
+		
 		return new Matrix4f(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4);
 	}
 	
