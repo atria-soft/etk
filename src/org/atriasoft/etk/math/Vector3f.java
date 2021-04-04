@@ -1,9 +1,13 @@
 package org.atriasoft.etk.math;
 
-import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 import org.atriasoft.etk.internal.Log;
 
-public record Vector3f(float x, float y, float z) {
+import edu.umd.cs.findbugs.annotations.CheckReturnValue;
+
+public record Vector3f(
+		float x,
+		float y,
+		float z) {
 	/**
 	 *  Get the length square between the 2 vectors
 	 * @param start First vector
@@ -16,7 +20,7 @@ public record Vector3f(float x, float y, float z) {
 		final float z = stop.z - start.z;
 		return x * x + y * y + z * z;
 	}
-
+	
 	public static Vector3f valueOf(String value) {
 		float val1 = 0;
 		float val2 = 0;
@@ -51,7 +55,7 @@ public record Vector3f(float x, float y, float z) {
 		}
 		return new Vector3f(val1, val2, val3);
 	}
-
+	
 	/**
 	 *  Constructor from scalars
 	 * @param value unique value for X,Y and Z value
@@ -59,13 +63,13 @@ public record Vector3f(float x, float y, float z) {
 	public Vector3f(final float value) {
 		this(value, value, value);
 	}
-
+	
 	public Vector3f(final float x, final float y, final float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
-
+	
 	/**
 	 *  Return a vector will the absolute values of each element
 	 * @return the curent reference
@@ -79,15 +83,17 @@ public record Vector3f(float x, float y, float z) {
 	public Vector3f add(final float value) {
 		return new Vector3f(this.x + value, this.y + value, this.z + value);
 	}
+	
 	@CheckReturnValue
 	public Vector3f add(final float xxx, final float yyy, final float zzz) {
 		return new Vector3f(this.x + xxx, this.y + yyy, this.z + zzz);
 	}
+	
 	@CheckReturnValue
 	public Vector3f clipInteger() {
-		return new Vector3f((int)x, (int)y, (int)z);
+		return new Vector3f((int) this.x, (int) this.y, (int) this.z);
 	}
-
+	
 	/**
 	 *  Add a vector to this one
 	 * @param obj The vector to add to this one
@@ -96,7 +102,7 @@ public record Vector3f(float x, float y, float z) {
 	public Vector3f add(final Vector3f obj) {
 		return new Vector3f(this.x + obj.x, this.y + obj.y, this.z + obj.z);
 	}
-
+	
 	/**
 	 *  Calculate the angle between this and another vector
 	 * @param obj The other vector
@@ -118,7 +124,7 @@ public record Vector3f(float x, float y, float z) {
 		}
 		return this;
 	}
-
+	
 	/**
 	 *  Return the axis with the largest ABSOLUTE value
 	 * @return values 0,1,2 for x, y, or z
@@ -127,7 +133,7 @@ public record Vector3f(float x, float y, float z) {
 	public int closestAxis() {
 		return abs().maxAxis();
 	}
-
+	
 	/**
 	 *  Return the cross product between this and another vector
 	 * @param obj The other vector
@@ -135,10 +141,9 @@ public record Vector3f(float x, float y, float z) {
 	 */
 	@CheckReturnValue
 	public Vector3f cross(final Vector3f obj) {
-		return new Vector3f(this.y * obj.z - this.z * obj.y, this.z * obj.x - this.x * obj.z,
-				this.x * obj.y - this.y * obj.x);
+		return new Vector3f(this.y * obj.z - this.z * obj.y, this.z * obj.x - this.x * obj.z, this.x * obj.y - this.y * obj.x);
 	}
-
+	
 	/**
 	 *  Return the distance between the ends of this and another vector This
 	 *        is symantically treating the vector like a point
@@ -149,7 +154,7 @@ public record Vector3f(float x, float y, float z) {
 	public float distance(final Vector3f obj) {
 		return (float) Math.sqrt(distance2(obj));
 	}
-
+	
 	/**
 	 *  Return the distance squared between the ends of this and another
 	 *        vector This is symantically treating the vector like a point
@@ -163,7 +168,7 @@ public record Vector3f(float x, float y, float z) {
 		final float deltaZ = obj.z - this.z;
 		return deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
 	}
-
+	
 	/**
 	 *  Inversely scale the vector
 	 * @param val Scale factor to divide by
@@ -175,7 +180,7 @@ public record Vector3f(float x, float y, float z) {
 		}
 		throw new IllegalArgumentException("divice by 0 (vector3f)");
 	}
-
+	
 	/**
 	 *  Inversely scale the vector
 	 * @param val Scale factor to divide by
@@ -184,7 +189,7 @@ public record Vector3f(float x, float y, float z) {
 	public Vector3f divide(final Vector3f val) {
 		return new Vector3f(this.x / val.x, this.y / val.y, this.z / val.z);
 	}
-
+	
 	/**
 	 *  Return the dot product
 	 * @param obj The other vector in the dot product
@@ -194,7 +199,7 @@ public record Vector3f(float x, float y, float z) {
 	public float dot(final Vector3f obj) {
 		return this.x * obj.x + this.y * obj.y + this.z * obj.z;
 	}
-
+	
 	/**
 	 *  Return the axis with the smallest ABSOLUTE value
 	 * @return values 0,1,2 for x, y, or z
@@ -203,7 +208,7 @@ public record Vector3f(float x, float y, float z) {
 	public int furthestAxis() {
 		return abs().minAxis();
 	}
-
+	
 	/**
 	 *  get the value with his index
 	 * @param index Index of the value (0: x, 1: y, 2: z)
@@ -220,7 +225,7 @@ public record Vector3f(float x, float y, float z) {
 		}
 		throw new IllegalArgumentException("Unknown index: " + index);
 	}
-
+	
 	/**
 	 *  Get the maximum value of the vector (x, y, z)
 	 * @return The max value
@@ -229,7 +234,7 @@ public record Vector3f(float x, float y, float z) {
 	public float getMax() {
 		return Math.max(Math.max(this.x, this.y), this.z);
 	}
-
+	
 	/**
 	 *  Get the Axis id with the maximum value
 	 * @return Axis ID 0,1,2
@@ -238,7 +243,7 @@ public record Vector3f(float x, float y, float z) {
 	public int getMaxAxis() {
 		return (this.x < this.y ? (this.y < this.z ? 2 : 1) : (this.x < this.z ? 2 : 0));
 	}
-
+	
 	/**
 	 *  Get the minimum value of the vector (x, y, z)
 	 * @return The min value
@@ -247,7 +252,7 @@ public record Vector3f(float x, float y, float z) {
 	public float getMin() {
 		return Math.min(Math.min(this.x, this.y), this.z);
 	}
-
+	
 	/**
 	 *  Get the Axis id with the minimum value
 	 * @return Axis ID 0,1,2
@@ -256,7 +261,7 @@ public record Vector3f(float x, float y, float z) {
 	public int getMinAxis() {
 		return (this.x < this.y ? (this.x < this.z ? 0 : 2) : (this.y < this.z ? 1 : 2));
 	}
-
+	
 	/**
 	 * @breif Get the orthogonal vector of the current vector
 	 * @return The ortho vector
@@ -275,7 +280,7 @@ public record Vector3f(float x, float y, float z) {
 		final float devider = (float) Math.sqrt(this.x * this.x + this.y * this.y);
 		return new Vector3f(-this.y / devider, this.x / devider, 0.0f);
 	}
-
+	
 	/*
 	 * public void getSkewSymmetricMatrix(final Vector3f obj0, final Vector3f obj1,
 	 * final Vector3f obj2) { obj0.setValue(0, -this.z, this.y);
@@ -295,13 +300,13 @@ public record Vector3f(float x, float y, float z) {
 	public Vector3f getSkewSymmetricMatrix2() {
 		return new Vector3f(-this.y, this.x, 0);
 	}
-
+	
 	// Overloaded operator for the negative of a vector
 	@CheckReturnValue
 	public Vector3f invert() {
 		return new Vector3f(-this.x, -this.y, -this.z);
 	}
-
+	
 	/**
 	 *  In-Equality compare operator with an other object.
 	 * @param obj Reference on the comparing object
@@ -312,7 +317,7 @@ public record Vector3f(float x, float y, float z) {
 	public boolean isDifferent(final Vector3f obj) {
 		return ((this.z != obj.z) || (this.y != obj.y) || (this.x != obj.x));
 	}
-
+	
 	/**
 	 *  Equality compare operator with an other object.
 	 * @param obj Reference on the comparing object
@@ -323,7 +328,7 @@ public record Vector3f(float x, float y, float z) {
 	public boolean isEqual(final Vector3f obj) {
 		return ((this.z == obj.z) && (this.y == obj.y) && (this.x == obj.x));
 	}
-
+	
 	/**
 	 *  Check if the vector is unitary (langth = 10f=)
 	 * @return true if unit , false otherwise
@@ -332,7 +337,7 @@ public record Vector3f(float x, float y, float z) {
 	public boolean isUnit() {
 		return FMath.approxEqual(length2(), 1.0f, Constant.MACHINE_EPSILON);
 	}
-
+	
 	/**
 	 *  Check if the vector is equal to (0,0,0)
 	 * @return true The value is equal to (0,0,0)
@@ -342,7 +347,7 @@ public record Vector3f(float x, float y, float z) {
 	public boolean isZero() {
 		return FMath.approxEqual(length2(), 0.0f, Constant.MACHINE_EPSILON);
 	}
-
+	
 	/**
 	 *  Get the length of the vector
 	 * @return Length value
@@ -351,7 +356,7 @@ public record Vector3f(float x, float y, float z) {
 	public float length() {
 		return (float) Math.sqrt(length2());
 	}
-
+	
 	/**
 	 *  Get the length between the 2 vectors
 	 * @param start First vector
@@ -362,7 +367,7 @@ public record Vector3f(float x, float y, float z) {
 	public float length(final Vector3f start, final Vector3f stop) {
 		return (float) Math.sqrt(length2(start, stop));
 	}
-
+	
 	/**
 	 *  Get the length of the vector squared
 	 * @return Squared length value.
@@ -371,7 +376,7 @@ public record Vector3f(float x, float y, float z) {
 	public float length2() {
 		return dot(this);
 	}
-
+	
 	/**
 	 *  Return the linear interpolation between this and another vector
 	 * @param obj   The other vector
@@ -381,19 +386,19 @@ public record Vector3f(float x, float y, float z) {
 	 */
 	@CheckReturnValue
 	public Vector3f lerp(final Vector3f obj, final float ratio) {
-		return new Vector3f(this.x + (obj.x - this.x) * ratio, this.y + (obj.y - this.y) * ratio,
-				this.z + (obj.z - this.z) * ratio);
+		return new Vector3f(this.x + (obj.x - this.x) * ratio, this.y + (obj.y - this.y) * ratio, this.z + (obj.z - this.z) * ratio);
 	}
 	
 	@CheckReturnValue
 	public Vector3f less(final float value) {
 		return new Vector3f(this.x - value, this.y - value, this.z - value);
 	}
+	
 	@CheckReturnValue
 	public Vector3f less(final float xxx, final float yyy, final float zzz) {
 		return new Vector3f(this.x - xxx, this.y - yyy, this.z - zzz);
 	}
-
+	
 	/**
 	 *  Subtract a vector from this one
 	 * @param obj The vector to subtract
@@ -403,7 +408,7 @@ public record Vector3f(float x, float y, float z) {
 	public Vector3f less(final Vector3f obj) {
 		return new Vector3f(this.x - obj.x, this.y - obj.y, this.z - obj.z);
 	}
-
+	
 	/**
 	 *  Return the axis with the largest value
 	 * @return values 0,1,2 for x, y, or z
@@ -415,7 +420,7 @@ public record Vector3f(float x, float y, float z) {
 		}
 		return this.x < this.z ? 2 : 0;
 	}
-
+	
 	/**
 	 *  Return the axis with the smallest value
 	 * @return values 0,1,2 for x, y, or z
@@ -427,7 +432,7 @@ public record Vector3f(float x, float y, float z) {
 		}
 		return this.y < this.z ? 1 : 2;
 	}
-
+	
 	/**
 	 *  Scale the vector
 	 * @param val Scale factor
@@ -437,7 +442,7 @@ public record Vector3f(float x, float y, float z) {
 	public Vector3f multiply(final float val) {
 		return new Vector3f(this.x * val, this.y * val, this.z * val);
 	}
-
+	
 	/**
 	 *  Elementwise multiply this vector by the other
 	 * @param obj The other vector
@@ -446,7 +451,7 @@ public record Vector3f(float x, float y, float z) {
 	public Vector3f multiply(final Vector3f obj) {
 		return new Vector3f(this.x * obj.x, this.y * obj.y, this.z * obj.z);
 	}
-
+	
 	/**
 	 *  Normalize this vector x^2 + y^2 + z^2 = 1
 	 * @return the current vector
@@ -455,7 +460,7 @@ public record Vector3f(float x, float y, float z) {
 	public Vector3f normalize() {
 		return this.divide(this.length());
 	}
-
+	
 	/**
 	 *  Return a rotated version of this vector
 	 * @param wAxis The axis to rotate about
@@ -473,7 +478,7 @@ public record Vector3f(float x, float y, float z) {
 		out = out.add(y);
 		return out;
 	}
-
+	
 	/**
 	 *  Normalize this vector x^2 + y^2 + z^2 = 1 (check if not deviding by 0,
 	 *        if it is the case ==> return (1,0,0))
@@ -487,7 +492,7 @@ public record Vector3f(float x, float y, float z) {
 		}
 		return new Vector3f(1, 0, 0);
 	}
-
+	
 	/**
 	 *  Interpolate the vector with a ration between 2 others
 	 * @param obj0  First vector
@@ -497,11 +502,10 @@ public record Vector3f(float x, float y, float z) {
 	@CheckReturnValue
 	public Vector3f setInterpolate3(final Vector3f obj0, final Vector3f obj1, final float ratio) {
 		final float inverse = 1.0f - ratio;
-		return new Vector3f(inverse * obj0.x + ratio * obj1.x, inverse * obj0.y + ratio * obj1.y,
-				inverse * obj0.z + ratio * obj1.z);
+		return new Vector3f(inverse * obj0.x + ratio * obj1.x, inverse * obj0.y + ratio * obj1.y, inverse * obj0.z + ratio * obj1.z);
 		// this.co[3] = s * v0[3] + rt * v1[3];
 	}
-
+	
 	/**
 	 *  Set each element to the max of the current values and the values of
 	 *        another Vector3f
@@ -521,7 +525,7 @@ public record Vector3f(float x, float y, float z) {
 	public static Vector3f min(final Vector3f obj1, final Vector3f obj2) {
 		return new Vector3f(Math.min(obj1.x, obj2.x), Math.min(obj1.y, obj2.y), Math.min(obj1.z, obj2.z));
 	}
-
+	
 	/**
 	 *  Set each element to the min of the current values and the values of
 	 *        another Vector3f
@@ -546,19 +550,28 @@ public record Vector3f(float x, float y, float z) {
 	public Vector3f withZ(final float zzz) {
 		return new Vector3f(this.x, this.y, zzz);
 	}
-
+	
 	/**
 	 *  Set 0 value on all the vector
 	 */
 	public static final Vector3f ZERO = new Vector3f(0, 0, 0);
 	public static final Vector3f ONE = new Vector3f(1, 1, 1);
-
+	public static final Vector3f VALUE_2 = new Vector3f(2, 2, 2);
+	public static final Vector3f VALUE_4 = new Vector3f(4, 4, 4);
+	public static final Vector3f VALUE_8 = new Vector3f(8, 8, 8);
+	public static final Vector3f VALUE_16 = new Vector3f(16, 16, 16);
+	public static final Vector3f VALUE_32 = new Vector3f(32, 32, 32);
+	public static final Vector3f VALUE_64 = new Vector3f(64, 64, 64);
+	public static final Vector3f VALUE_128 = new Vector3f(128, 128, 128);
+	public static final Vector3f VALUE_256 = new Vector3f(256, 256, 256);
+	public static final Vector3f VALUE_512 = new Vector3f(512, 512, 512);
+	public static final Vector3f VALUE_1024 = new Vector3f(1024, 1024, 1024);
+	
 	@Override
 	public String toString() {
-		return "Vector3f(" + FMath.floatToString(this.x) + "," + FMath.floatToString(this.y) + ","
-				+ FMath.floatToString(this.z) + ")";
+		return "Vector3f(" + FMath.floatToString(this.x) + "," + FMath.floatToString(this.y) + "," + FMath.floatToString(this.z) + ")";
 	}
-
+	
 	/**
 	 *  Return the triple product between this and another vector and another
 	 * @param obj1 The other vector 1
@@ -567,7 +580,6 @@ public record Vector3f(float x, float y, float z) {
 	 */
 	@CheckReturnValue
 	public float triple(final Vector3f obj1, final Vector3f obj2) {
-		return this.x * (obj1.y * obj2.z - obj1.z * obj2.y) + this.y * (obj1.z * obj2.x - obj1.x * obj2.z)
-				+ this.z * (obj1.x * obj2.y - obj1.y * obj2.x);
+		return this.x * (obj1.y * obj2.z - obj1.z * obj2.y) + this.y * (obj1.z * obj2.x - obj1.x * obj2.z) + this.z * (obj1.x * obj2.y - obj1.y * obj2.x);
 	}
 }

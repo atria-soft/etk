@@ -33,6 +33,13 @@ public class Log {
 		}
 	}
 	
+	public static void error(final String data, final Exception e) {
+		e.printStackTrace();
+		if (PRINT_ERROR) {
+			Logger.error(LIB_NAME_DRAW, data);
+		}
+	}
+	
 	public static void info(final String data) {
 		if (PRINT_INFO) {
 			Logger.info(LIB_NAME_DRAW, data);

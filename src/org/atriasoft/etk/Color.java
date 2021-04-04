@@ -162,8 +162,8 @@ public record Color(
 	public static final Color YELLOW = new Color(0xFF, 0xFF, 0x00, 0xFF);
 	public static final Color YELLOW_GREEN = new Color(0x9A, 0xCD, 0x32, 0xFF);
 	
-	private static final Map<String, Color> NAMED_COLORS = Map.<String, Color>ofEntries(
-			//@formatter:off
+	private static final Map<String, Color> NAMED_COLORS = Map.<String, Color> ofEntries(
+	//@formatter:off
     	Map.entry("none",				NONE),
     	Map.entry("aliceblue",			ALICE_BLUE),
     	Map.entry("antiquewhite",		ANTIQUE_WHITE),
@@ -414,9 +414,29 @@ public record Color(
 		this.a = a;
 	}
 	
+	public Color(final double r, final double g, final double b, final double a) {
+		this((float) r, (float) g, (float) b, (float) a);
+	}
+	
 	@Override
 	public String toString() {
 		return "rgba(" + this.r + ", " + this.g + ", " + this.b + ", " + this.a + ")";
+	}
+	
+	public Color withR(final float value) {
+		return new Color(value, this.g, this.b, this.a);
+	}
+	
+	public Color withG(final float value) {
+		return new Color(this.r, value, this.b, this.a);
+	}
+	
+	public Color withB(final float value) {
+		return new Color(this.r, this.g, value, this.a);
+	}
+	
+	public Color withA(final float value) {
+		return new Color(this.r, this.g, this.b, value);
 	}
 	
 }

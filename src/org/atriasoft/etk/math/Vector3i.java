@@ -1,7 +1,8 @@
 package org.atriasoft.etk.math;
 
-import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 import org.atriasoft.etk.internal.Log;
+
+import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
 public record Vector3i(
 		int x,
@@ -20,7 +21,7 @@ public record Vector3i(
 		}
 		final String[] values = value.split(",");
 		if (values.length > 3) {
-			Log.error("Can not parse Vector3f with more than 3 values: '" + value + "'");
+			Log.error("Can not parse Vector3i with more than 3 values: '" + value + "'");
 		}
 		if (values.length == 1) {
 			// no coma ...
@@ -58,15 +59,15 @@ public record Vector3i(
 		this.y = y;
 		this.z = z;
 	}
-
+	
 	public static Vector3i max(final Vector3i obj1, final Vector3i obj2) {
 		return new Vector3i(Math.max(obj1.x, obj2.x), Math.max(obj1.y, obj2.y), Math.max(obj1.z, obj2.z));
 	}
-
+	
 	public static Vector3i min(final Vector3i obj1, final Vector3i obj2) {
 		return new Vector3i(Math.min(obj1.x, obj2.x), Math.min(obj1.y, obj2.y), Math.min(obj1.z, obj2.z));
 	}
-
+	
 	/**
 	 * Constructor from scalars 
 	 * @param value unique value for X,Y and Z value
@@ -92,10 +93,12 @@ public record Vector3i(
 	public Vector3i add(final Vector3i obj) {
 		return new Vector3i(this.x + obj.x, this.y + obj.y, this.z + obj.z);
 	}
+	
 	@CheckReturnValue
 	public Vector3i add(final int value) {
 		return new Vector3i(this.x + value, this.y + value, this.z + value);
 	}
+	
 	@CheckReturnValue
 	public Vector3i add(final int xxx, final int yyy, final int zzz) {
 		return new Vector3i(this.x + xxx, this.y + yyy, this.z + zzz);
@@ -225,6 +228,7 @@ public record Vector3i(
 	public int getMinAxis() {
 		return (this.x < this.y ? (this.x < this.z ? 0 : 2) : (this.y < this.z ? 1 : 2));
 	}
+	
 	@CheckReturnValue
 	public Vector3i getSkewSymmetricMatrix0() {
 		return new Vector3i(0, -this.z, this.y);
@@ -309,10 +313,12 @@ public record Vector3i(
 	public Vector3i less(final Vector3i obj) {
 		return new Vector3i(this.x - obj.x, this.y - obj.y, this.z - obj.z);
 	}
+	
 	@CheckReturnValue
 	public Vector3i less(final int value) {
 		return new Vector3i(this.x - value, this.y - value, this.z - value);
 	}
+	
 	@CheckReturnValue
 	public Vector3i less(final int xxx, final int yyy, final int zzz) {
 		return new Vector3i(this.x - xxx, this.y - yyy, this.z - zzz);
@@ -414,6 +420,16 @@ public record Vector3i(
 	 */
 	public static final Vector3i ZERO = new Vector3i(0, 0, 0);
 	public static final Vector3i ONE = new Vector3i(1, 1, 1);
+	public static final Vector3i VALUE_2 = new Vector3i(2, 2, 2);
+	public static final Vector3i VALUE_4 = new Vector3i(4, 4, 4);
+	public static final Vector3i VALUE_8 = new Vector3i(8, 8, 8);
+	public static final Vector3i VALUE_16 = new Vector3i(16, 16, 16);
+	public static final Vector3i VALUE_32 = new Vector3i(32, 32, 32);
+	public static final Vector3i VALUE_64 = new Vector3i(64, 64, 64);
+	public static final Vector3i VALUE_128 = new Vector3i(128, 128, 128);
+	public static final Vector3i VALUE_256 = new Vector3i(256, 256, 256);
+	public static final Vector3i VALUE_512 = new Vector3i(512, 512, 512);
+	public static final Vector3i VALUE_1024 = new Vector3i(1024, 1024, 1024);
 	
 	@Override
 	public String toString() {

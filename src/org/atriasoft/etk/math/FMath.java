@@ -12,6 +12,10 @@ public class FMath {
 		return a;
 	}
 	
+	public static float acos(final float value) {
+		return (float) Math.acos(value);
+	}
+	
 	/**
 	 * Test if the value id in the correct range
 	 * 
@@ -36,6 +40,10 @@ public class FMath {
 		return (abs(difference) < epsilon);
 	}
 	
+	public static float asin(final float value) {
+		return (float) Math.asin(value);
+	}
+	
 	public static float atan(final float value) {
 		return (float) Math.atan(value);
 	}
@@ -45,6 +53,10 @@ public class FMath {
 	}
 	
 	public static float avg(final float min, final float value, final float max) {
+		return Math.max(min, Math.min(value, max));
+	}
+	
+	public static int avg(final int min, final int value, final int max) {
 		return Math.max(min, Math.min(value, max));
 	}
 	
@@ -79,6 +91,48 @@ public class FMath {
 	public static int floor(final float f) {
 		return (int) Math.floor(f);
 	}
+	
+	public static double[] getTableDouble(final String data, final String separator, final int nbElement) {
+		double[] out = new double[nbElement];
+		String[] values = data.split(separator);
+		if (values.length != nbElement) {
+			return null;
+		}
+		for (int iii = 0; iii < nbElement; iii++) {
+			out[iii] = Double.parseDouble(values[iii]);
+		}
+		return out;
+	}
+	
+	public static float[] getTableFloat(final String data, final String separator, final int nbElement) {
+		float[] out = new float[nbElement];
+		String[] values = data.split(separator);
+		if (values.length != nbElement) {
+			return null;
+		}
+		for (int iii = 0; iii < nbElement; iii++) {
+			out[iii] = Float.parseFloat(values[iii]);
+		}
+		return out;
+	}
+	
+	// return list of read and the number of char read.
+	/*
+	public static Pair<float[], Integer> getTableFloatMax(final String data, final String separator, final int nbElement) {
+		data = data.replace(",", " ");
+		
+		List<Float> out = new ArrayList<>();
+		String[] values = data.split(separator);
+		for (int iii = 0; iii < values.length; iii++) {
+			try {
+				float val = Float.parseFloat(values[iii]);
+			} catch (NumberFormatException e) {
+				break;
+			}
+		}
+		return out;
+	}
+	*/
 	
 	public static float max(final float a, final float b) {
 		return Math.max(a, b);

@@ -1,5 +1,7 @@
 package org.atriasoft.etk;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -22,7 +24,8 @@ public class Uri {
 	
 	static {
 		genericMap.put("DATA", "data/");
-		genericMap.put("THEME_GUI", "theme/");
+		genericMap.put("THEME", "theme/");
+		genericMap.put("TRANSLATE", "translate/");
 	}
 	
 	public static void addLibrary(final String libName, final Class<?> classHandle, String basePath) {
@@ -84,6 +87,7 @@ public class Uri {
 			Log.warning("    !! Application data class is not defined ...");
 		} else {
 			String tmpPath = applicationBasePath + offsetGroup + uri.path;
+			tmpPath = tmpPath.replace("//", "/");
 			Log.info("(appl) Try to load '" + tmpPath + "' in " + applicationClass.getCanonicalName());
 			URL realFileName = applicationClass.getClassLoader().getResource(tmpPath);
 			if (realFileName != null) {
@@ -107,6 +111,7 @@ public class Uri {
 					return null;
 				}
 				String tmpPath = libraryElement.basePath + offsetGroup + uri.path;
+				tmpPath = tmpPath.replace("//", "/");
 				Log.info("(lib) Try to load '" + tmpPath + "' in " + libraryElement.klass.getCanonicalName());
 				URL realFileName = libraryElement.klass.getClassLoader().getResource(tmpPath);
 				if (realFileName != null) {
@@ -129,6 +134,10 @@ public class Uri {
 	public static List<Uri> listRecursive(final Uri uri) {
 		final List<Uri> out = new ArrayList<>();
 		return out;
+	}
+	
+	public static void setApplication(final Class<?> classHandle) {
+		setApplication(classHandle, "");
 	}
 	
 	public static void setApplication(final Class<?> classHandle, String basePath) {
@@ -178,11 +187,35 @@ public class Uri {
 		return new Uri(group, path, lib);
 	}
 	
+	public static void writeAll(final Uri uri, final String data) {
+		BufferedWriter out = null;
+		try {
+			FileWriter fstream = new FileWriter(uri.getPath(), true); //true tells to append data.
+			out = new BufferedWriter(fstream);
+			out.write(data);
+		} catch (IOException e) {
+			Log.error("Error: " + e.getMessage());
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Log.error("Error: ", e);
+				}
+			}
+		}
+	}
+	
 	private final String group;
 	
 	private final String path;
 	
 	private final String lib;
+	
+	public Uri(final String path) {
+		this(null, path, null);
+	}
 	
 	public Uri(final String group, final String path) {
 		this(group, path, null);

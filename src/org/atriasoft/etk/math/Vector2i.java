@@ -21,7 +21,7 @@ public record Vector2i(
 		}
 		final String[] values = value.split(",");
 		if (values.length > 2) {
-			Log.error("Can not parse Vector2f with more than 2 values: '" + value + "'");
+			Log.error("Can not parse Vector2i with more than 2 values: '" + value + "'");
 		}
 		if (values.length == 1) {
 			// no coma ...
@@ -318,6 +318,16 @@ public record Vector2i(
 	 */
 	public static final Vector2i ZERO = new Vector2i(0, 0);
 	public static final Vector2i ONE = new Vector2i(1, 1);
+	public static final Vector2i VALUE_2 = new Vector2i(2, 2);
+	public static final Vector2i VALUE_4 = new Vector2i(4, 4);
+	public static final Vector2i VALUE_8 = new Vector2i(8, 8);
+	public static final Vector2i VALUE_16 = new Vector2i(16, 16);
+	public static final Vector2i VALUE_32 = new Vector2i(32, 32);
+	public static final Vector2i VALUE_64 = new Vector2i(64, 64);
+	public static final Vector2i VALUE_128 = new Vector2i(128, 128);
+	public static final Vector2i VALUE_256 = new Vector2i(256, 256);
+	public static final Vector2i VALUE_512 = new Vector2i(512, 512);
+	public static final Vector2i VALUE_1024 = new Vector2i(1024, 1024);
 	
 	@Override
 	public String toString() {

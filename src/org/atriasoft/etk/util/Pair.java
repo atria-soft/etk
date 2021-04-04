@@ -49,6 +49,15 @@ public class Pair<U, V> {
 	public String toString() {
 		return "(" + this.first + ", " + this.second + ")";
 	}
+	
+	public Pair<U, V> withFirst(final U value) {
+		return new Pair<>(value, this.second);
+	}
+	
+	public Pair<U, V> withSecond(final V value) {
+		return new Pair<>(this.first, value);
+	}
+	
 }
 
 // Program to implement Pair Class in Java
