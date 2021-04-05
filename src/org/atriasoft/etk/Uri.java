@@ -190,6 +190,26 @@ public class Uri {
 	public static void writeAll(final Uri uri, final String data) {
 		BufferedWriter out = null;
 		try {
+			FileWriter fstream = new FileWriter(uri.getPath(), false); //true tells to append data.
+			out = new BufferedWriter(fstream);
+			out.write(data);
+		} catch (IOException e) {
+			Log.error("Error: " + e.getMessage());
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					Log.error("Error: ", e);
+				}
+			}
+		}
+	}
+	
+	public static void writeAllAppend(final Uri uri, final String data) {
+		BufferedWriter out = null;
+		try {
 			FileWriter fstream = new FileWriter(uri.getPath(), true); //true tells to append data.
 			out = new BufferedWriter(fstream);
 			out.write(data);
@@ -240,7 +260,7 @@ public class Uri {
 	}
 	
 	public String getExtention() {
-		final String[] ret = this.path.split(".");
+		final String[] ret = this.path.split("\\.");
 		return ret[ret.length - 1];
 	}
 	

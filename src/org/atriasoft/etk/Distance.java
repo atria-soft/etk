@@ -1,6 +1,7 @@
 package org.atriasoft.etk;
 
 public enum Distance {
+	UNKNOW, //!< "%"
 	POURCENT, //!< "%"
 	PIXEL, //!< "px"
 	METER, //!< "m"

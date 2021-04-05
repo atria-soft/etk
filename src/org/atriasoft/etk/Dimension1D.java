@@ -6,7 +6,6 @@
 package org.atriasoft.etk;
 
 import org.atriasoft.etk.internal.Log;
-import org.atriasoft.etk.math.Vector2f;
 
 /**
  * in the dimension class we store the data as the more usefull unit (pixel) 
@@ -89,7 +88,6 @@ public record Dimension1D(
 	 * @param config dimension configuration.
 	 */
 	public static Dimension1D valueOf(String config) {
-		final Vector2f size = Vector2f.ZERO;
 		Distance type = Distance.PIXEL;
 		if (config.endsWith("%")) {
 			type = Distance.POURCENT;
@@ -127,9 +125,6 @@ public record Dimension1D(
 		} else if (config.endsWith("pc")) {
 			type = Distance.PC;
 			config = config.substring(0, config.length() - 2);
-		} else {
-			Log.critical("Can not parse dimension : '" + config + "'");
-			return null;
 		}
 		final float tmp = Float.valueOf(config);
 		final Dimension1D ret = new Dimension1D(tmp, type);

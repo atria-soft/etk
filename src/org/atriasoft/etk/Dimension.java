@@ -184,6 +184,9 @@ public record Dimension(
 	 * @return dimension in Pixel
 	 */
 	public Vector2f getPixel() {
+		if (this.type != Distance.POURCENT) {
+			return this.size;
+		}
 		return getPixel(windowsSize.getPixel());
 	}
 	
@@ -191,7 +194,7 @@ public record Dimension(
 		if (this.type != Distance.POURCENT) {
 			return this.size;
 		}
-		final Vector2f res = new Vector2f(uppersize.x() * this.size.x(), uppersize.y() * this.size.y());
+		final Vector2f res = new Vector2f(uppersize.x() * this.size.x() * 0.01f, uppersize.y() * this.size.y() * 0.01f);
 		//GALE_DEBUG("Get % : " + m_data + " / " + windDim + " == > " + res);
 		return res;
 	}
@@ -205,7 +208,7 @@ public record Dimension(
 		if (this.type != Distance.POURCENT) {
 			return new Vector2i((int) this.size.x(), (int) this.size.y());
 		}
-		final Vector2i res = new Vector2i((int) (uppersize.x() * this.size.x()), (int) (uppersize.y() * this.size.y()));
+		final Vector2i res = new Vector2i((int) (uppersize.x() * this.size.x() * 0.01f), (int) (uppersize.y() * this.size.y() * 0.01f));
 		//GALE_DEBUG("Get % : " + m_data + " / " + windDim + " == > " + res);
 		return res;
 	}
@@ -238,7 +241,6 @@ public record Dimension(
 	 * @param config dimension configuration.
 	 */
 	public static Dimension valueOf(String config) {
-		final Vector2f size = Vector2f.ZERO;
 		Distance type = Distance.PIXEL;
 		if (config.endsWith("%")) {
 			type = Distance.POURCENT;
@@ -308,6 +310,95 @@ public record Dimension(
 			default -> str += "";
 		}
 		return str;
+	}
+	
+	public static Dimension valueOf(String contentX, String contentY) {
+		
+		Distance typeX = Distance.UNKNOW;
+		if (contentX.endsWith("%")) {
+			typeX = Distance.POURCENT;
+			contentX = contentX.substring(0, contentX.length() - 1);
+		} else if (contentX.endsWith("px")) {
+			typeX = Distance.PIXEL;
+			contentX = contentX.substring(0, contentX.length() - 2);
+		} else if (contentX.endsWith("ft")) {
+			typeX = Distance.FOOT;
+			contentX = contentX.substring(0, contentX.length() - 2);
+		} else if (contentX.endsWith("in")) {
+			typeX = Distance.INCH;
+			contentX = contentX.substring(0, contentX.length() - 2);
+		} else if (contentX.endsWith("km")) {
+			typeX = Distance.KILOMETER;
+			contentX = contentX.substring(0, contentX.length() - 2);
+		} else if (contentX.endsWith("mm")) {
+			typeX = Distance.MILLIMETER;
+			contentX = contentX.substring(0, contentX.length() - 2);
+		} else if (contentX.endsWith("cm")) {
+			typeX = Distance.CENTIMETER;
+			contentX = contentX.substring(0, contentX.length() - 2);
+		} else if (contentX.endsWith("m")) {
+			typeX = Distance.METER;
+			contentX = contentX.substring(0, contentX.length() - 1);
+		} else if (contentX.endsWith("em")) {
+			typeX = Distance.ELEMENT;
+			contentX = contentX.substring(0, contentX.length() - 2);
+		} else if (contentX.endsWith("ex")) {
+			typeX = Distance.EX;
+			contentX = contentX.substring(0, contentX.length() - 2);
+		} else if (contentX.endsWith("pt")) {
+			typeX = Distance.POINT;
+			contentX = contentX.substring(0, contentX.length() - 2);
+		} else if (contentX.endsWith("pc")) {
+			typeX = Distance.PC;
+			contentX = contentX.substring(0, contentX.length() - 2);
+		}
+		float tmpX = Float.valueOf(contentX);
+		Distance typeY = Distance.UNKNOW;
+		if (contentY.endsWith("%")) {
+			typeY = Distance.POURCENT;
+			contentY = contentY.substring(0, contentY.length() - 1);
+		} else if (contentY.endsWith("px")) {
+			typeY = Distance.PIXEL;
+			contentY = contentY.substring(0, contentY.length() - 2);
+		} else if (contentY.endsWith("ft")) {
+			typeY = Distance.FOOT;
+			contentY = contentY.substring(0, contentY.length() - 2);
+		} else if (contentY.endsWith("in")) {
+			typeY = Distance.INCH;
+			contentY = contentY.substring(0, contentY.length() - 2);
+		} else if (contentY.endsWith("km")) {
+			typeY = Distance.KILOMETER;
+			contentY = contentY.substring(0, contentY.length() - 2);
+		} else if (contentY.endsWith("mm")) {
+			typeY = Distance.MILLIMETER;
+			contentY = contentY.substring(0, contentY.length() - 2);
+		} else if (contentY.endsWith("cm")) {
+			typeY = Distance.CENTIMETER;
+			contentY = contentY.substring(0, contentY.length() - 2);
+		} else if (contentY.endsWith("m")) {
+			typeY = Distance.METER;
+			contentY = contentY.substring(0, contentY.length() - 1);
+		} else if (contentY.endsWith("em")) {
+			typeY = Distance.ELEMENT;
+			contentY = contentY.substring(0, contentY.length() - 2);
+		} else if (contentY.endsWith("ex")) {
+			typeY = Distance.EX;
+			contentY = contentY.substring(0, contentY.length() - 2);
+		} else if (contentY.endsWith("pt")) {
+			typeY = Distance.POINT;
+			contentY = contentY.substring(0, contentY.length() - 2);
+		} else if (contentY.endsWith("pc")) {
+			typeY = Distance.PC;
+			contentY = contentY.substring(0, contentY.length() - 2);
+		}
+		float tmpY = Float.valueOf(contentY);
+		
+		if (typeX == Distance.UNKNOW && typeY == Distance.UNKNOW) {
+			return new Dimension(new Vector2f(tmpX, tmpY), Distance.PIXEL);
+		} else if (typeX == Distance.UNKNOW) {
+			return new Dimension(new Vector2f(tmpX, tmpY), typeY);
+		}
+		return new Dimension(new Vector2f(tmpX, tmpY), typeX);
 	}
 	
 }

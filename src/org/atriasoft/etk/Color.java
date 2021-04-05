@@ -321,7 +321,7 @@ public record Color(
 	
 	public static Color valueOf(final String colorBase) throws Exception {
 		// remove all white space...
-		String color = colorBase.replace(" \r\n\t\\(\\)", "");
+		String color = colorBase.replaceAll("[ \r\n\t\\(\\)]", "");
 		if (color.isEmpty()) {
 			return new Color(0, 0, 0, 1.0f);
 		}
@@ -403,8 +403,96 @@ public record Color(
 		}
 	}
 	
+	public static Color valueOf256(final String colorBase) throws Exception {
+		// remove all white space...
+		String color = colorBase.replaceAll("[ \r\n\t\\(\\)]", "");
+		if (color.isEmpty()) {
+			return new Color(0, 0, 0, 1.0f);
+		}
+		final Color named = get(colorBase);
+		if (named != null) {
+			return named;
+		} else if (color.charAt(0) == '#') {
+			// MODEL: #RGB
+			//        #RGBA
+			//        #RRGGBB
+			//        #RRGGBBAA
+			switch (color.length()) {
+				case 4 -> {
+					final float r = Integer.parseInt(color.substring(1, 2), 16) * 255.0f * 16.0f;
+					final float g = Integer.parseInt(color.substring(2, 3), 16) * 255.0f * 16.0f;
+					final float b = Integer.parseInt(color.substring(3, 4), 16) * 255.0f * 16.0f;
+					return new Color(r, g, b);
+				}
+				case 5 -> {
+					final float r = Integer.parseInt(color.substring(1, 2), 16) * 255.0f * 16.0f;
+					final float g = Integer.parseInt(color.substring(2, 3), 16) * 255.0f * 16.0f;
+					final float b = Integer.parseInt(color.substring(3, 4), 16) * 255.0f * 16.0f;
+					final float a = Integer.parseInt(color.substring(4, 5), 16) * 255.0f * 16.0f;
+					return new Color(r, g, b, a);
+				}
+				case 7 -> {
+					final float r = Integer.parseInt(color.substring(1, 3), 16) * 255.0f;
+					final float g = Integer.parseInt(color.substring(3, 5), 16) * 255.0f;
+					final float b = Integer.parseInt(color.substring(5, 7), 16) * 255.0f;
+					return new Color(r, g, b);
+				}
+				case 9 -> {
+					final float r = Integer.parseInt(color.substring(1, 3), 16) * 255.0f;
+					final float g = Integer.parseInt(color.substring(3, 5), 16) * 255.0f;
+					final float b = Integer.parseInt(color.substring(5, 7), 16) * 255.0f;
+					final float a = Integer.parseInt(color.substring(7, 9), 16) * 255.0f;
+					return new Color(r, g, b, a);
+				}
+				default -> throw new Exception("Can not parse color ... '" + colorBase + "'");
+			}
+		} else {
+			// Model: r.r,g.g,b.b
+			//        r.r,g.g,b.b,a.a
+			//       (r.r,g.g,b.b)
+			//       (r.r,g.g,b.b,a.a)
+			//       rgb(r.r,g.g,b.b)
+			//       rgba(r.r,g.g,b.b,a.a)
+			//       argb(a.a,r.r,g.g,b.b)
+			if (color.startsWith("argb")) {
+				color = color.replace("argb", "");
+				final String[] vals = color.split(",");
+				if (vals.length == 4) {
+					final float a = FMath.avg(0.0f, Float.parseFloat(vals[0]) / 256.0f, 1.0f);
+					final float r = FMath.avg(0.0f, Float.parseFloat(vals[1]) / 256.0f, 1.0f);
+					final float g = FMath.avg(0.0f, Float.parseFloat(vals[2]) / 256.0f, 1.0f);
+					final float b = FMath.avg(0.0f, Float.parseFloat(vals[3]) / 256.0f, 1.0f);
+					return new Color(r, g, b, a);
+				} else {
+					throw new Exception("Can not parse color ... '" + colorBase + "'");
+				}
+			}
+			color = color.replace("rgb", "");
+			color = color.replace("rgba", "");
+			final String[] vals = color.split(",");
+			if (vals.length == 3) {
+				final float r = FMath.avg(0.0f, Float.parseFloat(vals[0]) / 256.0f, 1.0f);
+				final float g = FMath.avg(0.0f, Float.parseFloat(vals[1]) / 256.0f, 1.0f);
+				final float b = FMath.avg(0.0f, Float.parseFloat(vals[2]) / 256.0f, 1.0f);
+				return new Color(r, g, b);
+			} else if (vals.length == 4) {
+				final float r = FMath.avg(0.0f, Float.parseFloat(vals[0]) / 256.0f, 1.0f);
+				final float g = FMath.avg(0.0f, Float.parseFloat(vals[1]) / 256.0f, 1.0f);
+				final float b = FMath.avg(0.0f, Float.parseFloat(vals[2]) / 256.0f, 1.0f);
+				final float a = FMath.avg(0.0f, Float.parseFloat(vals[3]) / 256.0f, 1.0f);
+				return new Color(r, g, b, a);
+			} else {
+				throw new Exception("Can not parse color ... '" + colorBase + "'");
+			}
+		}
+	}
+	
 	public Color(final float r, final float g, final float b) {
 		this(r, g, b, 1.0f);
+	}
+	
+	public Color(final int r, final int g, final int b) {
+		this(r, g, b, 0xFF);
 	}
 	
 	public Color(final float r, final float g, final float b, final float a) {
@@ -412,6 +500,10 @@ public record Color(
 		this.g = g;
 		this.b = b;
 		this.a = a;
+	}
+	
+	public Color(final int r, final int g, final int b, final int a) {
+		this(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
 	}
 	
 	public Color(final double r, final double g, final double b, final double a) {
