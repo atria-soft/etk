@@ -98,24 +98,25 @@ public record Matrix4f(
 	* @return New matrix of the transformation requested
 	*/
 	public static Matrix4f createMatrixOrtho(final float left, final float right, final float bottom, final float top, final float nearVal, final float farVal) {
-		float a1 = 2.0f / (right - left);
 		float b1 = 0;
 		float c1 = 0;
-		float d1 = -1.0f * (right + left) / (right - left);
 		float a2 = 0;
-		float b2 = 2.0f / (top - bottom);
 		float c2 = 0;
-		float d2 = -1.0f * (top + bottom) / (top - bottom);
 		float a3 = 0;
 		float b3 = 0;
-		float c3 = -2.0f / (farVal - nearVal);
-		float d3 = -1.0f * (farVal + nearVal) / (farVal - nearVal);
 		float a4 = 0;
 		float b4 = 0;
 		float c4 = 0;
+		
+		float a1 = 2.0f / (right - left);
+		float b2 = 2.0f / (top - bottom);
+		float c3 = -2.0f / (farVal - nearVal);
+		float d1 = -1.0f * (right + left) / (right - left);
+		float d2 = -1.0f * (top + bottom) / (top - bottom);
+		float d3 = -1.0f * (farVal + nearVal) / (farVal - nearVal);
 		float d4 = 1.0f;
-		//return new Matrix4f(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4);
-		return new Matrix4f(a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4);
+		return new Matrix4f(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4);
+		//return new Matrix4f(a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4);
 		
 	}
 	

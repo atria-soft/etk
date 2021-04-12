@@ -2,6 +2,8 @@ package org.atriasoft.etk.math;
 
 import java.text.DecimalFormat;
 
+import org.atriasoft.etk.internal.Log;
+
 public class FMath {
 	public static final float PI = (float) Math.PI;
 	
@@ -185,6 +187,23 @@ public class FMath {
 	public static float mod(final float value, final float modulo) {
 		// TODO Auto-generated method stub
 		return value % modulo;
+	}
+	
+	/**
+	 * get the next power 2 if the input
+	 * @param value Value that we want the next power of 2
+	 * @return result value
+	 */
+	public static int nextP2(final int value) {
+		int val = 1;
+		for (int iii = 1; iii < 31; iii++) {
+			if (value <= val) {
+				return val;
+			}
+			val *= 2;
+		}
+		Log.critical("impossible CASE....");
+		return val;
 	}
 	
 	public static float pow(final float value, final float exponent) {

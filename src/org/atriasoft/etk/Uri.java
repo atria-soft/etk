@@ -25,6 +25,7 @@ public class Uri {
 	static {
 		genericMap.put("DATA", "data/");
 		genericMap.put("THEME", "theme/");
+		genericMap.put("FONTS", "fonts/");
 		genericMap.put("TRANSLATE", "translate/");
 	}
 	
@@ -101,11 +102,11 @@ public class Uri {
 		}
 		if (out == null) {
 			// search in the libraries ...
-			if (uri.lib == null) {
+			if (uri.properties.get("lib") == null) {
 				Log.warning("    !! No library specified");
 				return null;
 			} else {
-				LibraryElement libraryElement = libraries.get(uri.lib);
+				LibraryElement libraryElement = libraries.get(uri.properties.get("lib"));
 				if (libraryElement == null) {
 					Log.warning("     Can not get element in library");
 					return null;
@@ -133,6 +134,7 @@ public class Uri {
 	
 	public static List<Uri> listRecursive(final Uri uri) {
 		final List<Uri> out = new ArrayList<>();
+		Log.todo("not implemented function ...");
 		return out;
 	}
 	
@@ -231,28 +233,56 @@ public class Uri {
 	
 	private final String path;
 	
-	private final String lib;
+	private final Map<String, String> properties;
 	
 	public Uri(final String path) {
-		this(null, path, null);
+		this(null, path);
 	}
 	
 	public Uri(final String group, final String path) {
-		this(group, path, null);
-	}
-	
-	public Uri(final String group, final String path, final String lib) {
 		if (group == null) {
 			this.group = null;
 		} else {
 			this.group = group.toUpperCase();
 		}
 		this.path = path;
-		if (lib == null) {
-			this.lib = null;
+		this.properties = new HashMap<>();
+	}
+	
+	public Uri(final String group, final String path, final Map<String, String> properties) {
+		if (group == null) {
+			this.group = null;
 		} else {
-			this.lib = lib.toLowerCase();
+			this.group = group.toUpperCase();
 		}
+		this.path = path;
+		this.properties = new HashMap<>(properties);
+	}
+	
+	public Uri(final String group, final String path, final String lib) {
+		this(group, path);
+		if (lib != null) {
+			this.properties.put("lib", lib.toLowerCase());
+		}
+	}
+	
+	@Override
+	public Uri clone() {
+		return new Uri(this.group, this.path, new HashMap<>(this.properties));
+	}
+	
+	public boolean exist() {
+		InputStream stream = getStream(this);
+		if (stream == null) {
+			return false;
+		}
+		try {
+			stream.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return true;
 	}
 	
 	public String get() {
@@ -264,8 +294,20 @@ public class Uri {
 		return ret[ret.length - 1];
 	}
 	
+	public String getGroup() {
+		return this.group;
+	}
+	
 	public String getPath() {
 		return this.path;
+	}
+	
+	public Map<String, String> getproperties() {
+		return this.properties;
+	}
+	
+	public String getproperty(final String key) {
+		return this.properties.get(key);
 	}
 	
 	public String getValue() {
@@ -276,29 +318,47 @@ public class Uri {
 		return this.path == null || this.path.isEmpty();
 	}
 	
+	public void setproperty(final String key, final String value) {
+		this.properties.put(key, value);
+	}
+	
 	@Override
 	public String toString() {
-		String out = "";
+		StringBuilder out = new StringBuilder();
 		if (this.group != null) {
-			out += this.group + ":";
+			out.append(this.group);
+			out.append(":");
 		}
-		out += this.path;
-		if (this.lib != null) {
-			out += "?lib=" + this.lib;
+		out.append(this.path);
+		boolean first = true;
+		for (Map.Entry<String, String> entry : this.properties.entrySet()) {
+			if (first) {
+				out.append("?");
+			} else {
+				out.append("&");
+			}
+			out.append(entry.getKey());
+			String value = entry.getValue();
+			if (value != null) {
+				out.append("=");
+				out.append(value);
+			}
 		}
-		return out;
+		return out.toString();
 	}
 	
 	// Format : DATA:jlfqkjsdflkjqs/sqldkhjflqksdjf/lll.png?lib=ewol
 	public Uri withGroup(final String group) {
-		return new Uri(group, this.path, this.lib);
+		return new Uri(group, this.path, new HashMap<>(this.properties));
 	}
 	
 	public Uri withLib(final String lib) {
-		return new Uri(this.group, this.path, lib);
+		Map<String, String> tmp = new HashMap<>(this.properties);
+		tmp.put("lib", lib);
+		return new Uri(this.group, this.path, tmp);
 	}
 	
 	public Uri withPath(final String path) {
-		return new Uri(this.group, path, this.lib);
+		return new Uri(this.group, path, new HashMap<>(this.properties));
 	}
 }
