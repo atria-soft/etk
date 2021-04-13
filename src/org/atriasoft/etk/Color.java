@@ -335,29 +335,29 @@ public record Color(
 			//        #RRGGBBAA
 			switch (color.length()) {
 				case 4 -> {
-					final float r = Integer.parseInt(color.substring(1, 2), 16) * 255.0f * 16.0f;
-					final float g = Integer.parseInt(color.substring(2, 3), 16) * 255.0f * 16.0f;
-					final float b = Integer.parseInt(color.substring(3, 4), 16) * 255.0f * 16.0f;
+					final float r = Integer.parseInt(color.substring(1, 2), 16) / 15.0f;
+					final float g = Integer.parseInt(color.substring(2, 3), 16) / 15.0f;
+					final float b = Integer.parseInt(color.substring(3, 4), 16) / 15.0f;
 					return new Color(r, g, b);
 				}
 				case 5 -> {
-					final float r = Integer.parseInt(color.substring(1, 2), 16) * 255.0f * 16.0f;
-					final float g = Integer.parseInt(color.substring(2, 3), 16) * 255.0f * 16.0f;
-					final float b = Integer.parseInt(color.substring(3, 4), 16) * 255.0f * 16.0f;
-					final float a = Integer.parseInt(color.substring(4, 5), 16) * 255.0f * 16.0f;
+					final float r = Integer.parseInt(color.substring(1, 2), 16) / 15.0f;
+					final float g = Integer.parseInt(color.substring(2, 3), 16) / 15.0f;
+					final float b = Integer.parseInt(color.substring(3, 4), 16) / 15.0f;
+					final float a = Integer.parseInt(color.substring(4, 5), 16) / 15.0f;
 					return new Color(r, g, b, a);
 				}
 				case 7 -> {
-					final float r = Integer.parseInt(color.substring(1, 3), 16) * 255.0f;
-					final float g = Integer.parseInt(color.substring(3, 5), 16) * 255.0f;
-					final float b = Integer.parseInt(color.substring(5, 7), 16) * 255.0f;
+					final float r = Integer.parseInt(color.substring(1, 3), 16) / 255.0f;
+					final float g = Integer.parseInt(color.substring(3, 5), 16) / 255.0f;
+					final float b = Integer.parseInt(color.substring(5, 7), 16) / 255.0f;
 					return new Color(r, g, b);
 				}
 				case 9 -> {
-					final float r = Integer.parseInt(color.substring(1, 3), 16) * 255.0f;
-					final float g = Integer.parseInt(color.substring(3, 5), 16) * 255.0f;
-					final float b = Integer.parseInt(color.substring(5, 7), 16) * 255.0f;
-					final float a = Integer.parseInt(color.substring(7, 9), 16) * 255.0f;
+					final float r = Integer.parseInt(color.substring(1, 3), 16) / 255.0f;
+					final float g = Integer.parseInt(color.substring(3, 5), 16) / 255.0f;
+					final float b = Integer.parseInt(color.substring(5, 7), 16) / 255.0f;
+					final float a = Integer.parseInt(color.substring(7, 9), 16) / 255.0f;
 					return new Color(r, g, b, a);
 				}
 				default -> throw new Exception("Can not parse color ... '" + colorBase + "'");
@@ -529,6 +529,22 @@ public record Color(
 	
 	public Color withA(final float value) {
 		return new Color(this.r, this.g, this.b, value);
+	}
+	
+	public Color withR(final int value) {
+		return new Color(value / 255.0f, this.g, this.b, this.a);
+	}
+	
+	public Color withG(final int value) {
+		return new Color(this.r, value / 255.0f, this.b, this.a);
+	}
+	
+	public Color withB(final int value) {
+		return new Color(this.r, this.g, value / 255.0f, this.a);
+	}
+	
+	public Color withA(final int value) {
+		return new Color(this.r, this.g, this.b, value / 255.0f);
 	}
 	
 }
