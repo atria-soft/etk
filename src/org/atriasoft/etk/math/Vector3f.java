@@ -582,4 +582,11 @@ public record Vector3f(
 	public float triple(final Vector3f obj1, final Vector3f obj2) {
 		return this.x * (obj1.y * obj2.z - obj1.z * obj2.y) + this.y * (obj1.z * obj2.x - obj1.x * obj2.z) + this.z * (obj1.x * obj2.y - obj1.y * obj2.x);
 	}
+	
+	public static Vector3f valueOf(final String valuesX, final String valuesY, final String valuesZ) {
+		float val1 = Float.valueOf(valuesX);
+		float val2 = Float.valueOf(valuesY);
+		float val3 = Float.valueOf(valuesZ);
+		return new Vector3f(val1, val2, val3);
+	}
 }
