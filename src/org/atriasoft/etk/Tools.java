@@ -1,0 +1,24 @@
+package org.atriasoft.etk;
+
+import org.atriasoft.etk.internal.Log;
+
+public class Tools {
+	/**
+	 * get the next power 2 if the input
+	 * @param value Value that we want the next power of 2
+	 * @return result value
+	 */
+	public static int nextP2(final int value) {
+		int val = 1;
+		for (int iii = 1; iii < 31; iii++) {
+			if (value <= val) {
+				return val;
+			}
+			val *= 2;
+		}
+		Log.critical("impossible CASE....");
+		return val;
+	}
+	
+	private Tools() {}
+}

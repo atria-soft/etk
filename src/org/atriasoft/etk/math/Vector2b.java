@@ -1,10 +1,13 @@
 package org.atriasoft.etk.math;
 
-import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 import org.atriasoft.etk.internal.Log;
 
+import edu.umd.cs.findbugs.annotations.CheckReturnValue;
+
 @SuppressWarnings("preview")
-public record Vector2b(boolean x, boolean y) {
+public record Vector2b(
+		boolean x,
+		boolean y) {
 	public static Vector2b valueOf(String value) {
 		boolean val1 = false;
 		boolean val2 = false;
@@ -15,7 +18,7 @@ public record Vector2b(boolean x, boolean y) {
 		while (value.length() > 0 && value.charAt(0) == ')') {
 			value = value.substring(0, value.length() - 1);
 		}
-		final String[] values = value.split(",");
+		final String[] values = value.split(",| ");
 		if (values.length > 2) {
 			Log.error("Can not parse Vector2f with more than 2 values: '" + value + "'");
 		}
@@ -30,19 +33,19 @@ public record Vector2b(boolean x, boolean y) {
 		}
 		return new Vector2b(val1, val2);
 	}
-
+	
 	/*
 	 * **************************************************** Constructor
 	 *****************************************************/
 	public Vector2b() {
 		this(false, false);
 	}
-
+	
 	public Vector2b(final boolean x, final boolean y) {
 		this.x = x;
 		this.y = y;
 	}
-
+	
 	/**
 	 * In-Equality compare operator with an other object.
 	 * @param obj Reference on the comparing object
@@ -53,7 +56,7 @@ public record Vector2b(boolean x, boolean y) {
 	public boolean isDifferent(final Vector2b obj) {
 		return (obj.x != this.x || obj.y != this.y);
 	}
-
+	
 	/**
 	 * Equality compare operator with an other object.
 	 * @param obj Reference on the comparing object
@@ -64,10 +67,10 @@ public record Vector2b(boolean x, boolean y) {
 	public boolean isEqual(final Vector2b obj) {
 		return (obj.x == this.x && obj.y == this.y);
 	}
-
+	
 	public static final Vector2b FALSE = new Vector2b(false, false);
 	public static final Vector2b TRUE = new Vector2b(true, true);
-
+	
 	@Override
 	public String toString() {
 		return "(" + this.x + "," + this.y + ")";

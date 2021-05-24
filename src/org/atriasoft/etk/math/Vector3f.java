@@ -32,7 +32,7 @@ public record Vector3f(
 		while (value.length() > 0 && value.charAt(0) == ')') {
 			value = value.substring(0, value.length() - 1);
 		}
-		final String[] values = value.split(",");
+		final String[] values = value.split(",| ");
 		if (values.length > 3) {
 			Log.error("Can not parse Vector3f with more than 3 values: '" + value + "'");
 		}

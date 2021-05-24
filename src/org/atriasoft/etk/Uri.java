@@ -1,9 +1,14 @@
 package org.atriasoft.etk;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,24 +63,66 @@ public class Uri {
 		return data;
 	}
 	
-	/*
-	 * public static Stream<Path> getResources(final URL element) { try { final URI
-	 * uri = element.toURI(); FileSystem fs; Path path; if
-	 * (uri.getScheme().contentEquals("jar")) { try { fs =
-	 * FileSystems.getFileSystem(uri); } catch (final FileSystemNotFoundException e)
-	 * { fs = FileSystems.newFileSystem(uri, Collections.<String, String>
-	 * emptyMap()); } String pathInJar = "/"; final String tmpPath =
-	 * element.getPath(); final int idSeparate = tmpPath.indexOf('!'); if
-	 * (idSeparate != -1) { pathInJar = tmpPath.substring(idSeparate + 1); while
-	 * (pathInJar.startsWith("/")) { pathInJar = pathInJar.substring(1); } } path =
-	 * fs.getPath(pathInJar); } else { fs = FileSystems.getDefault(); path =
-	 * Paths.get(uri); } return Files.walk(path, 1); } catch (URISyntaxException |
-	 * IOException e) { e.printStackTrace(); return Stream.of(); } }
-	 */
+	//	public static Stream<Path> getResources(final URL element) {
+	//		try {
+	//			final URI uri = element.toURI();
+	//			FileSystem fs;
+	//			Path path;
+	//			if (uri.getScheme().contentEquals("jar")) {
+	//				try {
+	//					fs = FileSystems.getFileSystem(uri);
+	//				} catch (final FileSystemNotFoundException e) {
+	//					fs = FileSystems.newFileSystem(uri, Collections.<String, String> emptyMap());
+	//				}
+	//				String pathInJar = "/";
+	//				final String tmpPath = element.getPath();
+	//				final int idSeparate = tmpPath.indexOf('!');
+	//				if (idSeparate != -1) {
+	//					pathInJar = tmpPath.substring(idSeparate + 1);
+	//					while (pathInJar.startsWith("/")) {
+	//						pathInJar = pathInJar.substring(1);
+	//					}
+	//				}
+	//				path = fs.getPath(pathInJar);
+	//			} else {
+	//				fs = FileSystems.getDefault();
+	//				path = Paths.get(uri);
+	//			}
+	//			return Files.walk(path, 1);
+	//		} catch (URISyntaxException | IOException e) {
+	//			e.printStackTrace();
+	//			return Stream.of();
+	//		}
+	//	}
+	
+	private static List<String> getResourceFiles(final Class<?> clazz, final String path) throws IOException {
+		List<String> filenames = new ArrayList<>();
+		
+		try (InputStream in = clazz.getResourceAsStream(path); BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+			String resource;
+			
+			while ((resource = br.readLine()) != null) {
+				filenames.add(resource);
+			}
+		}
+		
+		return filenames;
+	}
+	
 	public static InputStream getStream(final Uri uri) {
 		Log.warning("Load resource: " + uri);
 		String offsetGroup = "";
 		if (uri.group != null) {
+			if (uri.group.equals("FILE")) {
+				Log.warning("Load resource direct file: " + uri);
+				try {
+					return new FileInputStream(new File(uri.getPath()));
+				} catch (FileNotFoundException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					return null;
+				}
+			}
 			Log.warning("    find group: " + uri.group);
 			final String ret = genericMap.get(uri.group);
 			if (ret != null) {
@@ -89,15 +136,23 @@ public class Uri {
 		} else {
 			String tmpPath = applicationBasePath + offsetGroup + uri.path;
 			tmpPath = tmpPath.replace("//", "/");
-			Log.info("(appl) Try to load '" + tmpPath + "' in " + applicationClass.getCanonicalName());
+			Log.info("(appl) Try to load '" + tmpPath + "' in " + applicationClass.getCanonicalName());// + " ==> " + applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath());
 			URL realFileName = applicationClass.getClassLoader().getResource(tmpPath);
 			if (realFileName != null) {
 				Log.info("(appl)    >>> " + realFileName.getFile());
+			} else {
+				Log.info("(appl)    ??? base folder:" + applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath() + applicationBasePath + offsetGroup + uri.path);
 			}
 			out = applicationClass.getResourceAsStream(tmpPath);
 			
 			if (out == null) {
 				Log.info("(appl) ==> element does not exist ...");
+				//				try {
+				//					Log.warning("elements: " + getResourceFiles(applicationClass, applicationBasePath + offsetGroup + "/*.*"));
+				//				} catch (IOException e) {
+				//					// TODO Auto-generated catch block
+				//					e.printStackTrace();
+				//				}
 			}
 		}
 		if (out == null) {
@@ -111,19 +166,28 @@ public class Uri {
 					Log.warning("     Can not get element in library");
 					return null;
 				}
+				//				try {
+				//					Log.warning("elements: " + getResourceFiles(libraryElement.klass, libraryElement.basePath + offsetGroup + "/"));
+				//				} catch (IOException e) {
+				//					// TODO Auto-generated catch block
+				//					e.printStackTrace();
+				//				}
 				String tmpPath = libraryElement.basePath + offsetGroup + uri.path;
 				tmpPath = tmpPath.replace("//", "/");
-				Log.info("(lib) Try to load '" + tmpPath + "' in " + libraryElement.klass.getCanonicalName());
+				Log.info("(lib)  Try to load '" + tmpPath + "' in " + libraryElement.klass.getCanonicalName());
 				URL realFileName = libraryElement.klass.getClassLoader().getResource(tmpPath);
 				if (realFileName != null) {
-					Log.info("(lib)    >>> " + realFileName.getFile());
+					Log.info("(lib)     >>> " + realFileName.getFile());
+				} else {
+					Log.info("(lib)     ??? base folder:" + libraryElement.klass.getProtectionDomain().getCodeSource().getLocation().getPath() + libraryElement.basePath + offsetGroup + uri.path);
 				}
 				out = libraryElement.klass.getResourceAsStream(tmpPath);
 				if (out == null) {
-					Log.info("(lib) ==> element does not exist ...");
+					Log.info("(lib)  ==> element does not exist ...");
 				}
 			}
 		}
+		
 		if (out == null) {
 			Log.error("Can not load resource: '" + uri + "'");
 		} else {
@@ -298,6 +362,11 @@ public class Uri {
 		return this.group;
 	}
 	
+	public Uri getParent() {
+		String path = this.path.substring(0, this.path.lastIndexOf("/"));
+		return new Uri(getGroup(), path, this.properties);
+	}
+	
 	public String getPath() {
 		return this.path;
 	}
@@ -316,6 +385,14 @@ public class Uri {
 	
 	public boolean isEmpty() {
 		return this.path == null || this.path.isEmpty();
+	}
+	
+	public Uri pathAdd(final String value) {
+		if (this.path.charAt(this.path.length() - 1) == '/') {
+			return withPath(this.path + value);
+		} else {
+			return withPath(this.path + "/" + value);
+		}
 	}
 	
 	public void setproperty(final String key, final String value) {
