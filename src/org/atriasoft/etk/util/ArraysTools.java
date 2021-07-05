@@ -102,6 +102,20 @@ public class ArraysTools {
 		}
 		return out;
 	}
+	public static double[] listDoubleToPrimitive(List<Object> input) {
+		double[] out = new double[input.size()];
+		for(int iii=0; iii<input.size(); iii++) {
+			out[iii] = (Double)input.get(iii);
+		}
+		return out;
+	}
+	public static float[] listFloatToPrimitive(List<Object> input) {
+		float[] out = new float[input.size()];
+		for(int iii=0; iii<input.size(); iii++) {
+			out[iii] = (Float)input.get(iii);
+		}
+		return out;
+	}
 
 	public static boolean[] toPrimitive(boolean[] input) {
 		boolean[] out = new boolean[input.length];
