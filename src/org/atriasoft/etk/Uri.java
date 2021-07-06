@@ -20,7 +20,7 @@ import org.atriasoft.etk.internal.Log;
 public class Uri {
 	private record LibraryElement(
 			Class<?> klass,
-			String basePath) {};
+			String basePath) {}
 	
 	private static Map<String, String> genericMap = new HashMap<>();
 	private static Map<String, LibraryElement> libraries = new HashMap<>();
@@ -28,10 +28,10 @@ public class Uri {
 	private static String applicationBasePath = "";
 	
 	static {
-		genericMap.put("DATA", "data/");
-		genericMap.put("THEME", "theme/");
-		genericMap.put("FONTS", "fonts/");
-		genericMap.put("TRANSLATE", "translate/");
+		Uri.genericMap.put("DATA", "data/");
+		Uri.genericMap.put("THEME", "theme/");
+		Uri.genericMap.put("FONTS", "fonts/");
+		Uri.genericMap.put("TRANSLATE", "translate/");
 	}
 	
 	public static void addLibrary(final String libName, final Class<?> classHandle, String basePath) {
@@ -45,11 +45,11 @@ public class Uri {
 		if (basePath.charAt(0) != '/') {
 			basePath = "/" + basePath;
 		}
-		libraries.put(libName.toLowerCase(), new LibraryElement(classHandle, basePath));
+		Uri.libraries.put(libName.toLowerCase(), new LibraryElement(classHandle, basePath));
 	}
 	
 	public static byte[] getAllData(final Uri resourceName) {
-		final InputStream out = getStream(resourceName);
+		final InputStream out = Uri.getStream(resourceName);
 		if (out == null) {
 			return null;
 		}
@@ -98,14 +98,13 @@ public class Uri {
 	private static List<String> getResourceFiles(final Class<?> clazz, final String path) throws IOException {
 		List<String> filenames = new ArrayList<>();
 		
-		try (InputStream in = clazz.getResourceAsStream(path); BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+		try (InputStream in = clazz.getResourceAsStream(path);
+				BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
 			String resource;
-			
 			while ((resource = br.readLine()) != null) {
 				filenames.add(resource);
 			}
 		}
-		
 		return filenames;
 	}
 	
@@ -124,26 +123,26 @@ public class Uri {
 				}
 			}
 			Log.warning("    find group: " + uri.group);
-			final String ret = genericMap.get(uri.group);
+			final String ret = Uri.genericMap.get(uri.group);
 			if (ret != null) {
 				Log.warning("        ==> " + ret);
 				offsetGroup = ret;
 			}
 		}
 		InputStream out = null;
-		if (applicationClass == null) {
+		if (Uri.applicationClass == null) {
 			Log.warning("    !! Application data class is not defined ...");
 		} else {
-			String tmpPath = applicationBasePath + offsetGroup + uri.path;
+			String tmpPath = Uri.applicationBasePath + offsetGroup + uri.path;
 			tmpPath = tmpPath.replace("//", "/");
-			Log.info("(appl) Try to load '" + tmpPath + "' in " + applicationClass.getCanonicalName());// + " ==> " + applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath());
-			URL realFileName = applicationClass.getClassLoader().getResource(tmpPath);
+			Log.info("(appl) Try to load '" + tmpPath + "' in " + Uri.applicationClass.getCanonicalName());// + " ==> " + applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath());
+			URL realFileName = Uri.applicationClass.getClassLoader().getResource(tmpPath);
 			if (realFileName != null) {
 				Log.info("(appl)    >>> " + realFileName.getFile());
 			} else {
-				Log.info("(appl)    ??? base folder:" + applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath() + applicationBasePath + offsetGroup + uri.path);
+				Log.info("(appl)    ??? base folder:" + Uri.applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath() + Uri.applicationBasePath + offsetGroup + uri.path);
 			}
-			out = applicationClass.getResourceAsStream(tmpPath);
+			out = Uri.applicationClass.getResourceAsStream(tmpPath);
 			
 			if (out == null) {
 				Log.info("(appl) ==> element does not exist ...");
@@ -160,31 +159,30 @@ public class Uri {
 			if (uri.properties.get("lib") == null) {
 				Log.warning("    !! No library specified");
 				return null;
+			}
+			LibraryElement libraryElement = Uri.libraries.get(uri.properties.get("lib"));
+			if (libraryElement == null) {
+				Log.warning("     Can not get element in library");
+				return null;
+			}
+			//				try {
+			//					Log.warning("elements: " + getResourceFiles(libraryElement.klass, libraryElement.basePath + offsetGroup + "/"));
+			//				} catch (IOException e) {
+			//					// TODO Auto-generated catch block
+			//					e.printStackTrace();
+			//				}
+			String tmpPath = libraryElement.basePath + offsetGroup + uri.path;
+			tmpPath = tmpPath.replace("//", "/");
+			Log.info("(lib)  Try to load '" + tmpPath + "' in " + libraryElement.klass.getCanonicalName());
+			URL realFileName = libraryElement.klass.getClassLoader().getResource(tmpPath);
+			if (realFileName != null) {
+				Log.info("(lib)     >>> " + realFileName.getFile());
 			} else {
-				LibraryElement libraryElement = libraries.get(uri.properties.get("lib"));
-				if (libraryElement == null) {
-					Log.warning("     Can not get element in library");
-					return null;
-				}
-				//				try {
-				//					Log.warning("elements: " + getResourceFiles(libraryElement.klass, libraryElement.basePath + offsetGroup + "/"));
-				//				} catch (IOException e) {
-				//					// TODO Auto-generated catch block
-				//					e.printStackTrace();
-				//				}
-				String tmpPath = libraryElement.basePath + offsetGroup + uri.path;
-				tmpPath = tmpPath.replace("//", "/");
-				Log.info("(lib)  Try to load '" + tmpPath + "' in " + libraryElement.klass.getCanonicalName());
-				URL realFileName = libraryElement.klass.getClassLoader().getResource(tmpPath);
-				if (realFileName != null) {
-					Log.info("(lib)     >>> " + realFileName.getFile());
-				} else {
-					Log.info("(lib)     ??? base folder:" + libraryElement.klass.getProtectionDomain().getCodeSource().getLocation().getPath() + libraryElement.basePath + offsetGroup + uri.path);
-				}
-				out = libraryElement.klass.getResourceAsStream(tmpPath);
-				if (out == null) {
-					Log.info("(lib)  ==> element does not exist ...");
-				}
+				Log.info("(lib)     ??? base folder:" + libraryElement.klass.getProtectionDomain().getCodeSource().getLocation().getPath() + libraryElement.basePath + offsetGroup + uri.path);
+			}
+			out = libraryElement.klass.getResourceAsStream(tmpPath);
+			if (out == null) {
+				Log.info("(lib)  ==> element does not exist ...");
 			}
 		}
 		
@@ -203,12 +201,12 @@ public class Uri {
 	}
 	
 	public static void setApplication(final Class<?> classHandle) {
-		setApplication(classHandle, "");
+		Uri.setApplication(classHandle, "");
 	}
 	
 	public static void setApplication(final Class<?> classHandle, String basePath) {
 		Log.info("Set application reference : " + classHandle.getCanonicalName() + "  base path=" + basePath);
-		applicationClass = classHandle;
+		Uri.applicationClass = classHandle;
 		if (basePath == null || basePath.isEmpty()) {
 			basePath = "/";
 		}
@@ -218,7 +216,7 @@ public class Uri {
 		if (basePath.charAt(0) != '/') {
 			basePath = "/" + basePath;
 		}
-		applicationBasePath = basePath;
+		Uri.applicationBasePath = basePath;
 	}
 	
 	public static void setGroup(final String groupName, String basePath) {
@@ -229,7 +227,7 @@ public class Uri {
 		if (basePath.charAt(basePath.length() - 1) != '/') {
 			basePath += "/";
 		}
-		genericMap.put(groupName.toUpperCase(), basePath);
+		Uri.genericMap.put(groupName.toUpperCase(), basePath);
 	}
 	
 	public static Uri valueOf(String value) {
@@ -336,7 +334,7 @@ public class Uri {
 	}
 	
 	public boolean exist() {
-		InputStream stream = getStream(this);
+		InputStream stream = Uri.getStream(this);
 		if (stream == null) {
 			return false;
 		}
@@ -361,10 +359,26 @@ public class Uri {
 	public String getGroup() {
 		return this.group;
 	}
-	
+
 	public Uri getParent() {
 		String path = this.path.substring(0, this.path.lastIndexOf("/"));
 		return new Uri(getGroup(), path, this.properties);
+	}
+
+	/**
+	 * Get the filename of the URI with the extension "plop.txt"
+	 * @return simple filename
+	 */
+	public String getFileName() {
+		return this.path.substring(this.path.lastIndexOf("/")+1);
+	}
+	/**
+	 * Get the filename of the URI without the extension "plop"
+	 * @return simple filename
+	 */
+	public String getFileNameNoExt() {
+		String ext = getExtention();
+		return this.path.substring(this.path.lastIndexOf("/")+1, this.path.length()-ext.length()+1);
 	}
 	
 	public String getPath() {
@@ -390,12 +404,11 @@ public class Uri {
 	public Uri pathAdd(final String value) {
 		if (this.path.charAt(this.path.length() - 1) == '/') {
 			return withPath(this.path + value);
-		} else {
-			return withPath(this.path + "/" + value);
 		}
+		return withPath(this.path + "/" + value);
 	}
 	
-	public void setproperty(final String key, final String value) {
+	public void setProperty(final String key, final String value) {
 		this.properties.put(key, value);
 	}
 	
