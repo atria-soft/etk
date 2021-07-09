@@ -150,4 +150,62 @@ public class ArraysTools {
 		}
 		return null;
 	}
+
+	public static String primitivaArrayToSting(final Object value) {
+		StringBuilder out = new StringBuilder();
+		primitivaArrayToSting(value, out);
+		return out.toString();
+	}
+	public static void primitivaArrayToSting(final Object value, StringBuilder out) {
+		if (value instanceof byte[] tmp) {
+			for (int iii = 0; iii< tmp.length; iii++) {
+				if (iii != 0) {
+					out.append(";");
+				}
+				out.append(tmp[iii]);
+			}
+		} else if (value instanceof short[] tmp) {
+			for (int iii = 0; iii< tmp.length; iii++) {
+				if (iii != 0) {
+					out.append(";");
+				}
+				out.append(tmp[iii]);
+			}
+		} else if (value instanceof int[] tmp) {
+			for (int iii = 0; iii< tmp.length; iii++) {
+				if (iii != 0) {
+					out.append(";");
+				}
+				out.append(tmp[iii]);
+			}
+		} else if (value instanceof long[] tmp) {
+			for (int iii = 0; iii< tmp.length; iii++) {
+				if (iii != 0) {
+					out.append(";");
+				}
+				out.append(tmp[iii]);
+			}
+		} else if (value instanceof boolean[] tmp) {
+			for (int iii = 0; iii< tmp.length; iii++) {
+				if (iii != 0) {
+					out.append(";");
+				}
+				out.append(tmp[iii]);
+			}
+		} else if (value instanceof float[] tmp) {
+			for (int iii = 0; iii< tmp.length; iii++) {
+				if (iii != 0) {
+					out.append(";");
+				}
+				out.append(tmp[iii]);
+			}
+		} else if (value instanceof double[] tmp) {
+			for (int iii = 0; iii< tmp.length; iii++) {
+				if (iii != 0) {
+					out.append(";");
+				}
+				out.append(tmp[iii]);
+			}
+		}
+	}
 }
