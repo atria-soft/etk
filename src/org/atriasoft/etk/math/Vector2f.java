@@ -4,7 +4,6 @@ import org.atriasoft.etk.internal.Log;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
-@SuppressWarnings("preview")
 public record Vector2f(
 		float x,
 		float y) {
@@ -25,11 +24,11 @@ public record Vector2f(
 		if (values.length == 1) {
 			// no coma ...
 			// in every case, we parse the first element :
-			val1 = Float.valueOf(values[0]);
+			val1 = Float.parseFloat(values[0]);
 			val2 = val1;
 		} else {
-			val1 = Float.valueOf(values[0]);
-			val2 = Float.valueOf(values[1]);
+			val1 = Float.parseFloat(values[0]);
+			val2 = Float.parseFloat(values[1]);
 		}
 		return new Vector2f(val1, val2);
 	}
@@ -37,12 +36,7 @@ public record Vector2f(
 	/*
 	 * **************************************************** Constructor
 	 *****************************************************/
-	
-	public Vector2f(final float x, final float y) {
-		this.x = x;
-		this.y = y;
-	}
-	
+		
 	@CheckReturnValue
 	public static Vector2f clipInt(final Vector2f obj1) {
 		return new Vector2f((int) obj1.x, (int) obj1.y);
@@ -192,7 +186,8 @@ public record Vector2f(
 	public float get(final int index) {
 		if (index == 0) {
 			return this.x;
-		} else if (index == 1) {
+		}
+		if (index == 1) {
 			return this.y;
 		}
 		throw new IllegalArgumentException("Unknown index: " + index);
@@ -342,12 +337,12 @@ public record Vector2f(
 	@CheckReturnValue
 	public Vector2f multiply(final float val) {
 		return new Vector2f(this.x * val, this.y * val);
-	};
+	}
 	
 	@CheckReturnValue
 	public Vector2f multiply(final Vector2f obj) {
 		return new Vector2f(this.x * obj.x, this.y * obj.y);
-	};
+	}
 	
 	/**
 	 * Normalize this vector x^2 + y^2 = 1
