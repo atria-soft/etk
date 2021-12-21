@@ -36,7 +36,7 @@ public record Vector2f(
 	/*
 	 * **************************************************** Constructor
 	 *****************************************************/
-		
+	
 	@CheckReturnValue
 	public static Vector2f clipInt(final Vector2f obj1) {
 		return new Vector2f((int) obj1.x, (int) obj1.y);
@@ -379,7 +379,7 @@ public record Vector2f(
 	/**
 	 * Set each element to the min of the current values and the values of
 	 *        another vector
-	 * @param other The other vector to compare with
+	 * @param other The other vector to compare with 
 	 */
 	@CheckReturnValue
 	public Vector2f min(final Vector2f other) {
@@ -396,7 +396,7 @@ public record Vector2f(
 	 * Set 0 value on all the vector
 	 */
 	public static final Vector2f MAX_VALUE = new Vector2f(Float.MAX_VALUE, Float.MAX_VALUE);
-	public static final Vector2f MIN_VALUE = new Vector2f(Float.MIN_VALUE, Float.MIN_VALUE);
+	public static final Vector2f MIN_VALUE = new Vector2f(-Float.MAX_VALUE, -Float.MAX_VALUE);
 	public static final Vector2f ZERO = new Vector2f(0, 0);
 	public static final Vector2f ONE = new Vector2f(1, 1);
 	public static final Vector2f VALUE_2 = new Vector2f(2, 2);

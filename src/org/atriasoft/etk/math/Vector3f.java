@@ -556,6 +556,8 @@ public record Vector3f(
 	 */
 	public static final Vector3f ZERO = new Vector3f(0, 0, 0);
 	public static final Vector3f ONE = new Vector3f(1, 1, 1);
+	public static final Vector3f MAX = new Vector3f(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
+	public static final Vector3f MIN = new Vector3f(-Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE);
 	public static final Vector3f VALUE_2 = new Vector3f(2, 2, 2);
 	public static final Vector3f VALUE_4 = new Vector3f(4, 4, 4);
 	public static final Vector3f VALUE_8 = new Vector3f(8, 8, 8);

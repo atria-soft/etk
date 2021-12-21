@@ -251,7 +251,7 @@ public class Uri {
 		return new Uri(group, path, lib);
 	}
 	
-	public static void writeAll(final Uri uri, final String data) {
+	public static void writeAll(final Uri uri, final String data)  throws IOException {
 		BufferedWriter out = null;
 		try {
 			FileWriter fstream = new FileWriter(uri.getPath(), false); //true tells to append data.
@@ -259,6 +259,7 @@ public class Uri {
 			out.write(data);
 		} catch (IOException e) {
 			Log.error("Error: " + e.getMessage());
+			throw e;
 		} finally {
 			if (out != null) {
 				try {
@@ -266,6 +267,7 @@ public class Uri {
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					Log.error("Error: ", e);
+					throw e;
 				}
 			}
 		}
