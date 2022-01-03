@@ -176,7 +176,8 @@ public record Vector3f(
 	@CheckReturnValue
 	public Vector3f divide(final float val) {
 		if (val != 0.0f) {
-			return new Vector3f(this.x / val, this.y / val, this.z / val);
+			float tmp = 1.0f / val;
+			return new Vector3f(this.x * tmp, this.y * tmp, this.z * tmp);
 		}
 		throw new IllegalArgumentException("divice by 0 (vector3f)");
 	}
@@ -305,6 +306,16 @@ public record Vector3f(
 	@CheckReturnValue
 	public Vector3f invert() {
 		return new Vector3f(-this.x, -this.y, -this.z);
+	}
+	
+	/**
+	 * Reflect the current vector with the input normal
+	 * @param normal Normal to reflect on
+	 * @return the new reflect vector
+	 */
+	@CheckReturnValue
+	public Vector3f reflect(Vector3f normal) {
+		return this.less(normal.multiply(this.dot(normal) * 2.0f));
 	}
 	
 	/**
@@ -556,6 +567,9 @@ public record Vector3f(
 	 */
 	public static final Vector3f ZERO = new Vector3f(0, 0, 0);
 	public static final Vector3f ONE = new Vector3f(1, 1, 1);
+	public static final Vector3f ONE_X = new Vector3f(1, 0, 0);
+	public static final Vector3f ONE_Y = new Vector3f(0, 1, 0);
+	public static final Vector3f ONE_Z = new Vector3f(0, 0, 1);
 	public static final Vector3f MAX = new Vector3f(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE);
 	public static final Vector3f MIN = new Vector3f(-Float.MAX_VALUE, -Float.MAX_VALUE, -Float.MAX_VALUE);
 	public static final Vector3f VALUE_2 = new Vector3f(2, 2, 2);

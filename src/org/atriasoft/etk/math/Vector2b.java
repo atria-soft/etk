@@ -70,6 +70,10 @@ public record Vector2b(
 	
 	public static final Vector2b FALSE = new Vector2b(false, false);
 	public static final Vector2b TRUE = new Vector2b(true, true);
+	public static final Vector2b FALSE_FALSE = FALSE;
+	public static final Vector2b TRUE_TRUE = TRUE;
+	public static final Vector2b TRUE_FALSE = new Vector2b(true, false);
+	public static final Vector2b FALSE_TRUE = new Vector2b(false, true);
 	
 	@Override
 	public String toString() {
