@@ -69,7 +69,7 @@ public record Vector3i(
 	}
 	
 	/**
-	 * Constructor from scalars 
+	 * Constructor from scalars
 	 * @param value unique value for X,Y and Z value
 	 */
 	public Vector3i(final int value) {
@@ -86,7 +86,7 @@ public record Vector3i(
 	}
 	
 	/**
-	 * Add a vector to this one 
+	 * Add a vector to this one
 	 * @param obj The vector to add to this one
 	 */
 	@CheckReturnValue
@@ -138,7 +138,7 @@ public record Vector3i(
 	}
 	
 	/**
-	 * Inversely scale the vector 
+	 * Inversely scale the vector
 	 * @param val Scale factor to divide by
 	 */
 	@CheckReturnValue
@@ -151,26 +151,55 @@ public record Vector3i(
 	
 	/**
 	 * Return the distance between the ends of this and another vector
-	 * This is symantically treating the vector like a point
+	 * This is semantically treating the vector like a point
 	 * @param obj The other vector to compare distance
 	 * @return the distance of the 2 points
 	 */
 	@CheckReturnValue
-	public int distance(final Vector3i obj) {
-		return (int) Math.sqrt(distance2(obj));
+	public float distance(final Vector3i obj) {
+		return FMath.sqrt(distance2(obj));
+	}
+	
+	/**
+	 * Return the distance between the ends of this and another vector
+	 * This is semantically treating the vector like a point
+	 * @param xxx X position.
+	 * @param yyy Y position.
+	 * @param zzz Z position.
+	 * @return the distance of the 2 points
+	 */
+	@CheckReturnValue
+	public float distance(final int xxx, final int yyy, final int zzz) {
+		return FMath.sqrt(distance2(xxx, yyy, zzz));
 	}
 	
 	/**
 	 * Return the distance squared between the ends of this and another vector
-	 * This is symantically treating the vector like a point
+	 * This is semantically treating the vector like a point
 	 * @param obj The other vector to compare distance
-	 * @return the square distance of the 2 points
+	 * @return The square distance of the 2 points.
 	 */
 	@CheckReturnValue
 	public int distance2(final Vector3i obj) {
 		final int deltaX = obj.x - this.x;
 		final int deltaY = obj.y - this.y;
 		final int deltaZ = obj.z - this.z;
+		return deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
+	}
+	
+	/**
+	 * Return the distance squared between the ends of this and another vector
+	 * This is semantically treating the vector like a point
+	 * @param xxx X position.
+	 * @param yyy Y position.
+	 * @param zzz Z position.
+	 * @return The square distance of the 2 points.
+	 */
+	@CheckReturnValue
+	public int distance2(final int xxx, final int yyy, final int zzz) {
+		final int deltaX = xxx - this.x;
+		final int deltaY = yyy - this.y;
+		final int deltaZ = zzz - this.z;
 		return deltaX * deltaX + deltaY * deltaY + deltaZ * deltaZ;
 	}
 	
@@ -296,7 +325,7 @@ public record Vector3i(
 	
 	/**
 	 * Return the linear interpolation between this and another vector
-	 * @param obj The other vector 
+	 * @param obj The other vector
 	 * @param ratio The ratio of this to obj (ratio = 0 => return copy of this, ratio=1 => return other)
 	 * @return New vector containing the value
 	 */
@@ -399,7 +428,7 @@ public record Vector3i(
 	
 	/**
 	 * Set each element to the max of the current values and the values of another Vector3i
-	 * @param obj The other Vector3i to compare with 
+	 * @param obj The other Vector3i to compare with
 	 */
 	@CheckReturnValue
 	public Vector3i max(final Vector3i obj) {
@@ -408,7 +437,7 @@ public record Vector3i(
 	
 	/**
 	 * Set each element to the min of the current values and the values of another Vector3i
-	 * @param obj The other Vector3i to compare with 
+	 * @param obj The other Vector3i to compare with
 	 */
 	@CheckReturnValue
 	public Vector3i min(final Vector3i obj) {
