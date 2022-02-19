@@ -233,7 +233,7 @@ public class Uri {
 	public static Uri valueOf(String value) {
 		String group = null;
 		String path = null;
-		String lib = null;
+		Map<String, String> prop = new HashMap<>();
 		if (value.contains(":")) {
 			final String[] ret = value.split(":", 2);
 			group = ret[0].toUpperCase();
@@ -241,17 +241,30 @@ public class Uri {
 		} else {
 			group = "DATA";
 		}
-		if (value.contains("?lib=")) {
-			final String[] ret = value.split("\\?lib=", 2);
-			path = ret[0];
-			lib = ret[1].toLowerCase();
+		int index = value.indexOf('?');
+		if (index != -1) {
+			final String valuesMetadata = value.substring(index + 1);
+			final String[] elementMetaData = valuesMetadata.split("&");
+			for (int iii = 0; iii < elementMetaData.length; iii++) {
+				final String[] keyVal = elementMetaData[iii].split("=", 2);
+				if (keyVal.length == 1) {
+					prop.put(keyVal[0], "");
+				} else {
+					if (keyVal[0].equals("lib")) {
+						prop.put(keyVal[0], keyVal[1].toLowerCase());
+					} else {
+						prop.put(keyVal[0], keyVal[1]);
+					}
+				}
+			}
+			path = value.substring(0, index);
 		} else {
 			path = value;
 		}
-		return new Uri(group, path, lib);
+		return new Uri(group, path, prop);
 	}
 	
-	public static void writeAll(final Uri uri, final String data)  throws IOException {
+	public static void writeAll(final Uri uri, final String data) throws IOException {
 		BufferedWriter out = null;
 		try {
 			FileWriter fstream = new FileWriter(uri.getPath(), false); //true tells to append data.
@@ -358,29 +371,30 @@ public class Uri {
 		return ret[ret.length - 1];
 	}
 	
-	public String getGroup() {
-		return this.group;
-	}
-
-	public Uri getParent() {
-		String path = this.path.substring(0, this.path.lastIndexOf("/"));
-		return new Uri(getGroup(), path, this.properties);
-	}
-
 	/**
 	 * Get the filename of the URI with the extension "plop.txt"
 	 * @return simple filename
 	 */
 	public String getFileName() {
-		return this.path.substring(this.path.lastIndexOf("/")+1);
+		return this.path.substring(this.path.lastIndexOf("/") + 1);
 	}
+	
 	/**
 	 * Get the filename of the URI without the extension "plop"
 	 * @return simple filename
 	 */
 	public String getFileNameNoExt() {
 		String ext = getExtention();
-		return this.path.substring(this.path.lastIndexOf("/")+1, this.path.length()-ext.length()+1);
+		return this.path.substring(this.path.lastIndexOf("/") + 1, this.path.length() - ext.length() + 1);
+	}
+	
+	public String getGroup() {
+		return this.group;
+	}
+	
+	public Uri getParent() {
+		String path = this.path.substring(0, this.path.lastIndexOf("/"));
+		return new Uri(getGroup(), path, this.properties);
 	}
 	
 	public String getPath() {
@@ -391,12 +405,16 @@ public class Uri {
 		return this.properties;
 	}
 	
-	public String getproperty(final String key) {
+	public String getProperty(final String key) {
 		return this.properties.get(key);
 	}
 	
 	public String getValue() {
 		return toString();
+	}
+	
+	public boolean hasProperty(final String key) {
+		return this.properties.containsKey(key);
 	}
 	
 	public boolean isEmpty() {
