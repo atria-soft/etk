@@ -98,8 +98,7 @@ public class Uri {
 	private static List<String> getResourceFiles(final Class<?> clazz, final String path) throws IOException {
 		List<String> filenames = new ArrayList<>();
 		
-		try (InputStream in = clazz.getResourceAsStream(path);
-				BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
+		try (InputStream in = clazz.getResourceAsStream(path); BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
 			String resource;
 			while ((resource = br.readLine()) != null) {
 				filenames.add(resource);
@@ -140,7 +139,7 @@ public class Uri {
 			if (realFileName != null) {
 				Log.info("(appl)    >>> " + realFileName.getFile());
 			} else {
-				Log.info("(appl)    ??? base folder:" + Uri.applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath() + Uri.applicationBasePath + offsetGroup + uri.path);
+				Log.info("(appl)    ??? base folder: " + Uri.applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath() + Uri.applicationBasePath + offsetGroup + uri.path);
 			}
 			out = Uri.applicationClass.getResourceAsStream(tmpPath);
 			
@@ -178,7 +177,7 @@ public class Uri {
 			if (realFileName != null) {
 				Log.info("(lib)     >>> " + realFileName.getFile());
 			} else {
-				Log.info("(lib)     ??? base folder:" + libraryElement.klass.getProtectionDomain().getCodeSource().getLocation().getPath() + libraryElement.basePath + offsetGroup + uri.path);
+				Log.info("(lib)     ??? base folder: " + libraryElement.klass.getProtectionDomain().getCodeSource().getLocation().getPath() + libraryElement.basePath + offsetGroup + uri.path);
 			}
 			out = libraryElement.klass.getResourceAsStream(tmpPath);
 			if (out == null) {
