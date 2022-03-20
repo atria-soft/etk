@@ -166,7 +166,7 @@ public record Matrix4f(
 		final float cosVal = (float) Math.cos(angleRad);
 		final float sinVal = (float) Math.sin(angleRad);
 		final float invVal = 1.0f - cosVal;
-		// set rotation : 
+		// set rotation :
 		a1 = normal.x() * normal.x() * invVal + cosVal;
 		b1 = normal.x() * normal.y() * invVal - normal.z() * sinVal;
 		c1 = normal.x() * normal.z() * invVal + normal.y() * sinVal;
@@ -458,22 +458,27 @@ public record Matrix4f(
 			return this;
 		}
 		float a1 = coFactorRaw0Col0() / det;
-		float b1 = coFactorRaw0Col1() / det;
+		float b1 = -coFactorRaw0Col1() / det;
 		float c1 = coFactorRaw0Col2() / det;
-		float d1 = coFactorRaw0Col3() / det;
-		float a2 = coFactorRaw1Col0() / det;
+		float d1 = -coFactorRaw0Col3() / det;
+		
+		float a2 = -coFactorRaw1Col0() / det;
 		float b2 = coFactorRaw1Col1() / det;
-		float c2 = coFactorRaw1Col2() / det;
+		float c2 = -coFactorRaw1Col2() / det;
 		float d2 = coFactorRaw1Col3() / det;
+		
 		float a3 = coFactorRaw2Col0() / det;
-		float b3 = coFactorRaw2Col1() / det;
+		float b3 = -coFactorRaw2Col1() / det;
 		float c3 = coFactorRaw2Col2() / det;
-		float d3 = coFactorRaw2Col3() / det;
-		float a4 = coFactorRaw3Col0() / det;
+		float d3 = -coFactorRaw2Col3() / det;
+		
+		float a4 = -coFactorRaw3Col0() / det;
 		float b4 = coFactorRaw3Col1() / det;
-		float c4 = coFactorRaw3Col2() / det;
+		float c4 = -coFactorRaw3Col2() / det;
 		float d4 = coFactorRaw3Col3() / det;
+		
 		return new Matrix4f(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4);
+		//return new Matrix4f(a1, b1, c1, a4, a2, b2, c2, b4, a3, b3, c3, c4, d1, d2, d3, d4);
 	}
 	
 	/**
@@ -533,8 +538,22 @@ public record Matrix4f(
 	 */
 	@CheckReturnValue
 	public Vector3f multiply(final Vector3f point) {
-		return new Vector3f(this.a1 * point.x() + this.b1 * point.y() + this.c1 * point.z() + this.d1, this.a2 * point.x() + this.b2 * point.y() + this.c2 * point.z() + this.d2,
-				this.a3 * point.x() + this.b3 * point.y() + this.c3 * point.z() + this.d3);
+		return new Vector3f(this.a1 * point.x() + this.b1 * point.y() + this.c1 * point.z() + this.d1, // X
+				this.a2 * point.x() + this.b2 * point.y() + this.c2 * point.z() + this.d2, // Y
+				this.a3 * point.x() + this.b3 * point.y() + this.c3 * point.z() + this.d3); // Z
+	}
+	
+	/**
+	 * Operator* apply matrix on a vector
+	 * @param point Point value to apply the matrix
+	 * @return New vector containing the value
+	 */
+	@CheckReturnValue
+	public Vector4f multiply(final Vector4f point) {
+		return new Vector4f(this.a1 * point.x() + this.b1 * point.y() + this.c1 * point.z() + this.d1 * point.w(), // X
+				this.a2 * point.x() + this.b2 * point.y() + this.c2 * point.z() + this.d2 * point.w(), // Y
+				this.a3 * point.x() + this.b3 * point.y() + this.c3 * point.z() + this.d3 * point.w(), // Z
+				this.a4 * point.x() + this.b4 * point.y() + this.c4 * point.z() + this.d4 * point.w()); // W
 	}
 	
 	/**
