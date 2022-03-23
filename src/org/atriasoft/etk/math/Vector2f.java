@@ -42,18 +42,22 @@ public record Vector2f(
 		return new Vector2f((int) obj1.x, (int) obj1.y);
 	}
 	
+	@CheckReturnValue
 	public static Vector2f max(final Vector2f obj1, final Vector2f obj2) {
 		return new Vector2f(Math.max(obj1.x, obj2.x), Math.max(obj1.y, obj2.y));
 	}
 	
+	@CheckReturnValue
 	public static Vector2f max(final Vector2f obj1, final Vector2f obj2, final Vector2f obj3) {
 		return new Vector2f(FMath.max(obj1.x, obj2.x, obj3.x), FMath.max(obj1.y, obj2.y, obj3.y));
 	}
 	
+	@CheckReturnValue
 	public static Vector2f min(final Vector2f obj1, final Vector2f obj2) {
 		return new Vector2f(Math.min(obj1.x, obj2.x), Math.min(obj1.y, obj2.y));
 	}
 	
+	@CheckReturnValue
 	public static Vector2f min(final Vector2f obj1, final Vector2f obj2, final Vector2f obj3) {
 		return new Vector2f(FMath.min(obj1.x, obj2.x, obj3.x), FMath.min(obj1.y, obj2.y, obj3.y));
 	}
@@ -379,7 +383,7 @@ public record Vector2f(
 	/**
 	 * Set each element to the min of the current values and the values of
 	 *        another vector
-	 * @param other The other vector to compare with 
+	 * @param other The other vector to compare with
 	 */
 	@CheckReturnValue
 	public Vector2f min(final Vector2f other) {

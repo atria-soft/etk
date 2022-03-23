@@ -8,15 +8,15 @@ package org.atriasoft.etk;
 import org.atriasoft.etk.internal.Log;
 
 /**
- * in the dimension class we store the data as the more usefull unit (pixel) 
+ * in the dimension class we store the data as the more usefull unit (pixel)
  * but one case need to be dynamic the %, then when requested in % the register the % value
  */
-@SuppressWarnings("preview")
-public record Dimension1D(
+public record Dimension1f(
 		float size,
 		Distance type) {
+	
 	private static final float BASIC_RATIO = 72.0f / 25.4f;
-	public static final Dimension1D ZERO = new Dimension1D(0);
+	public static final Dimension1f ZERO = new Dimension1f(0);
 	public static final float INCH_TO_MILLIMETER = 1.0f / 25.4f;
 	public static final float FOOT_TO_MILLIMETER = 1.0f / 304.8f;
 	public static final float METER_TO_MILLIMETER = 1.0f / 1000.0f;
@@ -31,7 +31,7 @@ public record Dimension1D(
 	/**
 	 * Constructor (default :0,0 mode pixel)
 	 */
-	public Dimension1D() {
+	public Dimension1f() {
 		this(0, Distance.PIXEL);
 	}
 	
@@ -39,11 +39,11 @@ public record Dimension1D(
 	 * Constructor
 	 * @param size Requested dimension
 	 */
-	public Dimension1D(final float size) {
+	public Dimension1f(final float size) {
 		this(size, Distance.PIXEL);
 	}
 	
-	public Dimension1D(final float size, final Distance type) {
+	public Dimension1f(final float size, final Distance type) {
 		this.size = size;
 		this.type = type;
 	}
@@ -87,47 +87,15 @@ public record Dimension1D(
 	 * set the current dimension in requested type
 	 * @param config dimension configuration.
 	 */
-	public static Dimension1D valueOf(String config) {
-		Distance type = Distance.PIXEL;
-		if (config.endsWith("%")) {
-			type = Distance.POURCENT;
-			config = config.substring(0, config.length() - 1);
-		} else if (config.endsWith("px")) {
-			type = Distance.PIXEL;
-			config = config.substring(0, config.length() - 2);
-		} else if (config.endsWith("ft")) {
-			type = Distance.FOOT;
-			config = config.substring(0, config.length() - 2);
-		} else if (config.endsWith("in")) {
-			type = Distance.INCH;
-			config = config.substring(0, config.length() - 2);
-		} else if (config.endsWith("km")) {
-			type = Distance.KILOMETER;
-			config = config.substring(0, config.length() - 2);
-		} else if (config.endsWith("mm")) {
-			type = Distance.MILLIMETER;
-			config = config.substring(0, config.length() - 2);
-		} else if (config.endsWith("cm")) {
-			type = Distance.CENTIMETER;
-			config = config.substring(0, config.length() - 2);
-		} else if (config.endsWith("m")) {
-			type = Distance.METER;
-			config = config.substring(0, config.length() - 1);
-		} else if (config.endsWith("em")) {
-			type = Distance.ELEMENT;
-			config = config.substring(0, config.length() - 2);
-		} else if (config.endsWith("ex")) {
-			type = Distance.EX;
-			config = config.substring(0, config.length() - 2);
-		} else if (config.endsWith("pt")) {
-			type = Distance.POINT;
-			config = config.substring(0, config.length() - 2);
-		} else if (config.endsWith("pc")) {
-			type = Distance.PC;
-			config = config.substring(0, config.length() - 2);
+	public static Dimension1f valueOf(String config) {
+		Distance type = Distance.parseEndSmallString(config);
+		config = type.removeEndString(config);
+		if (type == Distance.UNKNOW) {
+			Log.critical("Can not parse dimension : '" + config + "'");
+			return null;
 		}
 		final float tmp = Float.valueOf(config);
-		final Dimension1D ret = new Dimension1D(tmp, type);
+		final Dimension1f ret = new Dimension1f(tmp, type);
 		Log.verbose(" config dimension : '" + config + "'  == > " + ret.toString());
 		return ret;
 	}
@@ -137,23 +105,7 @@ public record Dimension1D(
 	 */
 	@Override
 	public String toString() {
-		String str = Float.toString(this.size);
-		switch (getType()) {
-			case POURCENT -> str += "%";
-			case PIXEL -> str += "px";
-			case METER -> str += "m";
-			case CENTIMETER -> str += "cm";
-			case MILLIMETER -> str += "mm";
-			case KILOMETER -> str += "km";
-			case INCH -> str += "in";
-			case FOOT -> str += "ft";
-			case ELEMENT -> str += "em";
-			case EX -> str += "ex";
-			case POINT -> str += "pt";
-			case PC -> str += "pc";
-			default -> str += "";
-		}
-		return str;
+		return Float.toString(this.size) + getType().toSmallString();
 	}
 	
 }

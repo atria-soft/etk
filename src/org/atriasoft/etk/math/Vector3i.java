@@ -435,6 +435,16 @@ public record Vector3i(
 		return new Vector3i(Math.max(this.x, obj.x), Math.max(this.y, obj.y), Math.max(this.z, obj.z));
 	}
 	
+	@CheckReturnValue
+	public Vector3i max(final int xxx, final int yyy, final int zzz) {
+		return new Vector3i(Math.max(this.x, xxx), Math.max(this.y, yyy), Math.max(this.z, zzz));
+	}
+	
+	@CheckReturnValue
+	public Vector3i min(final int xxx, final int yyy, final int zzz) {
+		return new Vector3i(Math.min(this.x, xxx), Math.min(this.y, yyy), Math.min(this.z, zzz));
+	}
+	
 	/**
 	 * Set each element to the min of the current values and the values of another Vector3i
 	 * @param obj The other Vector3i to compare with
