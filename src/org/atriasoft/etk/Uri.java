@@ -35,7 +35,7 @@ public class Uri {
 	}
 	
 	public static void addLibrary(final String libName, final Class<?> classHandle, String basePath) {
-		Log.info("Add library reference: lib=" + libName + " ==> " + classHandle.getCanonicalName() + "  base path=" + basePath);
+		Log.info("Add library reference: lib={} ==> {} base path={}", libName, classHandle.getCanonicalName(), basePath);
 		if (basePath == null || basePath.isEmpty()) {
 			basePath = "/";
 		}
@@ -96,7 +96,7 @@ public class Uri {
 	//	}
 	
 	private static List<String> getResourceFiles(final Class<?> clazz, final String path) throws IOException {
-		List<String> filenames = new ArrayList<>();
+		final List<String> filenames = new ArrayList<>();
 		
 		try (InputStream in = clazz.getResourceAsStream(path); BufferedReader br = new BufferedReader(new InputStreamReader(in))) {
 			String resource;
@@ -108,23 +108,23 @@ public class Uri {
 	}
 	
 	public static InputStream getStream(final Uri uri) {
-		Log.warning("Load resource: " + uri);
+		Log.warning("Load resource: {}", uri);
 		String offsetGroup = "";
 		if (uri.group != null) {
 			if (uri.group.equals("FILE")) {
-				Log.warning("Load resource direct file: " + uri);
+				Log.warning("Load resource direct file: {}", uri);
 				try {
 					return new FileInputStream(new File(uri.getPath()));
-				} catch (FileNotFoundException e) {
+				} catch (final FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 					return null;
 				}
 			}
-			Log.warning("    find group: " + uri.group);
+			Log.warning("    find group: {}", uri.group);
 			final String ret = Uri.genericMap.get(uri.group);
 			if (ret != null) {
-				Log.warning("        ==> " + ret);
+				Log.warning("        ==> {}", ret);
 				offsetGroup = ret;
 			}
 		}
@@ -134,12 +134,12 @@ public class Uri {
 		} else {
 			String tmpPath = Uri.applicationBasePath + offsetGroup + uri.path;
 			tmpPath = tmpPath.replace("//", "/");
-			Log.info("(appl) Try to load '" + tmpPath + "' in " + Uri.applicationClass.getCanonicalName());// + " ==> " + applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath());
-			URL realFileName = Uri.applicationClass.getClassLoader().getResource(tmpPath);
+			Log.info("(appl) Try to load '{}' in {}", tmpPath, Uri.applicationClass.getCanonicalName());// + " ==> " + applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath());
+			final URL realFileName = Uri.applicationClass.getClassLoader().getResource(tmpPath);
 			if (realFileName != null) {
-				Log.info("(appl)    >>> " + realFileName.getFile());
+				Log.info("(appl)    >>> {}", realFileName.getFile());
 			} else {
-				Log.info("(appl)    ??? base folder: " + Uri.applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath() + Uri.applicationBasePath + offsetGroup + uri.path);
+				Log.info("(appl)    ??? base folder: {}", Uri.applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath() + Uri.applicationBasePath + offsetGroup + uri.path);
 			}
 			out = Uri.applicationClass.getResourceAsStream(tmpPath);
 			
@@ -159,7 +159,7 @@ public class Uri {
 				Log.warning("    !! No library specified");
 				return null;
 			}
-			LibraryElement libraryElement = Uri.libraries.get(uri.properties.get("lib"));
+			final LibraryElement libraryElement = Uri.libraries.get(uri.properties.get("lib"));
 			if (libraryElement == null) {
 				Log.warning("     Can not get element in library");
 				return null;
@@ -172,12 +172,12 @@ public class Uri {
 			//				}
 			String tmpPath = libraryElement.basePath + offsetGroup + uri.path;
 			tmpPath = tmpPath.replace("//", "/");
-			Log.info("(lib)  Try to load '" + tmpPath + "' in " + libraryElement.klass.getCanonicalName());
-			URL realFileName = libraryElement.klass.getClassLoader().getResource(tmpPath);
+			Log.info("(lib)  Try to load '{}' in {}", tmpPath, libraryElement.klass.getCanonicalName());
+			final URL realFileName = libraryElement.klass.getClassLoader().getResource(tmpPath);
 			if (realFileName != null) {
-				Log.info("(lib)     >>> " + realFileName.getFile());
+				Log.info("(lib)     >>> {}", realFileName.getFile());
 			} else {
-				Log.info("(lib)     ??? base folder: " + libraryElement.klass.getProtectionDomain().getCodeSource().getLocation().getPath() + libraryElement.basePath + offsetGroup + uri.path);
+				Log.info("(lib)     ??? base folder: {}", libraryElement.klass.getProtectionDomain().getCodeSource().getLocation().getPath() + libraryElement.basePath + offsetGroup + uri.path);
 			}
 			out = libraryElement.klass.getResourceAsStream(tmpPath);
 			if (out == null) {
@@ -204,7 +204,7 @@ public class Uri {
 	}
 	
 	public static void setApplication(final Class<?> classHandle, String basePath) {
-		Log.info("Set application reference : " + classHandle.getCanonicalName() + "  base path=" + basePath);
+		Log.info("Set application reference : {}  base path={}", classHandle.getCanonicalName(), basePath);
 		Uri.applicationClass = classHandle;
 		if (basePath == null || basePath.isEmpty()) {
 			basePath = "/";
@@ -219,7 +219,7 @@ public class Uri {
 	}
 	
 	public static void setGroup(final String groupName, String basePath) {
-		Log.info("Set Group : " + groupName + "  base path=" + basePath);
+		Log.info("Set Group : {}  base path={}", groupName, basePath);
 		if (basePath == null || basePath.isEmpty()) {
 			basePath = "/";
 		}
@@ -232,7 +232,7 @@ public class Uri {
 	public static Uri valueOf(String value) {
 		String group = null;
 		String path = null;
-		Map<String, String> prop = new HashMap<>();
+		final Map<String, String> prop = new HashMap<>();
 		if (value.contains(":")) {
 			final String[] ret = value.split(":", 2);
 			group = ret[0].toUpperCase();
@@ -240,7 +240,7 @@ public class Uri {
 		} else {
 			group = "DATA";
 		}
-		int index = value.indexOf('?');
+		final int index = value.indexOf('?');
 		if (index != -1) {
 			final String valuesMetadata = value.substring(index + 1);
 			final String[] elementMetaData = valuesMetadata.split("&");
@@ -266,17 +266,17 @@ public class Uri {
 	public static void writeAll(final Uri uri, final String data) throws IOException {
 		BufferedWriter out = null;
 		try {
-			FileWriter fstream = new FileWriter(uri.getPath(), false); //true tells to append data.
+			final FileWriter fstream = new FileWriter(uri.getPath(), false); //true tells to append data.
 			out = new BufferedWriter(fstream);
 			out.write(data);
-		} catch (IOException e) {
-			Log.error("Error: " + e.getMessage());
+		} catch (final IOException e) {
+			Log.error("Error: {}", e.getMessage());
 			throw e;
 		} finally {
 			if (out != null) {
 				try {
 					out.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					// TODO Auto-generated catch block
 					Log.error("Error: ", e);
 					throw e;
@@ -288,16 +288,16 @@ public class Uri {
 	public static void writeAllAppend(final Uri uri, final String data) {
 		BufferedWriter out = null;
 		try {
-			FileWriter fstream = new FileWriter(uri.getPath(), true); //true tells to append data.
+			final FileWriter fstream = new FileWriter(uri.getPath(), true); //true tells to append data.
 			out = new BufferedWriter(fstream);
 			out.write(data);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			Log.error("Error: " + e.getMessage());
 		} finally {
 			if (out != null) {
 				try {
 					out.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					// TODO Auto-generated catch block
 					Log.error("Error: ", e);
 				}
@@ -348,13 +348,13 @@ public class Uri {
 	}
 	
 	public boolean exist() {
-		InputStream stream = Uri.getStream(this);
+		final InputStream stream = Uri.getStream(this);
 		if (stream == null) {
 			return false;
 		}
 		try {
 			stream.close();
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
@@ -383,7 +383,7 @@ public class Uri {
 	 * @return simple filename
 	 */
 	public String getFileNameNoExt() {
-		String ext = getExtention();
+		final String ext = getExtention();
 		return this.path.substring(this.path.lastIndexOf("/") + 1, this.path.length() - ext.length() + 1);
 	}
 	
@@ -392,7 +392,7 @@ public class Uri {
 	}
 	
 	public Uri getParent() {
-		String path = this.path.substring(0, this.path.lastIndexOf("/"));
+		final String path = this.path.substring(0, this.path.lastIndexOf("/"));
 		return new Uri(getGroup(), path, this.properties);
 	}
 	
@@ -433,21 +433,21 @@ public class Uri {
 	
 	@Override
 	public String toString() {
-		StringBuilder out = new StringBuilder();
+		final StringBuilder out = new StringBuilder();
 		if (this.group != null) {
 			out.append(this.group);
 			out.append(":");
 		}
 		out.append(this.path);
-		boolean first = true;
-		for (Map.Entry<String, String> entry : this.properties.entrySet()) {
+		final boolean first = true;
+		for (final Map.Entry<String, String> entry : this.properties.entrySet()) {
 			if (first) {
 				out.append("?");
 			} else {
 				out.append("&");
 			}
 			out.append(entry.getKey());
-			String value = entry.getValue();
+			final String value = entry.getValue();
 			if (value != null) {
 				out.append("=");
 				out.append(value);
@@ -462,7 +462,7 @@ public class Uri {
 	}
 	
 	public Uri withLib(final String lib) {
-		Map<String, String> tmp = new HashMap<>(this.properties);
+		final Map<String, String> tmp = new HashMap<>(this.properties);
 		tmp.put("lib", lib);
 		return new Uri(this.group, this.path, tmp);
 	}
