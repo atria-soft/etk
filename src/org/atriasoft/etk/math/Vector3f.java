@@ -178,7 +178,7 @@ public record Vector3f(
 	@CheckReturnValue
 	public Vector3f divide(final float val) {
 		if (val != 0.0f) {
-			float tmp = 1.0f / val;
+			final float tmp = 1.0f / val;
 			return new Vector3f(this.x * tmp, this.y * tmp, this.z * tmp);
 		}
 		throw new IllegalArgumentException("divice by 0 (vector3f)");
@@ -316,7 +316,7 @@ public record Vector3f(
 	 * @return the new reflect vector
 	 */
 	@CheckReturnValue
-	public Vector3f reflect(Vector3f normal) {
+	public Vector3f reflect(final Vector3f normal) {
 		return this.less(normal.multiply(this.dot(normal) * 2.0f));
 	}
 	
@@ -539,6 +539,11 @@ public record Vector3f(
 		return new Vector3f(Math.min(obj1.x, obj2.x), Math.min(obj1.y, obj2.y), Math.min(obj1.z, obj2.z));
 	}
 	
+	@CheckReturnValue
+	public static Vector3f avg(final Vector3f min, final Vector3f obj2, final Vector3f max) {
+		return new Vector3f(FMath.avg(min.x, obj2.x, max.x), FMath.avg(min.y, obj2.y, max.y), FMath.avg(min.z, obj2.z, max.z));
+	}
+	
 	/**
 	 *  Set each element to the min of the current values and the values of
 	 *        another Vector3f
@@ -603,9 +608,9 @@ public record Vector3f(
 	
 	@CheckReturnValue
 	public static Vector3f valueOf(final String valuesX, final String valuesY, final String valuesZ) {
-		float val1 = Float.valueOf(valuesX);
-		float val2 = Float.valueOf(valuesY);
-		float val3 = Float.valueOf(valuesZ);
+		final float val1 = Float.valueOf(valuesX);
+		final float val2 = Float.valueOf(valuesY);
+		final float val3 = Float.valueOf(valuesZ);
 		return new Vector3f(val1, val2, val3);
 	}
 	
