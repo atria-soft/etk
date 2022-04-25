@@ -485,4 +485,19 @@ public record Vector3i(
 	public int triple(final Vector3i obj1, final Vector3i obj2) {
 		return this.x * (obj1.y * obj2.z - obj1.z * obj2.y) + this.y * (obj1.z * obj2.x - obj1.x * obj2.z) + this.z * (obj1.x * obj2.y - obj1.y * obj2.x);
 	}
+	
+	@CheckReturnValue
+	public Vector3i withX(final int xxx) {
+		return new Vector3i(xxx, this.y, this.z);
+	}
+	
+	@CheckReturnValue
+	public Vector3i withY(final int yyy) {
+		return new Vector3i(this.x, yyy, this.z);
+	}
+	
+	@CheckReturnValue
+	public Vector3i withZ(final int zzz) {
+		return new Vector3i(this.x, this.y, zzz);
+	}
 }
