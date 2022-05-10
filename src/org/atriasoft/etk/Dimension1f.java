@@ -48,6 +48,14 @@ public record Dimension1f(
 		this.type = type;
 	}
 	
+	public Dimension1f withSize(final float size) {
+		return new Dimension1f(size, this.type);
+	}
+	
+	public Dimension1f withType(final Distance type) {
+		return new Dimension1f(this.size, type);
+	}
+	
 	/**
 	 * get the current dimension in pixel
 	 * @return dimension in Pixel
@@ -88,7 +96,7 @@ public record Dimension1f(
 	 * @param config dimension configuration.
 	 */
 	public static Dimension1f valueOf(String config) {
-		Distance type = Distance.parseEndSmallString(config);
+		final Distance type = Distance.parseEndSmallString(config);
 		config = type.removeEndString(config);
 		if (type == Distance.UNKNOW) {
 			Log.critical("Can not parse dimension : '" + config + "'");

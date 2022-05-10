@@ -200,7 +200,7 @@ public record Dimension3f(
 	}
 	
 	public Vector2i getPixeli() {
-		Vector3f tmpSize = windowsSize.getPixel();
+		final Vector3f tmpSize = windowsSize.getPixel();
 		return getPixeli(new Vector2i((int) tmpSize.x(), (int) tmpSize.y()));
 	}
 	
@@ -241,7 +241,7 @@ public record Dimension3f(
 	 * @param config dimension configuration.
 	 */
 	public static Dimension3f valueOf(String config) {
-		Distance type = Distance.parseEndSmallString(config);
+		final Distance type = Distance.parseEndSmallString(config);
 		config = type.removeEndString(config);
 		if (type == Distance.UNKNOW) {
 			Log.critical("Can not parse dimension : '" + config + "'");
@@ -253,6 +253,14 @@ public record Dimension3f(
 		return ret;
 	}
 	
+	public Dimension3f withSize(final Vector3f size) {
+		return new Dimension3f(size, this.type);
+	}
+	
+	public Dimension3f withType(final Distance type) {
+		return new Dimension3f(this.size, type);
+	}
+	
 	/**
 	 * string cast :
 	 */
@@ -261,19 +269,19 @@ public record Dimension3f(
 		return get(getType()).toString() + getType().toSmallString();
 	}
 	
-	public static Dimension3f valueOf(String contentX, String contentY, String contentZ) {
+	public static Dimension3f valueOf(String contentX, final String contentY, final String contentZ) {
 		
-		Distance typeX = Distance.parseEndSmallString(contentX);
+		final Distance typeX = Distance.parseEndSmallString(contentX);
 		contentX = typeX.removeEndString(contentX);
-		float tmpX = Float.valueOf(contentX);
+		final float tmpX = Float.valueOf(contentX);
 		
-		Distance typeY = Distance.parseEndSmallString(contentY);
+		final Distance typeY = Distance.parseEndSmallString(contentY);
 		contentX = typeY.removeEndString(contentY);
-		float tmpY = Float.valueOf(contentY);
+		final float tmpY = Float.valueOf(contentY);
 		
-		Distance typeZ = Distance.parseEndSmallString(contentZ);
+		final Distance typeZ = Distance.parseEndSmallString(contentZ);
 		contentX = typeZ.removeEndString(contentZ);
-		float tmpZ = Float.valueOf(contentZ);
+		final float tmpZ = Float.valueOf(contentZ);
 		
 		if (typeX != Distance.UNKNOW) {
 			return new Dimension3f(new Vector3f(tmpX, tmpY, tmpZ), typeX);

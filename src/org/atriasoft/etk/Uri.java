@@ -35,7 +35,7 @@ public class Uri {
 	}
 	
 	public static void addLibrary(final String libName, final Class<?> classHandle, String basePath) {
-		Log.info("Add library reference: lib={} ==> {} base path={}", libName, classHandle.getCanonicalName(), basePath);
+		Log.verbose("Add library reference: lib={} ==> {} base path={}", libName, classHandle.getCanonicalName(), basePath);
 		if (basePath == null || basePath.isEmpty()) {
 			basePath = "/";
 		}
@@ -108,11 +108,11 @@ public class Uri {
 	}
 	
 	public static InputStream getStream(final Uri uri) {
-		Log.warning("Load resource: {}", uri);
+		Log.verbose("Load resource: {}", uri);
 		String offsetGroup = "";
 		if (uri.group != null) {
 			if (uri.group.equals("FILE")) {
-				Log.warning("Load resource direct file: {}", uri);
+				Log.verbose("Load resource direct file: {}", uri);
 				try {
 					return new FileInputStream(new File(uri.getPath()));
 				} catch (final FileNotFoundException e) {
@@ -121,30 +121,30 @@ public class Uri {
 					return null;
 				}
 			}
-			Log.warning("    find group: {}", uri.group);
+			Log.verbose("    find group: {}", uri.group);
 			final String ret = Uri.genericMap.get(uri.group);
 			if (ret != null) {
-				Log.warning("        ==> {}", ret);
+				Log.verbose("        ==> {}", ret);
 				offsetGroup = ret;
 			}
 		}
 		InputStream out = null;
 		if (Uri.applicationClass == null) {
-			Log.warning("    !! Application data class is not defined ...");
+			Log.verbose("    !! Application data class is not defined ...");
 		} else {
 			String tmpPath = Uri.applicationBasePath + offsetGroup + uri.path;
 			tmpPath = tmpPath.replace("//", "/");
-			Log.info("(appl) Try to load '{}' in {}", tmpPath, Uri.applicationClass.getCanonicalName());// + " ==> " + applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath());
+			Log.verbose("(appl) Try to load '{}' in {}", tmpPath, Uri.applicationClass.getCanonicalName());// + " ==> " + applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath());
 			final URL realFileName = Uri.applicationClass.getClassLoader().getResource(tmpPath);
 			if (realFileName != null) {
-				Log.info("(appl)    >>> {}", realFileName.getFile());
+				Log.verbose("(appl)    >>> {}", realFileName.getFile());
 			} else {
-				Log.info("(appl)    ??? base folder: {}", Uri.applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath() + Uri.applicationBasePath + offsetGroup + uri.path);
+				Log.verbose("(appl)    ??? base folder: {}", Uri.applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath() + Uri.applicationBasePath + offsetGroup + uri.path);
 			}
 			out = Uri.applicationClass.getResourceAsStream(tmpPath);
 			
 			if (out == null) {
-				Log.info("(appl) ==> element does not exist ...");
+				Log.verbose("(appl) ==> element does not exist ...");
 				//				try {
 				//					Log.warning("elements: " + getResourceFiles(applicationClass, applicationBasePath + offsetGroup + "/*.*"));
 				//				} catch (IOException e) {
@@ -156,12 +156,12 @@ public class Uri {
 		if (out == null) {
 			// search in the libraries ...
 			if (uri.properties.get("lib") == null) {
-				Log.warning("    !! No library specified");
+				Log.verbose("    !! No library specified");
 				return null;
 			}
 			final LibraryElement libraryElement = Uri.libraries.get(uri.properties.get("lib"));
 			if (libraryElement == null) {
-				Log.warning("     Can not get element in library");
+				Log.verbose("     Can not get element in library");
 				return null;
 			}
 			//				try {
@@ -172,23 +172,23 @@ public class Uri {
 			//				}
 			String tmpPath = libraryElement.basePath + offsetGroup + uri.path;
 			tmpPath = tmpPath.replace("//", "/");
-			Log.info("(lib)  Try to load '{}' in {}", tmpPath, libraryElement.klass.getCanonicalName());
+			Log.verbose("(lib)  Try to load '{}' in {}", tmpPath, libraryElement.klass.getCanonicalName());
 			final URL realFileName = libraryElement.klass.getClassLoader().getResource(tmpPath);
 			if (realFileName != null) {
-				Log.info("(lib)     >>> {}", realFileName.getFile());
+				Log.verbose("(lib)     >>> {}", realFileName.getFile());
 			} else {
-				Log.info("(lib)     ??? base folder: {}", libraryElement.klass.getProtectionDomain().getCodeSource().getLocation().getPath() + libraryElement.basePath + offsetGroup + uri.path);
+				Log.verbose("(lib)     ??? base folder: {}", libraryElement.klass.getProtectionDomain().getCodeSource().getLocation().getPath() + libraryElement.basePath + offsetGroup + uri.path);
 			}
 			out = libraryElement.klass.getResourceAsStream(tmpPath);
 			if (out == null) {
-				Log.info("(lib)  ==> element does not exist ...");
+				Log.verbose("(lib)  ==> element does not exist ...");
 			}
 		}
 		
 		if (out == null) {
 			Log.error("Can not load resource: '" + uri + "'");
 		} else {
-			Log.warning("   =====> DATA LOADED <====== ");
+			Log.verbose("   =====> DATA LOADED <====== ");
 		}
 		return out;
 	}
