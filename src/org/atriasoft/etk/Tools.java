@@ -1,11 +1,17 @@
 package org.atriasoft.etk;
 
+import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
 import org.atriasoft.etk.internal.Log;
 import org.atriasoft.etk.util.FilePos;
 
 public class Tools {
+	
 	/**
-	 *  add indentation of the string input.
+	 * Add indentation of the string input.
 	 * @param data String where the indentation is done.
 	 * @param indent Number of tab to add at the string.
 	 */
@@ -19,7 +25,7 @@ public class Tools {
 	}
 	
 	/**
-	 *  check if an element or attribute is availlable (not : !"#$%&'()*+,/;<=>?@[\]^`{|}~ \\n\\t\\r and for first char : not -.0123456789).
+	 * Check if an element or attribute is availlable (not : !"#$%&'()*+,/;<=>?@[\]^`{|}~ \\n\\t\\r and for first char : not -.0123456789).
 	 * @param val Value to check the conformity.
 	 * @param firstChar True if the element check is the first char.
 	 * @return true The value can be a part of attribute name
@@ -39,6 +45,13 @@ public class Tools {
 		return true;
 	}
 	
+	public static boolean checkNumber(final Character val) {
+		if (val == '-' || val == '+' || val == 'e' || val == '.' || (val >= '0' && val <= '9')) {
+			return true;
+		}
+		return false;
+	}
+	
 	public static boolean checkNumber(final Character val, final boolean firstChar) {
 		if (val == '.' || (val >= '0' && val <= '9')) {
 			return true;
@@ -47,6 +60,16 @@ public class Tools {
 			return true;
 		}
 		return false;
+	}
+	
+	public static boolean checkString(final Character val) {
+		if (val == '!' || val == '"' || val == '#' || val == '$' || val == '%' || val == '&' || val == '\'' // '
+				|| val == '(' || val == ')' || val == '*' || val == '+' || val == ',' || val == '/' || val == ':' || val == ';' || val == '<' || val == '=' || val == '>' || val == '?' || val == '@'
+				|| val == '[' || val == '\\' || val == ']' || val == '^' || val == '`' || val == '{' || val == '|' || val == '}' || val == '~' || val == ' ' || val == '\n' || val == '\t'
+				|| val == '\r') {
+			return false;
+		}
+		return true;
 	}
 	
 	public static String cleanNumberList(final String data) {
@@ -324,6 +347,11 @@ public class Tools {
 			out[count++] = Short.parseShort(str);
 		}
 		return out;
+	}
+	
+	private static String readFile(final Path path, final Charset encoding) throws IOException {
+		final byte[] encoded = Files.readAllBytes(path);
+		return new String(encoded, encoding);
 	}
 	
 	// transform the Text with :
