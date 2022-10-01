@@ -7,6 +7,6 @@ open module org.atriasoft.etk {
 	exports org.atriasoft.etk.math;
 	exports org.atriasoft.etk.util;
 	
-	requires transitive io.scenarium.logger;
+	requires transitive org.atriasoft.reggol;
 	requires com.github.spotbugs.annotations;
 }
