@@ -2,9 +2,12 @@ package org.atriasoft.etk.math;
 
 import java.text.DecimalFormat;
 
-import org.atriasoft.etk.internal.Log;
+import org.atriasoft.etk.Uri;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FMath {
+	final static Logger LOGGER = LoggerFactory.getLogger(FMath.class);
 	public static final float PI = (float) Math.PI;
 	
 	public static float abs(final float a) {
@@ -202,7 +205,7 @@ public class FMath {
 			}
 			val *= 2;
 		}
-		Log.critical("impossible CASE....");
+		LOGGER.error("impossible CASE....");
 		return val;
 	}
 	

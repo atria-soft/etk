@@ -5,9 +5,10 @@
  */
 package org.atriasoft.etk;
 
-import org.atriasoft.etk.internal.Log;
 import org.atriasoft.etk.math.Vector2f;
 import org.atriasoft.etk.math.Vector2i;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * in the dimension class we store the data as the more usefull unit (pixel)
@@ -16,6 +17,7 @@ import org.atriasoft.etk.math.Vector2i;
 public record Dimension2f(
 		Vector2f size,
 		Distance type) {
+	final static Logger LOGGER = LoggerFactory.getLogger(Dimension2f.class);
 	
 	public static final Dimension2f ZERO = new Dimension2f(Vector2f.ZERO, Distance.PIXEL);
 	private static Vector2f ratio = new Vector2f(9999999, 888888);
@@ -76,12 +78,12 @@ public record Dimension2f(
 	 * @note: same as @ref setPixelPerInch (internal manage convention)
 	 */
 	public static void setPixelRatio(final Vector2f ratio, final Distance type) {
-		Log.info("Set a new screen ratio for the screen : ratio=" + ratio + " type=" + type);
+		LOGGER.info("Set a new screen ratio for the screen : ratio=" + ratio + " type=" + type);
 		final Dimension2f conversion = new Dimension2f(ratio, type);
-		Log.info("     == > " + conversion);
+		LOGGER.info("     == > " + conversion);
 		Dimension2f.ratio = conversion.getMillimeter();
 		invRatio = new Vector2f(1.0f / Dimension2f.ratio.x(), 1.0f / Dimension2f.ratio.y());
-		Log.info("Set a new screen ratio for the screen : ratioMm=" + Dimension2f.ratio);
+		LOGGER.info("Set a new screen ratio for the screen : ratioMm=" + Dimension2f.ratio);
 	}
 	
 	/**
@@ -90,7 +92,6 @@ public record Dimension2f(
 	 */
 	public static void setPixelWindowsSize(final Vector2f size) {
 		windowsSize = new Dimension2f(size);
-		Log.verbose("Set a new Windows property size " + windowsSize + "px");
 	}
 	
 	/**
@@ -131,7 +132,7 @@ public record Dimension2f(
 			case ELEMENT -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 			case EX -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 			case PC -> {
-				Log.error("Does not support other than Px and % type of dimention : " + type + " automaticly convert with {72,72} pixel/inch");
+				LOGGER.error("Does not support other than Px and % type of dimention : " + type + " automaticly convert with {72,72} pixel/inch");
 				yield null;
 			}
 			case POINT -> throw new UnsupportedOperationException("Unimplemented case: " + type);
@@ -252,12 +253,11 @@ public record Dimension2f(
 		final Distance type = Distance.parseEndSmallString(config);
 		config = type.removeEndString(config);
 		if (type == Distance.UNKNOW) {
-			Log.critical("Can not parse dimension : '" + config + "'");
+			LOGGER.error("Can not parse dimension : '" + config + "'");
 			return null;
 		}
 		final Vector2f tmp = Vector2f.valueOf(config);
 		final Dimension2f ret = new Dimension2f(tmp, type);
-		Log.verbose(" config dimension : '" + config + "'  == > " + ret.toString());
 		return ret;
 	}
 	

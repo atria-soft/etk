@@ -5,9 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import org.atriasoft.etk.internal.Log;
+import org.atriasoft.etk.Uri;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Theme {
+	final static Logger LOGGER = LoggerFactory.getLogger(Theme.class);
 	private static Map<String, Path> globalListTheme = new HashMap<>();
 	private static Map<String, Path> globalListThemeDefault = new HashMap<>();
 	
@@ -50,7 +54,7 @@ public class Theme {
 	 * @param folderName The associated folder of the Theme (like "myTheme/folder/folder2/")
 	 */
 	public static void setName(final String refName, final Path folderName) {
-		Log.warning("Change theme : '" + refName + "' : '" + folderName + "'");
+		LOGGER.warn("Change theme : '" + refName + "' : '" + folderName + "'");
 		globalListTheme.put(refName, folderName);
 		updateProvider(refName);
 	}

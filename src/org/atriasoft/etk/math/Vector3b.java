@@ -1,6 +1,9 @@
 package org.atriasoft.etk.math;
 
-import org.atriasoft.etk.internal.Log;
+import org.atriasoft.etk.Uri;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
@@ -9,6 +12,7 @@ public record Vector3b(
 		boolean x,
 		boolean y,
 		boolean z) {
+	final static Logger LOGGER = LoggerFactory.getLogger(Vector3b.class);
 	public static Vector3b valueOf(String value) {
 		boolean val1 = false;
 		boolean val2 = false;
@@ -22,7 +26,7 @@ public record Vector3b(
 		}
 		final String[] values = value.split(",| ");
 		if (values.length > 3) {
-			Log.error("Can not parse Vector3b with more than 3 values: '" + value + "'");
+			LOGGER.error("Can not parse Vector3b with more than 3 values: '" + value + "'");
 		}
 		if (values.length == 1) {
 			// no coma ...

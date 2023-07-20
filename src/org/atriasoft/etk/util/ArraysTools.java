@@ -3,6 +3,7 @@ package org.atriasoft.etk.util;
 import java.util.Arrays;
 import java.util.List;
 
+
 public class ArraysTools {
 	public static <T> void fill(final T[] buffer, final T value) {
 		if (buffer == null) {

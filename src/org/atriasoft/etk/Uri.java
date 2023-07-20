@@ -14,10 +14,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.atriasoft.etk.internal.Log;
 
 public class Uri {
+	final static Logger LOGGER = LoggerFactory.getLogger(Uri.class);
 	private record LibraryElement(
 			Class<?> klass,
 			String basePath) {}
@@ -35,7 +37,7 @@ public class Uri {
 	}
 	
 	public static void addLibrary(final String libName, final Class<?> classHandle, String basePath) {
-		Log.verbose("Add library reference: lib={} ==> {} base path={}", libName, classHandle.getCanonicalName(), basePath);
+		LOGGER.trace("Add library reference: lib={} ==> {} base path={}", libName, classHandle.getCanonicalName(), basePath);
 		if (basePath == null || basePath.isEmpty()) {
 			basePath = "/";
 		}
@@ -108,11 +110,11 @@ public class Uri {
 	}
 	
 	public static InputStream getStream(final Uri uri) {
-		Log.verbose("Load resource: {}", uri);
+		LOGGER.trace("Load resource: {}", uri);
 		String offsetGroup = "";
 		if (uri.group != null) {
 			if (uri.group.equals("FILE")) {
-				Log.verbose("Load resource direct file: {}", uri);
+				LOGGER.trace("Load resource direct file: {}", uri);
 				try {
 					return new FileInputStream(new File(uri.getPath()));
 				} catch (final FileNotFoundException e) {
@@ -121,32 +123,32 @@ public class Uri {
 					return null;
 				}
 			}
-			Log.verbose("    find group: {}", uri.group);
+			LOGGER.trace("    find group: {}", uri.group);
 			final String ret = Uri.genericMap.get(uri.group);
 			if (ret != null) {
-				Log.verbose("        ==> {}", ret);
+				LOGGER.trace("        ==> {}", ret);
 				offsetGroup = ret;
 			}
 		}
 		InputStream out = null;
 		if (Uri.applicationClass == null) {
-			Log.verbose("    !! Application data class is not defined ...");
+			LOGGER.trace("    !! Application data class is not defined ...");
 		} else {
 			String tmpPath = Uri.applicationBasePath + offsetGroup + uri.path;
 			tmpPath = tmpPath.replace("//", "/");
-			Log.verbose("(appl) Try to load '{}' in {}", tmpPath, Uri.applicationClass.getCanonicalName());// + " ==> " + applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath());
+			LOGGER.trace("(appl) Try to load '{}' in {}", tmpPath, Uri.applicationClass.getCanonicalName());// + " ==> " + applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath());
 			final URL realFileName = Uri.applicationClass.getClassLoader().getResource(tmpPath);
 			if (realFileName != null) {
-				Log.verbose("(appl)    >>> {}", realFileName.getFile());
+				LOGGER.trace("(appl)    >>> {}", realFileName.getFile());
 			} else {
-				Log.verbose("(appl)    ??? base folder: {}", Uri.applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath() + Uri.applicationBasePath + offsetGroup + uri.path);
+				LOGGER.trace("(appl)    ??? base folder: {}", Uri.applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath() + Uri.applicationBasePath + offsetGroup + uri.path);
 			}
 			out = Uri.applicationClass.getResourceAsStream(tmpPath);
 			
 			if (out == null) {
-				Log.verbose("(appl) ==> element does not exist ...");
+				LOGGER.trace("(appl) ==> element does not exist ...");
 				//				try {
-				//					Log.warning("elements: " + getResourceFiles(applicationClass, applicationBasePath + offsetGroup + "/*.*"));
+				//					LOGGER.warn("elements: " + getResourceFiles(applicationClass, applicationBasePath + offsetGroup + "/*.*"));
 				//				} catch (IOException e) {
 				//					// TODO Auto-generated catch block
 				//					e.printStackTrace();
@@ -156,46 +158,46 @@ public class Uri {
 		if (out == null) {
 			// search in the libraries ...
 			if (uri.properties.get("lib") == null) {
-				Log.verbose("    !! No library specified");
+				LOGGER.trace("    !! No library specified");
 				return null;
 			}
 			final LibraryElement libraryElement = Uri.libraries.get(uri.properties.get("lib"));
 			if (libraryElement == null) {
-				Log.verbose("     Can not get element in library");
+				LOGGER.trace("     Can not get element in library");
 				return null;
 			}
 			//				try {
-			//					Log.warning("elements: " + getResourceFiles(libraryElement.klass, libraryElement.basePath + offsetGroup + "/"));
+			//					LOGGER.warn("elements: " + getResourceFiles(libraryElement.klass, libraryElement.basePath + offsetGroup + "/"));
 			//				} catch (IOException e) {
 			//					// TODO Auto-generated catch block
 			//					e.printStackTrace();
 			//				}
 			String tmpPath = libraryElement.basePath + offsetGroup + uri.path;
 			tmpPath = tmpPath.replace("//", "/");
-			Log.verbose("(lib)  Try to load '{}' in {}", tmpPath, libraryElement.klass.getCanonicalName());
+			LOGGER.trace("(lib)  Try to load '{}' in {}", tmpPath, libraryElement.klass.getCanonicalName());
 			final URL realFileName = libraryElement.klass.getClassLoader().getResource(tmpPath);
 			if (realFileName != null) {
-				Log.verbose("(lib)     >>> {}", realFileName.getFile());
+				LOGGER.trace("(lib)     >>> {}", realFileName.getFile());
 			} else {
-				Log.verbose("(lib)     ??? base folder: {}", libraryElement.klass.getProtectionDomain().getCodeSource().getLocation().getPath() + libraryElement.basePath + offsetGroup + uri.path);
+				LOGGER.trace("(lib)     ??? base folder: {}", libraryElement.klass.getProtectionDomain().getCodeSource().getLocation().getPath() + libraryElement.basePath + offsetGroup + uri.path);
 			}
 			out = libraryElement.klass.getResourceAsStream(tmpPath);
 			if (out == null) {
-				Log.verbose("(lib)  ==> element does not exist ...");
+				LOGGER.trace("(lib)  ==> element does not exist ...");
 			}
 		}
 		
 		if (out == null) {
-			Log.error("Can not load resource: '" + uri + "'");
+			LOGGER.error("Can not load resource: '" + uri + "'");
 		} else {
-			Log.verbose("   =====> DATA LOADED <====== ");
+			LOGGER.trace("   =====> DATA LOADED <====== ");
 		}
 		return out;
 	}
 	
 	public static List<Uri> listRecursive(final Uri uri) {
 		final List<Uri> out = new ArrayList<>();
-		Log.todo("not implemented function ...");
+		LOGGER.error("TODO: not implemented function ...");
 		return out;
 	}
 	
@@ -204,7 +206,7 @@ public class Uri {
 	}
 	
 	public static void setApplication(final Class<?> classHandle, String basePath) {
-		Log.info("Set application reference : {}  base path={}", classHandle.getCanonicalName(), basePath);
+		LOGGER.info ("Set application reference : {}  base path={}", classHandle.getCanonicalName(), basePath);
 		Uri.applicationClass = classHandle;
 		if (basePath == null || basePath.isEmpty()) {
 			basePath = "/";
@@ -219,7 +221,7 @@ public class Uri {
 	}
 	
 	public static void setGroup(final String groupName, String basePath) {
-		Log.info("Set Group : {}  base path={}", groupName, basePath);
+		LOGGER.info ("Set Group : {}  base path={}", groupName, basePath);
 		if (basePath == null || basePath.isEmpty()) {
 			basePath = "/";
 		}
@@ -270,7 +272,7 @@ public class Uri {
 			out = new BufferedWriter(fstream);
 			out.write(data);
 		} catch (final IOException e) {
-			Log.error("Error: {}", e.getMessage());
+			LOGGER.error("Error: {}", e.getMessage());
 			throw e;
 		} finally {
 			if (out != null) {
@@ -278,7 +280,7 @@ public class Uri {
 					out.close();
 				} catch (final IOException e) {
 					// TODO Auto-generated catch block
-					Log.error("Error: ", e);
+					LOGGER.error("Error: ", e);
 					throw e;
 				}
 			}
@@ -292,14 +294,14 @@ public class Uri {
 			out = new BufferedWriter(fstream);
 			out.write(data);
 		} catch (final IOException e) {
-			Log.error("Error: " + e.getMessage());
+			LOGGER.error("Error: " + e.getMessage());
 		} finally {
 			if (out != null) {
 				try {
 					out.close();
 				} catch (final IOException e) {
 					// TODO Auto-generated catch block
-					Log.error("Error: ", e);
+					LOGGER.error("Error: ", e);
 				}
 			}
 		}

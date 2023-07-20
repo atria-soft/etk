@@ -1,6 +1,10 @@
 package org.atriasoft.etk;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 public abstract class ThreadAbstract {
+	final static Logger LOGGER = LoggerFactory.getLogger(ThreadAbstract.class);
 	// thread section:
 	private boolean threadStopRequested = false;
 	private Thread threadInstance = null;

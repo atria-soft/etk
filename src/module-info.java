@@ -7,6 +7,6 @@ open module org.atriasoft.etk {
 	exports org.atriasoft.etk.math;
 	exports org.atriasoft.etk.util;
 	
-	requires transitive org.atriasoft.reggol;
+	requires transitive org.slf4j;
 	requires com.github.spotbugs.annotations;
 }

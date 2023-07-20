@@ -3,7 +3,8 @@ package org.atriasoft.etk;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.atriasoft.etk.internal.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /** @file
  * @author Edouard DUPIN
@@ -12,6 +13,7 @@ import org.atriasoft.etk.internal.Log;
  */
 
 public class ConfigFont {
+	final static Logger LOGGER = LoggerFactory.getLogger(ConfigFont.class);
 	private final Map<String, Uri> fonts = new HashMap<>();
 	private String name = "FreeSans";
 	private int size = 12;
@@ -23,7 +25,7 @@ public class ConfigFont {
 	public Uri getFontUri(final String fontName) {
 		Uri out = this.fonts.get(fontName);
 		if (out == null) {
-			Log.warning(" try to get unexistant font : " + fontName);
+			LOGGER.warn(" try to get unexistant font : " + fontName);
 		}
 		return out;
 	}
@@ -52,7 +54,7 @@ public class ConfigFont {
 	public void set(final String fontName, final int size) {
 		this.name = fontName;
 		this.size = size;
-		Log.debug("Set default Font : '" + this.name + "' size=" + this.size);
+		LOGGER.trace("Set default Font : '" + this.name + "' size=" + this.size);
 	}
 	
 	/**
@@ -61,7 +63,7 @@ public class ConfigFont {
 	 */
 	public void setName(final String fontName) {
 		this.name = fontName;
-		Log.debug("Set default Font : '" + this.name + "' size=" + this.size + " (change name only)");
+		LOGGER.trace("Set default Font : '" + this.name + "' size=" + this.size + " (change name only)");
 	}
 	
 	/**
@@ -70,6 +72,6 @@ public class ConfigFont {
 	 */
 	public void setSize(final int size) {
 		this.size = size;
-		Log.debug("Set default Font : '" + this.name + "' size=" + this.size + " (change size only)");
+		LOGGER.trace("Set default Font : '" + this.name + "' size=" + this.size + " (change size only)");
 	}
 }

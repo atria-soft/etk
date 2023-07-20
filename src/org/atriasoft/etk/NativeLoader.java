@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.atriasoft.etk.internal.Log;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class NativeLoader {
+	final static Logger LOGGER = LoggerFactory.getLogger(NativeLoader.class);
 	private NativeLoader() {}
 	
 	/**
@@ -16,7 +19,7 @@ public class NativeLoader {
 	 * @throws IOException the library can not be loaded...
 	 */
     public static void load(final Uri fileToLoad) throws IOException {
-        Log.error("Start load library native ...");
+        LOGGER.error("Start load library native ...");
         // in java the loading of .so need to be externalized to be loaded by the system as native library. then we copy in an external temporary folder and remove it when application close.
         try {
 			InputStream is = Uri.getStream(fileToLoad);

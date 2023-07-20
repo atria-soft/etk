@@ -1,12 +1,16 @@
 package org.atriasoft.etk.math;
 
-import org.atriasoft.etk.internal.Log;
+import org.atriasoft.etk.Uri;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
 public record Vector2f(
 		float x,
 		float y) {
+	final static Logger LOGGER = LoggerFactory.getLogger(Vector2f.class);
 	public static Vector2f valueOf(String value) {
 		float val1 = 0;
 		float val2 = 0;
@@ -19,7 +23,7 @@ public record Vector2f(
 		}
 		final String[] values = value.split(",| ");
 		if (values.length > 2) {
-			Log.error("Can not parse Vector2f with more than 2 values: '" + value + "'");
+			LOGGER.error("Can not parse Vector2f with more than 2 values: '" + value + "'");
 		}
 		if (values.length == 1) {
 			// no coma ...

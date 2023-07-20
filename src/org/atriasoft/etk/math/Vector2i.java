@@ -1,6 +1,9 @@
 package org.atriasoft.etk.math;
 
-import org.atriasoft.etk.internal.Log;
+import org.atriasoft.etk.Uri;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
@@ -8,6 +11,7 @@ import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 public record Vector2i(
 		int x,
 		int y) {
+	final static Logger LOGGER = LoggerFactory.getLogger(Vector2i.class);
 	
 	public static Vector2i valueOf(String value) throws NumberFormatException {
 		int val1 = 0;
@@ -21,7 +25,7 @@ public record Vector2i(
 		}
 		final String[] values = value.split(",| ");
 		if (values.length > 2) {
-			Log.error("Can not parse Vector2i with more than 2 values: '" + value + "'");
+			LOGGER.error("Can not parse Vector2i with more than 2 values: '" + value + "'");
 		}
 		if (values.length == 1) {
 			// no coma ...

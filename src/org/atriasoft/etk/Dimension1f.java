@@ -5,7 +5,8 @@
  */
 package org.atriasoft.etk;
 
-import org.atriasoft.etk.internal.Log;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * in the dimension class we store the data as the more usefull unit (pixel)
@@ -14,6 +15,7 @@ import org.atriasoft.etk.internal.Log;
 public record Dimension1f(
 		float size,
 		Distance type) {
+	final static Logger LOGGER = LoggerFactory.getLogger(Dimension1f.class);
 	
 	private static final float BASIC_RATIO = 72.0f / 25.4f;
 	public static final Dimension1f ZERO = new Dimension1f(0);
@@ -99,13 +101,11 @@ public record Dimension1f(
 		final Distance type = Distance.parseEndSmallString(config);
 		config = type.removeEndString(config);
 		if (type == Distance.UNKNOW) {
-			Log.critical("Can not parse dimension : '" + config + "'");
+			LOGGER.error("FATAL: Can not parse dimension : '" + config + "'");
 			return null;
 		}
 		final float tmp = Float.valueOf(config);
-		final Dimension1f ret = new Dimension1f(tmp, type);
-		Log.verbose(" config dimension : '" + config + "'  == > " + ret.toString());
-		return ret;
+		return new Dimension1f(tmp, type);
 	}
 	
 	/**

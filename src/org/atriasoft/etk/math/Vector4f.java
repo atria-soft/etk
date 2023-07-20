@@ -1,7 +1,10 @@
 
 package org.atriasoft.etk.math;
 
-import org.atriasoft.etk.internal.Log;
+import org.atriasoft.etk.Uri;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
@@ -10,6 +13,7 @@ public record Vector4f(
 		float y,
 		float z,
 		float w) {
+	final static Logger LOGGER = LoggerFactory.getLogger(Vector4f.class);
 	/**
 	 *  Get the length square between the 2 vectors
 	 * @param start First vector
@@ -38,7 +42,7 @@ public record Vector4f(
 		}
 		final String[] values = value.split(",| ");
 		if (values.length > 3) {
-			Log.error("Can not parse Vector4f with more than 3 values: '" + value + "'");
+			LOGGER.error("Can not parse Vector4f with more than 3 values: '" + value + "'");
 		}
 		if (values.length == 1) {
 			// no coma ...

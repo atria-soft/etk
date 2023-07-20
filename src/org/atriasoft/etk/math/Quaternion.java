@@ -10,7 +10,7 @@ public record Quaternion(
 		float w) {
 	// a * diff = b
 	public static Quaternion diff(final Quaternion a, final Quaternion b) {
-		// Log.info("diff " + a + " " + b);
+		// LOGGER.info("diff " + a + " " + b);
 		final Quaternion inv = a.inverse();
 		return inv.multiply(b);
 	}

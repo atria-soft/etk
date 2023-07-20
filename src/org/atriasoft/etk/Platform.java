@@ -1,10 +1,13 @@
 package org.atriasoft.etk;
 
-import org.atriasoft.etk.internal.Log;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
 public class Platform {
+	final static Logger LOGGER = LoggerFactory.getLogger(Platform.class);
 	private Platform() {}
 	/**
 	 * Get the current OS we are running:
@@ -67,7 +70,7 @@ public class Platform {
         } else if (osArch.startsWith("arm")) {
             osArch = "arm";
         } else {
-        	Log.warning("Maybe unknowx system... osArch=" + osArch + " abiType=" + abiType + " libPath=" + libPath);
+        	LOGGER.warn("Maybe unknowx system... osArch=" + osArch + " abiType=" + abiType + " libPath=" + libPath);
         }
         return System.getProperty("org.atriasoft.etk.platform.arch", osArch);
     }

@@ -5,10 +5,13 @@ import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-import org.atriasoft.etk.internal.Log;
+
 import org.atriasoft.etk.util.FilePos;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class Tools {
+	final static Logger LOGGER = LoggerFactory.getLogger(Tools.class);
 	
 	/**
 	 * Add indentation of the string input.
@@ -131,11 +134,11 @@ public class Tools {
 	 */
 	public static void drawElementParsed(final Character val, final FilePos filePos) {
 		//		if (val == '\n') {
-		//			Log.error(filePos + " parse '\\n'");
+		//			LOGGER.error(filePos + " parse '\\n'");
 		//		} else if (val == '\t') {
-		//			Log.error(filePos + " parse '\\t'");
+		//			LOGGER.error(filePos + " parse '\\t'");
 		//		} else {
-		//			Log.error(filePos + " parse '" + val + "'");
+		//			LOGGER.error(filePos + " parse '" + val + "'");
 		//		}
 	}
 	
@@ -191,7 +194,7 @@ public class Tools {
 			}
 			val *= 2;
 		}
-		Log.critical("impossible CASE....");
+		LOGGER.error("impossible CASE....");
 		return val;
 	}
 	
