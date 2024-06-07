@@ -52,7 +52,7 @@ def configure(target, my_module):
 	    'src/org/atriasoft/etk/util/Pair.java',
 	    'src/org/atriasoft/etk/util/Dynamic.java',
 	    'src/org/atriasoft/etk/util/ArraysTools.java',
-	    'src/org/atriasoft/etk/internal/Log.java',
+	    'src/org/atriasoft/etk/internal/LOGGER.java',
 	    'src/org/atriasoft/etk/theme/Theme.java',
 	    'src/org/atriasoft/etk/Tools.java',
 	    'src/org/atriasoft/etk/Configs.java',

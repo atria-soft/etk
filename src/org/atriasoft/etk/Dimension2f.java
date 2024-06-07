@@ -132,7 +132,8 @@ public record Dimension2f(
 			case ELEMENT -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 			case EX -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 			case PC -> {
-				LOGGER.error("Does not support other than Px and % type of dimention : " + type + " automaticly convert with {72,72} pixel/inch");
+				LOGGER.error("Does not support other than Px and % type of dimention : " + type
+						+ " automaticly convert with {72,72} pixel/inch");
 				yield null;
 			}
 			case POINT -> throw new UnsupportedOperationException("Unimplemented case: " + type);
@@ -217,7 +218,8 @@ public record Dimension2f(
 		if (this.type != Distance.POURCENT) {
 			return new Vector2i((int) this.size.x(), (int) this.size.y());
 		}
-		final Vector2i res = new Vector2i((int) (uppersize.x() * this.size.x() * 0.01f), (int) (uppersize.y() * this.size.y() * 0.01f));
+		final Vector2i res = new Vector2i((int) (uppersize.x() * this.size.x() * 0.01f),
+				(int) (uppersize.y() * this.size.y() * 0.01f));
 		//GALE_DEBUG("Get % : " + m_data + " / " + windDim + " == > " + res);
 		return res;
 	}
@@ -269,13 +271,13 @@ public record Dimension2f(
 		return get(getType()).toString() + getType().toSmallString();
 	}
 	
-	public static Dimension2f valueOf(String contentX, final String contentY) {
+	public static Dimension2f valueOf(String contentX, String contentY) {
 		final Distance typeX = Distance.parseEndSmallString(contentX);
 		contentX = typeX.removeEndString(contentX);
 		final float tmpX = Float.valueOf(contentX);
 		
 		final Distance typeY = Distance.parseEndSmallString(contentY);
-		contentX = typeY.removeEndString(contentY);
+		contentY = typeY.removeEndString(contentY);
 		final float tmpY = Float.valueOf(contentY);
 		
 		if (typeX != Distance.UNKNOW) {

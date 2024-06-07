@@ -63,26 +63,17 @@ public record Dimension1f(
 	 * @return dimension in Pixel
 	 */
 	public float getPixel(final float upperSize) {
-		switch (this.type) {
-			case POURCENT:
-				return upperSize * this.size * 0.01f;
-			case PIXEL:
-				return this.size;
-			case METER:
-				return this.size * METER_TO_MILLIMETER * BASIC_RATIO;
-			case CENTIMETER:
-				return this.size * CENTIMETER_TO_MILLIMETER * BASIC_RATIO;
-			case MILLIMETER:
-				return this.size * BASIC_RATIO;
-			case KILOMETER:
-				return this.size * KILOMETER_TO_MILLIMETER * BASIC_RATIO;
-			case INCH:
-				return this.size * INCH_TO_MILLIMETER * BASIC_RATIO;
-			case FOOT:
-				return this.size * FOOT_TO_MILLIMETER * BASIC_RATIO;
-			default:
-				return 128.0f;
-		}
+		return switch (this.type) {
+			case POURCENT -> upperSize * this.size * 0.01f;
+			case PIXEL -> this.size;
+			case METER -> this.size * METER_TO_MILLIMETER * BASIC_RATIO;
+			case CENTIMETER -> this.size * CENTIMETER_TO_MILLIMETER * BASIC_RATIO;
+			case MILLIMETER -> this.size * BASIC_RATIO;
+			case KILOMETER -> this.size * KILOMETER_TO_MILLIMETER * BASIC_RATIO;
+			case INCH -> this.size * INCH_TO_MILLIMETER * BASIC_RATIO;
+			case FOOT -> this.size * FOOT_TO_MILLIMETER * BASIC_RATIO;
+			default -> 128.0f;
+		};
 	}
 	
 	/**
@@ -98,11 +89,11 @@ public record Dimension1f(
 	 * @param config dimension configuration.
 	 */
 	public static Dimension1f valueOf(String config) {
-		final Distance type = Distance.parseEndSmallString(config);
+		Distance type = Distance.parseEndSmallString(config);
 		config = type.removeEndString(config);
 		if (type == Distance.UNKNOW) {
-			LOGGER.error("FATAL: Can not parse dimension : '" + config + "'");
-			return null;
+			LOGGER.error("FATAL: Can not parse dimension : '{}' CAn not deterùmine extention ... px, cm, ...", config);
+			type = Distance.PIXEL;
 		}
 		final float tmp = Float.valueOf(config);
 		return new Dimension1f(tmp, type);
