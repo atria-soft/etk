@@ -5,7 +5,6 @@ package org.atriasoft.etk.math;
  *  sx  shx  tx
  *  sy  shy  ty
  */
-@SuppressWarnings("preview")
 public record Matrix2x3f(
 		float sx,
 		float shy,

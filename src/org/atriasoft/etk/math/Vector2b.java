@@ -1,17 +1,15 @@
 package org.atriasoft.etk.math;
 
-import org.atriasoft.etk.Uri;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
-@SuppressWarnings("preview")
 public record Vector2b(
 		boolean x,
 		boolean y) {
 	final static Logger LOGGER = LoggerFactory.getLogger(Vector2b.class);
+	
 	public static Vector2b valueOf(String value) {
 		boolean val1 = false;
 		boolean val2 = false;
@@ -37,19 +35,19 @@ public record Vector2b(
 		}
 		return new Vector2b(val1, val2);
 	}
-	
+
 	/*
 	 * **************************************************** Constructor
 	 *****************************************************/
 	public Vector2b() {
 		this(false, false);
 	}
-	
+
 	public Vector2b(final boolean x, final boolean y) {
 		this.x = x;
 		this.y = y;
 	}
-	
+
 	/**
 	 * In-Equality compare operator with an other object.
 	 * @param obj Reference on the comparing object
@@ -60,7 +58,7 @@ public record Vector2b(
 	public boolean isDifferent(final Vector2b obj) {
 		return (obj.x != this.x || obj.y != this.y);
 	}
-	
+
 	/**
 	 * Equality compare operator with an other object.
 	 * @param obj Reference on the comparing object
@@ -71,24 +69,24 @@ public record Vector2b(
 	public boolean isEqual(final Vector2b obj) {
 		return (obj.x == this.x && obj.y == this.y);
 	}
-	
+
 	public static final Vector2b FALSE = new Vector2b(false, false);
 	public static final Vector2b TRUE = new Vector2b(true, true);
 	public static final Vector2b FALSE_FALSE = FALSE;
 	public static final Vector2b TRUE_TRUE = TRUE;
 	public static final Vector2b TRUE_FALSE = new Vector2b(true, false);
 	public static final Vector2b FALSE_TRUE = new Vector2b(false, true);
-	
+
 	@Override
 	public String toString() {
 		return "(" + this.x + "," + this.y + ")";
 	}
-	
+
 	@CheckReturnValue
 	public Vector2b withX(final boolean xxx) {
 		return new Vector2b(xxx, this.y);
 	}
-	
+
 	@CheckReturnValue
 	public Vector2b withY(final boolean yyy) {
 		return new Vector2b(this.x, yyy);

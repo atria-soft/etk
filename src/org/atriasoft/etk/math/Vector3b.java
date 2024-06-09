@@ -1,17 +1,15 @@
 package org.atriasoft.etk.math;
 
-import org.atriasoft.etk.Uri;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
-@SuppressWarnings("preview")
 public record Vector3b(
 		boolean x,
 		boolean y,
 		boolean z) {
+	
 	final static Logger LOGGER = LoggerFactory.getLogger(Vector3b.class);
 	public static Vector3b valueOf(String value) {
 		boolean val1 = false;
@@ -45,20 +43,20 @@ public record Vector3b(
 		}
 		return new Vector3b(val1, val2, val3);
 	}
-	
+
 	/*
 	 * **************************************************** Constructor
 	 *****************************************************/
 	public Vector3b() {
 		this(false, false, false);
 	}
-	
+
 	public Vector3b(final boolean x, final boolean y, final boolean z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
-	
+
 	/**
 	 * In-Equality compare operator with an other object.
 	 * @param obj Reference on the comparing object
@@ -69,7 +67,7 @@ public record Vector3b(
 	public boolean isDifferent(final Vector3b obj) {
 		return (obj.x != this.x || obj.y != this.y || obj.z != this.z);
 	}
-	
+
 	/**
 	 * Equality compare operator with an other object.
 	 * @param obj Reference on the comparing object
@@ -80,7 +78,7 @@ public record Vector3b(
 	public boolean isEqual(final Vector3b obj) {
 		return (obj.x == this.x && obj.y == this.y && obj.z == this.z);
 	}
-	
+
 	public static final Vector3b FALSE = new Vector3b(false, false, false);
 	public static final Vector3b TRUE = new Vector3b(true, true, true);
 	public static final Vector3b FALSE_FALSE_FALSE = FALSE;
@@ -88,22 +86,22 @@ public record Vector3b(
 	public static final Vector3b TRUE_FALSE_FALSE = new Vector3b(true, false, false);
 	public static final Vector3b FALSE_TRUE_FALSE = new Vector3b(false, true, false);
 	public static final Vector3b FALSE_FALSE_TRUE = new Vector3b(false, false, true);
-	
+
 	@Override
 	public String toString() {
 		return "(" + this.x + "," + this.y + ")";
 	}
-	
+
 	@CheckReturnValue
 	public Vector3b withX(final boolean xxx) {
 		return new Vector3b(xxx, this.y, this.z);
 	}
-	
+
 	@CheckReturnValue
 	public Vector3b withY(final boolean yyy) {
 		return new Vector3b(this.x, yyy, this.z);
 	}
-	
+
 	@CheckReturnValue
 	public Vector3b withZ(final boolean zzz) {
 		return new Vector3b(this.x, this.y, zzz);

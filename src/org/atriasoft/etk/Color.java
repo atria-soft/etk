@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.atriasoft.etk.math.FMath;
 
-@SuppressWarnings("preview")
 
 //@formatter:off
 public record Color(
