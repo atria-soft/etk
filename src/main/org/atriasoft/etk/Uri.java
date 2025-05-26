@@ -67,6 +67,14 @@ public class Uri {
 		return data;
 	}
 
+	public static String getAllDataString(final Uri resourceName) {
+		final byte[] data = getAllData(resourceName);
+		if (data == null) {
+			return null;
+		}
+		return new String(data);
+	}
+
 	private static List<String> getResourceFiles(final Class<?> clazz, final String path) throws IOException {
 		final List<String> filenames = new ArrayList<>();
 
@@ -121,7 +129,7 @@ public class Uri {
 			out = Uri.applicationClass.getResourceAsStream("/" + tmpPath);
 
 			if (out == null) {
-				LOGGER.error("(appl) ==> element does not exist ... {}", uri);
+				LOGGER.trace("(appl) ==> element does not exist ... {} => {}", uri, tmpPath);
 				/*
 				try {
 					LOGGER.warn("elements: " + getResourceFiles(applicationClass,

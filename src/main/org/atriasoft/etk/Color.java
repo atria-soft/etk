@@ -4,7 +4,6 @@ import java.util.Map;
 
 import org.atriasoft.etk.math.FMath;
 
-
 //@formatter:off
 public record Color(
 		float r,
@@ -332,35 +331,35 @@ public record Color(
 			//        #RGBA
 			//        #RRGGBB
 			//        #RRGGBBAA
-			switch (color.length()) {
+			return switch (color.length()) {
 				case 4 -> {
 					final float r = Integer.parseInt(color.substring(1, 2), 16) / 15.0f;
 					final float g = Integer.parseInt(color.substring(2, 3), 16) / 15.0f;
 					final float b = Integer.parseInt(color.substring(3, 4), 16) / 15.0f;
-					return new Color(r, g, b);
+					yield new Color(r, g, b);
 				}
 				case 5 -> {
 					final float r = Integer.parseInt(color.substring(1, 2), 16) / 15.0f;
 					final float g = Integer.parseInt(color.substring(2, 3), 16) / 15.0f;
 					final float b = Integer.parseInt(color.substring(3, 4), 16) / 15.0f;
 					final float a = Integer.parseInt(color.substring(4, 5), 16) / 15.0f;
-					return new Color(r, g, b, a);
+					yield new Color(r, g, b, a);
 				}
 				case 7 -> {
 					final float r = Integer.parseInt(color.substring(1, 3), 16) / 255.0f;
 					final float g = Integer.parseInt(color.substring(3, 5), 16) / 255.0f;
 					final float b = Integer.parseInt(color.substring(5, 7), 16) / 255.0f;
-					return new Color(r, g, b);
+					yield new Color(r, g, b);
 				}
 				case 9 -> {
 					final float r = Integer.parseInt(color.substring(1, 3), 16) / 255.0f;
 					final float g = Integer.parseInt(color.substring(3, 5), 16) / 255.0f;
 					final float b = Integer.parseInt(color.substring(5, 7), 16) / 255.0f;
 					final float a = Integer.parseInt(color.substring(7, 9), 16) / 255.0f;
-					return new Color(r, g, b, a);
+					yield new Color(r, g, b, a);
 				}
 				default -> throw new Exception("Can not parse color ... '" + colorBase + "'");
-			}
+			};
 		} else {
 			// Model: r.r,g.g,b.b
 			//        r.r,g.g,b.b,a.a
@@ -416,35 +415,35 @@ public record Color(
 			//        #RGBA
 			//        #RRGGBB
 			//        #RRGGBBAA
-			switch (color.length()) {
+			return switch (color.length()) {
 				case 4 -> {
 					final float r = Integer.parseInt(color.substring(1, 2), 16) * 255.0f * 16.0f;
 					final float g = Integer.parseInt(color.substring(2, 3), 16) * 255.0f * 16.0f;
 					final float b = Integer.parseInt(color.substring(3, 4), 16) * 255.0f * 16.0f;
-					return new Color(r, g, b);
+					yield new Color(r, g, b);
 				}
 				case 5 -> {
 					final float r = Integer.parseInt(color.substring(1, 2), 16) * 255.0f * 16.0f;
 					final float g = Integer.parseInt(color.substring(2, 3), 16) * 255.0f * 16.0f;
 					final float b = Integer.parseInt(color.substring(3, 4), 16) * 255.0f * 16.0f;
 					final float a = Integer.parseInt(color.substring(4, 5), 16) * 255.0f * 16.0f;
-					return new Color(r, g, b, a);
+					yield new Color(r, g, b, a);
 				}
 				case 7 -> {
 					final float r = Integer.parseInt(color.substring(1, 3), 16) * 255.0f;
 					final float g = Integer.parseInt(color.substring(3, 5), 16) * 255.0f;
 					final float b = Integer.parseInt(color.substring(5, 7), 16) * 255.0f;
-					return new Color(r, g, b);
+					yield new Color(r, g, b);
 				}
 				case 9 -> {
 					final float r = Integer.parseInt(color.substring(1, 3), 16) * 255.0f;
 					final float g = Integer.parseInt(color.substring(3, 5), 16) * 255.0f;
 					final float b = Integer.parseInt(color.substring(5, 7), 16) * 255.0f;
 					final float a = Integer.parseInt(color.substring(7, 9), 16) * 255.0f;
-					return new Color(r, g, b, a);
+					yield new Color(r, g, b, a);
 				}
 				default -> throw new Exception("Can not parse color ... '" + colorBase + "'");
-			}
+			};
 		} else {
 			// Model: r.r,g.g,b.b
 			//        r.r,g.g,b.b,a.a
@@ -512,6 +511,18 @@ public record Color(
 	@Override
 	public String toString() {
 		return "rgba(" + this.r + ", " + this.g + ", " + this.b + ", " + this.a + ")";
+	}
+
+	public String toStringSharp() {
+		final StringBuilder out = new StringBuilder();
+		out.append("#");
+		out.append(String.format("%02X", Math.round(this.r * 255)));
+		out.append(String.format("%02X", Math.round(this.g * 255)));
+		out.append(String.format("%02X", Math.round(this.b * 255)));
+		if (this.a <= 0.999999) {
+			out.append(String.format("%02X", Math.round(this.a * 255)));
+		}
+		return out.toString();
 	}
 	
 	public Color withR(final float value) {
