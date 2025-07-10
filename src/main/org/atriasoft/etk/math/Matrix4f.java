@@ -160,7 +160,8 @@ public record Matrix4f(
 	* @param angleRad Radian angle to set at the matrix
 	* @return New matrix of the transformation requested
 	*/
-	public static Matrix4f createMatrixRotate(final Vector3f normal, final float angleRad) {
+	
+		public static Matrix4f createMatrixRotate(final Vector3f normal, final float angleRad) {
 		float a1 = 1.0f;
 		float b1 = 0;
 		float c1 = 0;
@@ -195,10 +196,16 @@ public record Matrix4f(
 		c3 = normal.z() * normal.z() * invVal + cosVal;
 		return new Matrix4f(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4);
 	}
+	public static Matrix4f createMatrixRotate(final Vector2f normal, final float angleRad) {
+		return createMatrixRotate(new Vector3f(normal.x(), normal.y(), 0), angleRad);
+	}
 
 	//! @notindoc
 	public static Matrix4f createMatrixRotate2(final Vector3f vect) {
 		return createMatrixLookAt(vect, new Vector3f(0, 0, 0), new Vector3f(0, 1, 0));
+	}
+	public static Matrix4f createMatrixRotate2(final Vector2f vect) {
+		return createMatrixLookAt(new Vector3f(vect.x(), vect.y(), 0), new Vector3f(0, 0, 0), new Vector3f(0, 1, 0));
 	}
 
 	/**
@@ -212,6 +219,13 @@ public record Matrix4f(
 
 	public static Matrix4f createMatrixScale(final float xxx, final float yyy, final float zzz) {
 		return new Matrix4f(xxx, 0, 0, 0, 0, yyy, 0, 0, 0, 0, zzz, 0, 0, 0, 0, 1);
+	}
+	public static Matrix4f createMatrixScale(final Vector2f scale) {
+		return new Matrix4f(scale.x(), 0, 0, 0, 0, scale.y(), 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
+	}
+
+	public static Matrix4f createMatrixScale(final float xxx, final float yyy) {
+		return new Matrix4f(xxx, 0, 0, 0, 0, yyy, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 	}
 
 	/**
@@ -237,7 +251,30 @@ public record Matrix4f(
 		final float c4 = 0;
 		final float d4 = 1.0f;
 		return new Matrix4f(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4);
-		//return new Matrix4f(a1, a2, a3, a4, b1, b2, b3, b4, c1, c2, c3, c4, d1, d2, d3, d4);
+	}
+	/**
+	* Create a matrix 3D with a simple translation
+	* @param translate 3 dimention translation
+	* @return New matrix of the transformation requested
+	*/
+	public static Matrix4f createMatrixTranslate(final Vector2f translate) {
+		final float a1 = 1.0f;
+		final float b1 = 0;
+		final float c1 = 0;
+		final float d1 = translate.x();
+		final float a2 = 0;
+		final float b2 = 1.0f;
+		final float c2 = 0;
+		final float d2 = translate.y();
+		final float a3 = 0;
+		final float b3 = 0;
+		final float c3 = 1.0f;
+		final float d3 = 0;
+		final float a4 = 0;
+		final float b4 = 0;
+		final float c4 = 0;
+		final float d4 = 1.0f;
+		return new Matrix4f(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4);
 	}
 
 	/**

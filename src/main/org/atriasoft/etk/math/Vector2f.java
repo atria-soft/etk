@@ -65,6 +65,11 @@ public record Vector2f(
 	public static Vector2f min(final Vector2f obj1, final Vector2f obj2, final Vector2f obj3) {
 		return new Vector2f(FMath.min(obj1.x, obj2.x, obj3.x), FMath.min(obj1.y, obj2.y, obj3.y));
 	}
+
+	@CheckReturnValue
+	public Vector2f clipInteger() {
+		return new Vector2f((int) this.x, (int) this.y);
+	}
 	
 	/**
 	 * Return a vector will the absolute values of each element
@@ -103,6 +108,11 @@ public record Vector2f(
 	@CheckReturnValue
 	public Vector2f add(final float xxx, final float yyy) {
 		return new Vector2f(this.x + xxx, this.y + yyy);
+	}
+	
+	@CheckReturnValue
+	public static Vector2f avg(final Vector2f min, final Vector2f obj2, final Vector2f max) {
+		return new Vector2f(FMath.avg(min.x, obj2.x, max.x), FMath.avg(min.y, obj2.y, max.y));
 	}
 	
 	/**
