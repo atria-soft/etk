@@ -48,6 +48,9 @@ public record Vector2i(
 		this.y = y;
 	}
 
+	public Vector2f toVector2f() {
+		return new Vector2f(this.x, this.y);
+	}
 	public static Vector2i max(final Vector2i obj1, final Vector2i obj2) {
 		return new Vector2i(Math.max(obj1.x, obj2.x), Math.max(obj1.y, obj2.y));
 	}

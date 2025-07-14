@@ -1,7 +1,5 @@
 package org.atriasoft.etk.math;
 
-import org.atriasoft.etk.Uri;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +9,7 @@ public record Vector2f(
 		float x,
 		float y) {
 	final static Logger LOGGER = LoggerFactory.getLogger(Vector2f.class);
+
 	public static Vector2f valueOf(String value) {
 		float val1 = 0;
 		float val2 = 0;
@@ -40,7 +39,17 @@ public record Vector2f(
 	/*
 	 * **************************************************** Constructor
 	 *****************************************************/
-	
+
+	@CheckReturnValue
+	public Vector2i toVector2i() {
+		return new Vector2i((int) this.x, (int) this.y);
+	}
+
+	@CheckReturnValue
+	public Vector3f toVector3f() {
+		return new Vector3f(this.x, this.y, 0);
+	}
+
 	@CheckReturnValue
 	public static Vector2f clipInt(final Vector2f obj1) {
 		return new Vector2f((int) obj1.x, (int) obj1.y);
