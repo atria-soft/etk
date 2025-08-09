@@ -16,12 +16,12 @@ public record DimensionInsets(
 		Insets size,
 		Distance type) {
 	final static Logger LOGGER = LoggerFactory.getLogger(DimensionInsets.class);
-	
+
 	public static final DimensionInsets ZERO = new DimensionInsets(Insets.ZERO, Distance.PIXEL);
 	private static Insets ratio = new Insets(9999999, 888888, 7777777, 66666666);
 	private static Insets invRatio = Insets.ONE;
 	private static DimensionInsets windowsSize = new DimensionInsets(Insets.MAX_VALUE, Distance.PIXEL);
-	
+
 	public static final float INCH_TO_MILLIMETER = 1.0f / 25.4f;
 	public static final float FOOT_TO_MILLIMETER = 1.0f / 304.8f;
 	public static final float METER_TO_MILLIMETER = 1.0f / 1000.0f;
@@ -41,7 +41,7 @@ public record DimensionInsets(
 		invRatio = new Insets(1.0f / ratio.top(), 1.0f / ratio.right(), 1.0f / ratio.bottom(), 1.0f / ratio.left());
 		windowsSize = new DimensionInsets(new Insets(200, 200, 200, 200), Distance.PIXEL);
 	}
-	
+
 	/**
 	 * set the current Windows size
 	 * @param size size of the current windows in pixel.
@@ -56,7 +56,7 @@ public record DimensionInsets(
 	public DimensionInsets() {
 		this(Insets.ZERO, Distance.PIXEL);
 	}
-	
+
 	/**
 	 * Constructor
 	 * @param size Requested dimension
@@ -65,15 +65,27 @@ public record DimensionInsets(
 		this(new Insets(size, size, size, size), Distance.PIXEL);
 	}
 	
+	/**
+	 * Constructor
+	 * @param size Requested dimension
+	 */
+	public DimensionInsets(final float top, final float right, final float bottom, final float left) {
+		this(new Insets(top, right, bottom, left), Distance.PIXEL);
+	}
+
+	public DimensionInsets(final float yyy, final float xxx) {
+		this(new Insets(yyy, xxx, yyy, xxx), Distance.PIXEL);
+	}
+
 	public DimensionInsets(final Insets size) {
 		this(size, Distance.PIXEL);
 	}
-	
+
 	public DimensionInsets(final Insets size, final Distance type) {
 		this.size = size;
 		this.type = type;
 	}
-	
+
 	/**
 	 * get the current dimension in requested type
 	 * @param type Type of unit requested.
@@ -100,7 +112,7 @@ public record DimensionInsets(
 			default -> throw new IllegalArgumentException("Unexpected value: " + type);
 		};
 	}
-	
+
 	/**
 	 * get the current dimension in Centimeter
 	 * @return dimension in Centimeter
@@ -108,7 +120,7 @@ public record DimensionInsets(
 	public Insets getCentimeter() {
 		return getMillimeter().multiply(MILLIMETER_TO_CENTIMETER);
 	}
-	
+
 	/**
 	 * get the current dimension in Foot
 	 * @return dimension in Foot
@@ -116,7 +128,7 @@ public record DimensionInsets(
 	public Insets getFoot() {
 		return getMillimeter().multiply(MILLIMETER_TO_FOOT);
 	}
-	
+
 	/**
 	 * get the current dimension in Inch
 	 * @return dimension in Inch
@@ -124,7 +136,7 @@ public record DimensionInsets(
 	public Insets getInch() {
 		return getMillimeter().multiply(MILLIMETER_TO_INCH);
 	}
-	
+
 	/**
 	 * get the current dimension in Kilometer
 	 * @return dimension in Kilometer
@@ -132,7 +144,7 @@ public record DimensionInsets(
 	public Insets getKilometer() {
 		return getMillimeter().multiply(MILLIMETER_TO_KILOMETER);
 	}
-	
+
 	/**
 	 * get the current dimension in Meter
 	 * @return dimension in Meter
@@ -140,7 +152,7 @@ public record DimensionInsets(
 	public Insets getMeter() {
 		return getMillimeter().multiply(MILLIMETER_TO_METER);
 	}
-	
+
 	/**
 	 * get the current dimension in Millimeter
 	 * @return dimension in Millimeter
@@ -149,7 +161,7 @@ public record DimensionInsets(
 		return new Insets(getPixel().top() * invRatio.top(), getPixel().right() * invRatio.right(),
 				getPixel().bottom() * invRatio.bottom(), getPixel().left() * invRatio.left());
 	}
-	
+
 	/**
 	 * get the current dimension in pixel
 	 * @return dimension in Pixel
@@ -160,7 +172,7 @@ public record DimensionInsets(
 		}
 		return getPixel(windowsSize.getPixel());
 	}
-	
+
 	public Insets getPixel(final Insets uppersize) {
 		if (this.type != Distance.POURCENT) {
 			return this.size;
@@ -171,7 +183,7 @@ public record DimensionInsets(
 		//GALE_DEBUG("Get % : " + m_data + " / " + windDim + " == > " + res);
 		return res;
 	}
-
+	
 	/**
 	 * get the current dimension in Pourcent
 	 * @return dimension in Pourcent
@@ -191,7 +203,7 @@ public record DimensionInsets(
 				this.size.bottom() * 100.0f, //
 				this.size.left() * 100.0f);
 	}
-	
+
 	/**
 	 * get the dimension type
 	 * @return the type
@@ -199,7 +211,7 @@ public record DimensionInsets(
 	public Distance getType() {
 		return this.type;
 	}
-	
+
 	/**
 	 * set the current dimension in requested type
 	 * @param config dimension configuration.
@@ -215,15 +227,15 @@ public record DimensionInsets(
 		final DimensionInsets ret = new DimensionInsets(tmp, type);
 		return ret;
 	}
-	
+
 	public DimensionInsets withSize(final Insets size) {
 		return new DimensionInsets(size, this.type);
 	}
-	
+
 	public DimensionInsets withType(final Distance type) {
 		return new DimensionInsets(this.size, type);
 	}
-	
+
 	/**
 	 * string cast :
 	 */
@@ -231,29 +243,29 @@ public record DimensionInsets(
 	public String toString() {
 		return get(getType()).toString() + getType().toSmallString();
 	}
-	
+
 	public static DimensionInsets valueOf(
 			String contentX,
 			final String contentY,
 			final String contentZ,
 			final String contentW) {
-		
+
 		final Distance typeX = Distance.parseEndSmallString(contentX);
 		contentX = typeX.removeEndString(contentX);
 		final float tmpX = Float.valueOf(contentX);
-		
+
 		final Distance typeY = Distance.parseEndSmallString(contentX);
 		contentX = typeY.removeEndString(contentY);
 		final float tmpY = Float.valueOf(contentY);
-
+		
 		final Distance typeZ = Distance.parseEndSmallString(contentX);
 		contentX = typeZ.removeEndString(contentZ);
 		final float tmpZ = Float.valueOf(contentZ);
-		
+
 		final Distance typeW = Distance.parseEndSmallString(contentX);
 		contentX = typeW.removeEndString(contentW);
 		final float tmpW = Float.valueOf(contentW);
-		
+
 		if (typeX != Distance.UNKNOW) {
 			return new DimensionInsets(new Insets(tmpX, tmpY, tmpZ, tmpW), typeX);
 		}
@@ -268,5 +280,5 @@ public record DimensionInsets(
 		}
 		return new DimensionInsets(new Insets(tmpX, tmpY, tmpZ, tmpW), Distance.PIXEL);
 	}
-	
+
 }

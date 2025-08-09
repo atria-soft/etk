@@ -16,13 +16,13 @@ public record DimensionBorderRadius(
 		BorderRadius size,
 		Distance type) {
 	final static Logger LOGGER = LoggerFactory.getLogger(DimensionBorderRadius.class);
-	
+
 	public static final DimensionBorderRadius ZERO = new DimensionBorderRadius(BorderRadius.ZERO, Distance.PIXEL);
 	private static BorderRadius ratio = new BorderRadius(9999999, 888888, 7777777, 66666666);
 	private static BorderRadius invRatio = BorderRadius.ONE;
 	private static DimensionBorderRadius windowsSize = new DimensionBorderRadius(BorderRadius.MAX_VALUE,
 			Distance.PIXEL);
-	
+
 	public static final float INCH_TO_MILLIMETER = 1.0f / 25.4f;
 	public static final float FOOT_TO_MILLIMETER = 1.0f / 304.8f;
 	public static final float METER_TO_MILLIMETER = 1.0f / 1000.0f;
@@ -44,7 +44,7 @@ public record DimensionBorderRadius(
 				1.0f / ratio.bottomLeft());
 		windowsSize = new DimensionBorderRadius(new BorderRadius(200, 200, 200, 200), Distance.PIXEL);
 	}
-	
+
 	/**
 	 * set the current Windows size
 	 * @param size size of the current windows in pixel.
@@ -52,14 +52,14 @@ public record DimensionBorderRadius(
 	public static void setPixelWindowsSize(final BorderRadius size) {
 		windowsSize = new DimensionBorderRadius(size);
 	}
-	
+
 	/**
 	 * Constructor (default :0,0 mode pixel)
 	 */
 	public DimensionBorderRadius() {
 		this(BorderRadius.ZERO, Distance.PIXEL);
 	}
-	
+
 	/**
 	 * Constructor
 	 * @param size Requested dimension
@@ -68,15 +68,20 @@ public record DimensionBorderRadius(
 		this(new BorderRadius(size, size, size, size), Distance.PIXEL);
 	}
 	
+	public DimensionBorderRadius(final float topLeft, final float topRight, final float bottomRight,
+			final float bottomLeft) {
+		this(new BorderRadius(topLeft, topRight, bottomRight, bottomLeft), Distance.PIXEL);
+	}
+
 	public DimensionBorderRadius(final BorderRadius size) {
 		this(size, Distance.PIXEL);
 	}
-	
+
 	public DimensionBorderRadius(final BorderRadius size, final Distance type) {
 		this.size = size;
 		this.type = type;
 	}
-	
+
 	/**
 	 * get the current dimension in requested type
 	 * @param type Type of unit requested.
@@ -103,7 +108,7 @@ public record DimensionBorderRadius(
 			default -> throw new IllegalArgumentException("Unexpected value: " + type);
 		};
 	}
-	
+
 	/**
 	 * get the current dimension in Centimeter
 	 * @return dimension in Centimeter
@@ -111,7 +116,7 @@ public record DimensionBorderRadius(
 	public BorderRadius getCentimeter() {
 		return getMillimeter().multiply(MILLIMETER_TO_CENTIMETER);
 	}
-	
+
 	/**
 	 * get the current dimension in Foot
 	 * @return dimension in Foot
@@ -119,7 +124,7 @@ public record DimensionBorderRadius(
 	public BorderRadius getFoot() {
 		return getMillimeter().multiply(MILLIMETER_TO_FOOT);
 	}
-	
+
 	/**
 	 * get the current dimension in Inch
 	 * @return dimension in Inch
@@ -127,7 +132,7 @@ public record DimensionBorderRadius(
 	public BorderRadius getInch() {
 		return getMillimeter().multiply(MILLIMETER_TO_INCH);
 	}
-	
+
 	/**
 	 * get the current dimension in Kilometer
 	 * @return dimension in Kilometer
@@ -135,7 +140,7 @@ public record DimensionBorderRadius(
 	public BorderRadius getKilometer() {
 		return getMillimeter().multiply(MILLIMETER_TO_KILOMETER);
 	}
-	
+
 	/**
 	 * get the current dimension in Meter
 	 * @return dimension in Meter
@@ -143,7 +148,7 @@ public record DimensionBorderRadius(
 	public BorderRadius getMeter() {
 		return getMillimeter().multiply(MILLIMETER_TO_METER);
 	}
-	
+
 	/**
 	 * get the current dimension in Millimeter
 	 * @return dimension in Millimeter
@@ -152,7 +157,7 @@ public record DimensionBorderRadius(
 		return new BorderRadius(getPixel().topLeft() * invRatio.topLeft(), getPixel().topRight() * invRatio.topRight(),
 				getPixel().bottomRight() * invRatio.bottomRight(), getPixel().bottomLeft() * invRatio.bottomLeft());
 	}
-	
+
 	/**
 	 * get the current dimension in pixel
 	 * @return dimension in Pixel
@@ -163,7 +168,7 @@ public record DimensionBorderRadius(
 		}
 		return getPixel(windowsSize.getPixel());
 	}
-	
+
 	public BorderRadius getPixel(final BorderRadius uppersize) {
 		if (this.type != Distance.POURCENT) {
 			return this.size;
@@ -175,7 +180,7 @@ public record DimensionBorderRadius(
 		//GALE_DEBUG("Get % : " + m_data + " / " + windDim + " == > " + res);
 		return res;
 	}
-	
+
 	/**
 	 * get the current dimension in Pourcent
 	 * @return dimension in Pourcent
@@ -194,7 +199,7 @@ public record DimensionBorderRadius(
 		return new BorderRadius(this.size.topLeft() * 100.0f, this.size.topRight() * 100.0f,
 				this.size.bottomRight() * 100.0f, this.size.bottomLeft() * 100.0f);
 	}
-	
+
 	/**
 	 * get the dimension type
 	 * @return the type
@@ -202,7 +207,7 @@ public record DimensionBorderRadius(
 	public Distance getType() {
 		return this.type;
 	}
-	
+
 	/**
 	 * set the current dimension in requested type
 	 * @param config dimension configuration.
@@ -218,15 +223,15 @@ public record DimensionBorderRadius(
 		final DimensionBorderRadius ret = new DimensionBorderRadius(tmp, type);
 		return ret;
 	}
-	
+
 	public DimensionBorderRadius withSize(final BorderRadius size) {
 		return new DimensionBorderRadius(size, this.type);
 	}
-	
+
 	public DimensionBorderRadius withType(final Distance type) {
 		return new DimensionBorderRadius(this.size, type);
 	}
-	
+
 	/**
 	 * string cast :
 	 */
@@ -234,29 +239,29 @@ public record DimensionBorderRadius(
 	public String toString() {
 		return get(getType()).toString() + getType().toSmallString();
 	}
-	
+
 	public static DimensionBorderRadius valueOf(
 			String contentX,
 			final String contentY,
 			final String contentZ,
 			final String contentW) {
-		
+
 		final Distance typeX = Distance.parseEndSmallString(contentX);
 		contentX = typeX.removeEndString(contentX);
 		final float tmpX = Float.valueOf(contentX);
-		
+
 		final Distance typeY = Distance.parseEndSmallString(contentY);
 		contentX = typeY.removeEndString(contentY);
 		final float tmpY = Float.valueOf(contentY);
-		
+
 		final Distance typeZ = Distance.parseEndSmallString(contentZ);
 		contentX = typeZ.removeEndString(contentZ);
 		final float tmpZ = Float.valueOf(contentZ);
-
+		
 		final Distance typeW = Distance.parseEndSmallString(contentW);
 		contentX = typeW.removeEndString(contentZ);
 		final float tmpW = Float.valueOf(contentZ);
-		
+
 		if (typeX != Distance.UNKNOW) {
 			return new DimensionBorderRadius(new BorderRadius(tmpX, tmpY, tmpZ, tmpW), typeX);
 		}
@@ -271,5 +276,5 @@ public record DimensionBorderRadius(
 		}
 		return new DimensionBorderRadius(new BorderRadius(tmpX, tmpY, tmpZ, tmpW), Distance.PIXEL);
 	}
-	
+
 }
