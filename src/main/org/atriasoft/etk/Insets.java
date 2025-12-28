@@ -41,7 +41,7 @@ public record Insets(
 		}
 		final String[] values = value.split(",| ");
 		if (values.length > 3) {
-			LOGGER.error("Can not parse Constraint4f with more than 3 values: '" + value + "'");
+			LOGGER.warn("Can not parse Constraint4f with more than 3 values: '{}'", value);
 		}
 		if (values.length == 1) {
 			// no coma ...

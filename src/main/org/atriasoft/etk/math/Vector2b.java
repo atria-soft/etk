@@ -22,7 +22,7 @@ public record Vector2b(
 		}
 		final String[] values = value.split(",| ");
 		if (values.length > 2) {
-			LOGGER.error("Can not parse Vector2f with more than 2 values: '" + value + "'");
+			LOGGER.warn("Can not parse Vector2f with more than 2 values: '{}'", value);
 		}
 		if (values.length == 1) {
 			// no coma ...

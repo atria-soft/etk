@@ -25,7 +25,7 @@ public record Vector3i(
 		}
 		final String[] values = value.split(",| ");
 		if (values.length > 3) {
-			LOGGER.error("Can not parse Vector3i with more than 3 values: '" + value + "'");
+			LOGGER.warn("Can not parse Vector3i with more than 3 values: '{}'", value);
 		}
 		if (values.length == 1) {
 			// no coma ...

@@ -54,7 +54,7 @@ public class Theme {
 	 * @param folderName The associated folder of the Theme (like "myTheme/folder/folder2/")
 	 */
 	public static void setName(final String refName, final Path folderName) {
-		LOGGER.warn("Change theme : '" + refName + "' : '" + folderName + "'");
+		LOGGER.debug("Change theme : '{}' : '{}'", refName, folderName);
 		globalListTheme.put(refName, folderName);
 		updateProvider(refName);
 	}

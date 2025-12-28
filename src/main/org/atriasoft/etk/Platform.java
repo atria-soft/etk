@@ -70,7 +70,7 @@ public class Platform {
         } else if (osArch.startsWith("arm")) {
             osArch = "arm";
         } else {
-        	LOGGER.warn("Maybe unknowx system... osArch=" + osArch + " abiType=" + abiType + " libPath=" + libPath);
+        	LOGGER.debug("Maybe unknowx system... osArch={} abiType={} libPath={}", osArch, abiType, libPath);
         }
         return System.getProperty("org.atriasoft.etk.platform.arch", osArch);
     }

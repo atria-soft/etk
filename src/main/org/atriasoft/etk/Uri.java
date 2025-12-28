@@ -176,7 +176,7 @@ public class Uri {
 		}
 
 		if (out == null) {
-			LOGGER.error("Can not load resource: '" + uri + "'");
+			LOGGER.warn("Can not load resource: '{}'", uri);
 		} else {
 			LOGGER.trace("   =====> DATA LOADED <====== ");
 		}
@@ -280,7 +280,7 @@ public class Uri {
 			out = new BufferedWriter(fstream);
 			out.write(data);
 		} catch (final IOException e) {
-			LOGGER.error("Error: " + e.getMessage());
+			LOGGER.error("Error: {}", e.getMessage());
 		} finally {
 			if (out != null) {
 				try {

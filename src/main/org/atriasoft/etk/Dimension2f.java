@@ -78,12 +78,12 @@ public record Dimension2f(
 	 * @note: same as @ref setPixelPerInch (internal manage convention)
 	 */
 	public static void setPixelRatio(final Vector2f ratio, final Distance type) {
-		LOGGER.info("Set a new screen ratio for the screen : ratio=" + ratio + " type=" + type);
+		LOGGER.debug("Set a new screen ratio for the screen : ratio={} type={}", ratio, type);
 		final Dimension2f conversion = new Dimension2f(ratio, type);
-		LOGGER.info("     == > " + conversion);
+		LOGGER.debug("     == > {}", conversion);
 		Dimension2f.ratio = conversion.getMillimeter();
 		invRatio = new Vector2f(1.0f / Dimension2f.ratio.x(), 1.0f / Dimension2f.ratio.y());
-		LOGGER.info("Set a new screen ratio for the screen : ratioMm=" + Dimension2f.ratio);
+		LOGGER.debug("Set a new screen ratio for the screen : ratioMm={}", Dimension2f.ratio);
 	}
 	
 	/**
@@ -132,8 +132,7 @@ public record Dimension2f(
 			case ELEMENT -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 			case EX -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 			case PC -> {
-				LOGGER.error("Does not support other than Px and % type of dimention : " + type
-						+ " automaticly convert with {72,72} pixel/inch");
+				LOGGER.warn("Does not support other than Px and % type of dimention : {} automaticly convert with {{72,72}} pixel/inch", type);
 				yield null;
 			}
 			case POINT -> throw new UnsupportedOperationException("Unimplemented case: " + type);
@@ -255,7 +254,7 @@ public record Dimension2f(
 		final Distance type = Distance.parseEndSmallString(config);
 		config = type.removeEndString(config);
 		if (type == Distance.UNKNOW) {
-			LOGGER.error("Can not parse dimension : '" + config + "'");
+			LOGGER.warn("Can not parse dimension : '{}'", config);
 			return null;
 		}
 		final Vector2f tmp = Vector2f.valueOf(config);

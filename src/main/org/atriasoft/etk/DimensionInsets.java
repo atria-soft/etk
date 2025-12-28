@@ -104,8 +104,7 @@ public record DimensionInsets(
 			case ELEMENT -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 			case EX -> throw new UnsupportedOperationException("Unimplemented case: " + type);
 			case PC -> {
-				LOGGER.error("Does not support other than Px and % type of dimention : " + type
-						+ " automaticly convert with {72,72} pixel/inch");
+				LOGGER.warn("Does not support other than Px and % type of dimention : {} automaticly convert with {{72,72}} pixel/inch", type);
 				yield null;
 			}
 			case POINT -> throw new UnsupportedOperationException("Unimplemented case: " + type);
@@ -220,7 +219,7 @@ public record DimensionInsets(
 		final Distance type = Distance.parseEndSmallString(config);
 		config = type.removeEndString(config);
 		if (type == Distance.UNKNOW) {
-			LOGGER.error("Can not parse dimension : '" + config + "'");
+			LOGGER.warn("Can not parse dimension : '{}'", config);
 			return null;
 		}
 		final Insets tmp = Insets.valueOf(config);

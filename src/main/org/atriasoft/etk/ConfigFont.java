@@ -25,7 +25,7 @@ public class ConfigFont {
 	public Uri getFontUri(final String fontName) {
 		Uri out = this.fonts.get(fontName);
 		if (out == null) {
-			LOGGER.warn(" try to get unexistant font : " + fontName);
+			LOGGER.warn("try to get unexistant font : {}", fontName);
 		}
 		return out;
 	}
@@ -54,7 +54,7 @@ public class ConfigFont {
 	public void set(final String fontName, final int size) {
 		this.name = fontName;
 		this.size = size;
-		LOGGER.trace("Set default Font : '" + this.name + "' size=" + this.size);
+		LOGGER.trace("Set default Font : '{}' size={}", this.name, this.size);
 	}
 	
 	/**
@@ -63,7 +63,7 @@ public class ConfigFont {
 	 */
 	public void setName(final String fontName) {
 		this.name = fontName;
-		LOGGER.trace("Set default Font : '" + this.name + "' size=" + this.size + " (change name only)");
+		LOGGER.trace("Set default Font : '{}' size={} (change name only)", this.name, this.size);
 	}
 	
 	/**
@@ -72,6 +72,6 @@ public class ConfigFont {
 	 */
 	public void setSize(final int size) {
 		this.size = size;
-		LOGGER.trace("Set default Font : '" + this.name + "' size=" + this.size + " (change size only)");
+		LOGGER.trace("Set default Font : '{}' size={} (change size only)", this.name, this.size);
 	}
 }
