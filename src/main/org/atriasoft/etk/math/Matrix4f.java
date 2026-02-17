@@ -533,24 +533,25 @@ public record Matrix4f(
 			// The matrix is not invertible! Singular case!
 			return this;
 		}
+		// Adjugate = transpose of cofactor matrix: adj[i][j] = (-1)^(i+j) * minor(j,i)
 		final float a1 = coFactorRaw0Col0() / det;
-		final float b1 = -coFactorRaw0Col1() / det;
-		final float c1 = coFactorRaw0Col2() / det;
-		final float d1 = -coFactorRaw0Col3() / det;
+		final float b1 = -coFactorRaw1Col0() / det;
+		final float c1 = coFactorRaw2Col0() / det;
+		final float d1 = -coFactorRaw3Col0() / det;
 
-		final float a2 = -coFactorRaw1Col0() / det;
+		final float a2 = -coFactorRaw0Col1() / det;
 		final float b2 = coFactorRaw1Col1() / det;
-		final float c2 = -coFactorRaw1Col2() / det;
-		final float d2 = coFactorRaw1Col3() / det;
+		final float c2 = -coFactorRaw2Col1() / det;
+		final float d2 = coFactorRaw3Col1() / det;
 
-		final float a3 = coFactorRaw2Col0() / det;
-		final float b3 = -coFactorRaw2Col1() / det;
+		final float a3 = coFactorRaw0Col2() / det;
+		final float b3 = -coFactorRaw1Col2() / det;
 		final float c3 = coFactorRaw2Col2() / det;
-		final float d3 = -coFactorRaw2Col3() / det;
+		final float d3 = -coFactorRaw3Col2() / det;
 
-		final float a4 = -coFactorRaw3Col0() / det;
-		final float b4 = coFactorRaw3Col1() / det;
-		final float c4 = -coFactorRaw3Col2() / det;
+		final float a4 = -coFactorRaw0Col3() / det;
+		final float b4 = coFactorRaw1Col3() / det;
+		final float c4 = -coFactorRaw2Col3() / det;
 		final float d4 = coFactorRaw3Col3() / det;
 
 		return new Matrix4f(a1, b1, c1, d1, a2, b2, c2, d2, a3, b3, c3, d3, a4, b4, c4, d4);
