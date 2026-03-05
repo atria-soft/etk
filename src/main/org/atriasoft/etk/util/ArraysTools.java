@@ -3,7 +3,15 @@ package org.atriasoft.etk.util;
 import java.util.Arrays;
 import java.util.List;
 
-
+/**
+ * Utility class for array manipulation and conversion operations.
+ *
+ * <p>Provides helper methods for filling arrays, converting between primitive and object arrays,
+ * and converting collections to primitive arrays.</p>
+ *
+ * @author Edouard DUPIN
+ * @since 0.1.0
+ */
 public class ArraysTools {
 	public static <T> void fill(final T[] buffer, final T value) {
 		if (buffer == null) {

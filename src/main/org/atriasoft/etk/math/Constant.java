@@ -1,5 +1,14 @@
 package org.atriasoft.etk.math;
 
+/**
+ * Mathematical constants for floating-point operations.
+ *
+ * <p>Defines commonly used mathematical constants with appropriate precision for
+ * float-based calculations, including Pi and various epsilon values for comparisons.</p>
+ *
+ * @author Edouard DUPIN
+ * @since 0.1.0
+ */
 public class Constant {
 
     private Constant() {

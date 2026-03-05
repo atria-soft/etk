@@ -1,8 +1,27 @@
 package org.atriasoft.etk.util;
 
-// Pair class
+/**
+ * Immutable pair of two values of potentially different types.
+ *
+ * <p>A simple tuple implementation for holding two related values together.
+ * Useful for returning multiple values from methods or storing key-value pairs.</p>
+ *
+ * @param <U> Type of the first element
+ * @param <V> Type of the second element
+ *
+ * @author Edouard DUPIN
+ * @since 0.1.0
+ */
 public class Pair<U, V> {
-	// Factory method for creating a Typed Pair immutable instance
+	/**
+	 * Factory method for creating a Pair instance.
+	 *
+	 * @param <U> Type of the first element
+	 * @param <V> Type of the second element
+	 * @param a First element value
+	 * @param b Second element value
+	 * @return New Pair containing the specified values
+	 */
 	public static <U, V> Pair<U, V> of(final U a, final V b) {
 		// calls private constructor
 		return new Pair<>(a, b);
@@ -12,7 +31,12 @@ public class Pair<U, V> {
 	
 	public final V second; // second field of a Pair
 	
-	// Constructs a new Pair with specified values
+	/**
+	 * Constructs a new Pair with specified values.
+	 *
+	 * @param first First element value
+	 * @param second Second element value
+	 */
 	public Pair(final U first, final V second) {
 		this.first = first;
 		this.second = second;
@@ -50,10 +74,22 @@ public class Pair<U, V> {
 		return "(" + this.first + ", " + this.second + ")";
 	}
 	
+	/**
+	 * Creates a new Pair with a different first value.
+	 *
+	 * @param value New first element value
+	 * @return New Pair with modified first element
+	 */
 	public Pair<U, V> withFirst(final U value) {
 		return new Pair<>(value, this.second);
 	}
 	
+	/**
+	 * Creates a new Pair with a different second value.
+	 *
+	 * @param value New second element value
+	 * @return New Pair with modified second element
+	 */
 	public Pair<U, V> withSecond(final V value) {
 		return new Pair<>(this.first, value);
 	}

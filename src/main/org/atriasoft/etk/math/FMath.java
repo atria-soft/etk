@@ -6,6 +6,15 @@ import org.atriasoft.etk.Uri;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Mathematical utility class providing floating-point math operations.
+ *
+ * <p>Offers various mathematical functions optimized for float precision, including
+ * trigonometry, clamping, min/max operations, and comparison with epsilon tolerance.</p>
+ *
+ * @author Edouard DUPIN
+ * @since 0.1.0
+ */
 public class FMath {
 	final static Logger LOGGER = LoggerFactory.getLogger(FMath.class);
 	public static final float PI = (float) Math.PI;

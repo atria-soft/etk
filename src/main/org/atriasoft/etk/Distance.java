@@ -1,6 +1,14 @@
 package org.atriasoft.etk;
 
-
+/**
+ * Enumeration of distance/dimension units.
+ *
+ * <p>Defines the various unit types that can be used for measurements in the ETK framework,
+ * including absolute units (pixels, metric, imperial) and relative units (percentage, em, ex).</p>
+ *
+ * @author Edouard DUPIN
+ * @since 0.1.0
+ */
 public enum Distance {
 	UNKNOW, //!< "%"
 	POURCENT, //!< "%"
@@ -16,6 +24,14 @@ public enum Distance {
 	POINT, //!< "pt"
 	PC; //!< "pc"
 	
+	/**
+	 * Parses the unit from the end of a string.
+	 *
+	 * <p>Analyzes the suffix of the string to determine the distance unit type.</p>
+	 *
+	 * @param data String ending with a unit suffix (e.g., "10px", "50%")
+	 * @return Parsed Distance enum value, or UNKNOW if not recognized
+	 */
 	public static Distance parseEndSmallString(String data) {
 		if (data.endsWith("%")) {
 			return Distance.POURCENT;
@@ -45,6 +61,12 @@ public enum Distance {
 		return UNKNOW;
 	}
 	
+	/**
+	 * Parses a unit from an exact string match.
+	 *
+	 * @param data String representing a distance unit (e.g., "px", "%", "cm")
+	 * @return Parsed Distance enum value, or UNKNOW if not recognized
+	 */
 	public static Distance parseSmallString(String data) {
 		if (data.equals("%")) {
 			return Distance.POURCENT;
@@ -74,6 +96,12 @@ public enum Distance {
 		return UNKNOW;
 	}
 	
+	/**
+	 * Removes this distance unit suffix from the end of a string.
+	 *
+	 * @param data String with unit suffix
+	 * @return String with the unit suffix removed
+	 */
 	public String removeEndString(String data) {
 		return switch (this) {
 			case POURCENT -> data.substring(0, data.length() - 1);
@@ -93,7 +121,9 @@ public enum Distance {
 	}
 	
 	/**
-	 * string cast :
+	 * Converts this distance unit to its string representation.
+	 *
+	 * @return String representation of the unit (e.g., "px", "%", "cm")
 	 */
 	public String toSmallString() {
 		return switch (this) {

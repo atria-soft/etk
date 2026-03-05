@@ -4,6 +4,21 @@ import java.util.Map;
 
 import org.atriasoft.etk.math.FMath;
 
+/**
+ * Immutable RGBA color representation.
+ *
+ * <p>Represents a color with four floating-point components: red, green, blue, and alpha (opacity).
+ * All color components are normalized in the range [0.0, 1.0]. Provides a comprehensive set of
+ * predefined colors matching CSS/web color names, as well as various parsing and conversion methods.</p>
+ *
+ * @param r Red component (0.0 to 1.0)
+ * @param g Green component (0.0 to 1.0)
+ * @param b Blue component (0.0 to 1.0)
+ * @param a Alpha component (opacity, 0.0=transparent to 1.0=opaque)
+ *
+ * @author Edouard DUPIN
+ * @since 0.1.0
+ */
 //@formatter:off
 public record Color(
 		float r,
@@ -313,10 +328,31 @@ public record Color(
 		//@formatter:on
 	);
 	
+	/**
+	 * Retrieves a predefined color by its name.
+	 *
+	 * @param name Color name (case-insensitive), such as "red", "blue", "aliceblue", etc.
+	 * @return The corresponding Color object, or null if the name is not recognized
+	 */
 	public static Color get(final String name) {
 		return NAMED_COLORS.get(name.toLowerCase());
 	}
 	
+	/**
+	 * Parses a color from a string representation.
+	 *
+	 * <p>Supports multiple formats:</p>
+	 * <ul>
+	 *   <li>Named colors: "red", "blue", "aliceblue", etc.</li>
+	 *   <li>Hexadecimal: #RGB, #RGBA, #RRGGBB, #RRGGBBAA</li>
+	 *   <li>Functional notation: rgb(r,g,b), rgba(r,g,b,a), argb(a,r,g,b)</li>
+	 *   <li>Comma-separated: r,g,b or r,g,b,a (values in 0.0-1.0 range)</li>
+	 * </ul>
+	 *
+	 * @param colorBase String representation of the color
+	 * @return Parsed Color object
+	 * @throws Exception If the color string cannot be parsed
+	 */
 	public static Color valueOf(final String colorBase) throws Exception {
 		// remove all white space...
 		String color = colorBase.replaceAll("[ \r\n\t\\(\\)]", "");
@@ -401,6 +437,15 @@ public record Color(
 		}
 	}
 	
+	/**
+	 * Parses a color from a string representation with 256-scale values.
+	 *
+	 * <p>Similar to valueOf() but accepts RGB values in the 0-255 range instead of 0.0-1.0.</p>
+	 *
+	 * @param colorBase String representation of the color with 256-scale values
+	 * @return Parsed Color object with normalized (0.0-1.0) components
+	 * @throws Exception If the color string cannot be parsed
+	 */
 	public static Color valueOf256(final String colorBase) throws Exception {
 		// remove all white space...
 		String color = colorBase.replaceAll("[ \r\n\t\\(\\)]", "");
@@ -485,14 +530,36 @@ public record Color(
 		}
 	}
 	
+	/**
+	 * Creates a color with RGB components and full opacity.
+	 *
+	 * @param r Red component (0.0 to 1.0)
+	 * @param g Green component (0.0 to 1.0)
+	 * @param b Blue component (0.0 to 1.0)
+	 */
 	public Color(final float r, final float g, final float b) {
 		this(r, g, b, 1.0f);
 	}
 	
+	/**
+	 * Creates a color with RGB components (0-255 scale) and full opacity.
+	 *
+	 * @param r Red component (0 to 255)
+	 * @param g Green component (0 to 255)
+	 * @param b Blue component (0 to 255)
+	 */
 	public Color(final int r, final int g, final int b) {
 		this(r, g, b, 0xFF);
 	}
 	
+	/**
+	 * Creates a color with RGBA components.
+	 *
+	 * @param r Red component (0.0 to 1.0)
+	 * @param g Green component (0.0 to 1.0)
+	 * @param b Blue component (0.0 to 1.0)
+	 * @param a Alpha component (0.0=transparent to 1.0=opaque)
+	 */
 	public Color(final float r, final float g, final float b, final float a) {
 		this.r = r;
 		this.g = g;
@@ -500,10 +567,26 @@ public record Color(
 		this.a = a;
 	}
 	
+	/**
+	 * Creates a color with RGBA components (0-255 scale).
+	 *
+	 * @param r Red component (0 to 255)
+	 * @param g Green component (0 to 255)
+	 * @param b Blue component (0 to 255)
+	 * @param a Alpha component (0 to 255)
+	 */
 	public Color(final int r, final int g, final int b, final int a) {
 		this(r / 255.0f, g / 255.0f, b / 255.0f, a / 255.0f);
 	}
 	
+	/**
+	 * Creates a color with RGBA components from double values.
+	 *
+	 * @param r Red component (0.0 to 1.0)
+	 * @param g Green component (0.0 to 1.0)
+	 * @param b Blue component (0.0 to 1.0)
+	 * @param a Alpha component (0.0=transparent to 1.0=opaque)
+	 */
 	public Color(final double r, final double g, final double b, final double a) {
 		this((float) r, (float) g, (float) b, (float) a);
 	}
@@ -513,6 +596,11 @@ public record Color(
 		return "rgba(" + this.r + ", " + this.g + ", " + this.b + ", " + this.a + ")";
 	}
 
+	/**
+	 * Converts this color to hexadecimal format with '#' prefix.
+	 *
+	 * @return Hexadecimal color string (e.g., "#FF0000" or "#FF0000AA" if alpha < 1.0)
+	 */
 	public String toStringSharp() {
 		final StringBuilder out = new StringBuilder();
 		out.append("#");
@@ -525,34 +613,82 @@ public record Color(
 		return out.toString();
 	}
 	
+	/**
+	 * Creates a new color with a different red component.
+	 *
+	 * @param value New red component value (0.0 to 1.0)
+	 * @return New Color with modified red component
+	 */
 	public Color withR(final float value) {
 		return new Color(value, this.g, this.b, this.a);
 	}
 	
+	/**
+	 * Creates a new color with a different green component.
+	 *
+	 * @param value New green component value (0.0 to 1.0)
+	 * @return New Color with modified green component
+	 */
 	public Color withG(final float value) {
 		return new Color(this.r, value, this.b, this.a);
 	}
 	
+	/**
+	 * Creates a new color with a different blue component.
+	 *
+	 * @param value New blue component value (0.0 to 1.0)
+	 * @return New Color with modified blue component
+	 */
 	public Color withB(final float value) {
 		return new Color(this.r, this.g, value, this.a);
 	}
 	
+	/**
+	 * Creates a new color with a different alpha component.
+	 *
+	 * @param value New alpha component value (0.0=transparent to 1.0=opaque)
+	 * @return New Color with modified alpha component
+	 */
 	public Color withA(final float value) {
 		return new Color(this.r, this.g, this.b, value);
 	}
 	
+	/**
+	 * Creates a new color with a different red component (0-255 scale).
+	 *
+	 * @param value New red component value (0 to 255)
+	 * @return New Color with modified red component
+	 */
 	public Color withR(final int value) {
 		return new Color(value / 255.0f, this.g, this.b, this.a);
 	}
 	
+	/**
+	 * Creates a new color with a different green component (0-255 scale).
+	 *
+	 * @param value New green component value (0 to 255)
+	 * @return New Color with modified green component
+	 */
 	public Color withG(final int value) {
 		return new Color(this.r, value / 255.0f, this.b, this.a);
 	}
 	
+	/**
+	 * Creates a new color with a different blue component (0-255 scale).
+	 *
+	 * @param value New blue component value (0 to 255)
+	 * @return New Color with modified blue component
+	 */
 	public Color withB(final int value) {
 		return new Color(this.r, this.g, value / 255.0f, this.a);
 	}
 	
+	/**
+	 * Creates a new color with a different alpha component (0-255 scale).
+	 *
+	 * @param value New alpha component value (0 to 255)
+	 * @return New Color with modified alpha component
+	 */
 	public Color withA(final int value) {
 		return new Color(this.r, this.g, this.b, value / 255.0f);
 	}

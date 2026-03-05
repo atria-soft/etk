@@ -6,6 +6,16 @@ import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
+/**
+ * Platform detection utility class.
+ *
+ * <p>Provides static methods to detect the current operating system and hardware architecture at runtime.
+ * This class supports detection of common platforms including Linux, Android, macOS, iOS, and Windows,
+ * as well as various processor architectures (x86, x86_64, ARM variants).</p>
+ *
+ * @author Edouard DUPIN
+ * @since 0.1.0
+ */
 public class Platform {
 	final static Logger LOGGER = LoggerFactory.getLogger(Platform.class);
 	private Platform() {}

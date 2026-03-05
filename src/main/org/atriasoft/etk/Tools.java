@@ -10,6 +10,15 @@ import org.atriasoft.etk.util.FilePos;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Utility class providing various helper methods for string manipulation, parsing, and data conversion.
+ *
+ * <p>Contains static utility methods for XML character escaping, number parsing, array conversions,
+ * and text processing operations.</p>
+ *
+ * @author Edouard DUPIN
+ * @since 0.1.0
+ */
 public class Tools {
 	final static Logger LOGGER = LoggerFactory.getLogger(Tools.class);
 	
