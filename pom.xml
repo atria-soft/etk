@@ -92,6 +92,27 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.2.5</version>
 			</plugin>
+			<!-- Code coverage -->
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>0.8.12</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>report</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
 		    <plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
@@ -109,11 +130,31 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.10.1</version>
 				<configuration>
-					<show>private</show>
-					<nohelp>true</nohelp>
+					<show>public</show>
+					<nohelp>false</nohelp>
+					<encoding>UTF-8</encoding>
+					<docencoding>UTF-8</docencoding>
+					<charset>UTF-8</charset>
+					<author>true</author>
+					<version>true</version>
+					<use>true</use>
+					<windowtitle>ETK ${project.version} API Documentation</windowtitle>
+					<doctitle>ETK ${project.version} API Documentation</doctitle>
+					<bottom>Copyright © 2024-2026 Atria Soft. All Rights Reserved. Licensed under MPL-2.0.</bottom>
+					<additionalOptions>
+						<additionalOption>-Xdoclint:none</additionalOption>
+					</additionalOptions>
 				</configuration>
+				<executions>
+					<execution>
+						<id>attach-javadocs</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
 	</build>
@@ -123,9 +164,17 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>3.3.0</version>
+				<version>3.10.1</version>
 				<configuration>
 					<show>public</show>
+					<encoding>UTF-8</encoding>
+					<docencoding>UTF-8</docencoding>
+					<charset>UTF-8</charset>
+					<windowtitle>ETK ${project.version} API Documentation</windowtitle>
+					<doctitle>ETK ${project.version} API Documentation</doctitle>
+					<additionalOptions>
+						<additionalOption>-Xdoclint:none</additionalOption>
+					</additionalOptions>
 				</configuration>
 			</plugin>
 		</plugins>
