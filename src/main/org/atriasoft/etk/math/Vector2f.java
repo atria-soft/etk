@@ -5,11 +5,32 @@ import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
+/**
+ * Immutable 2D vector with floating-point components.
+ *
+ * <p>Represents a point or direction in 2D space. Provides comprehensive mathematical operations
+ * including addition, subtraction, multiplication, division, dot product, cross product,
+ * normalization, and distance calculations. All operations return new instances.</p>
+ *
+ * @param x X-coordinate component
+ * @param y Y-coordinate component
+ *
+ * @author Edouard DUPIN
+ * @since 0.1.0
+ */
 public record Vector2f(
 		float x,
 		float y) {
 	final static Logger LOGGER = LoggerFactory.getLogger(Vector2f.class);
 
+	/**
+	 * Parses a Vector2f from a string representation.
+	 *
+	 * <p>Supports formats: "x,y" or "value" (applies to both x and y).</p>
+	 *
+	 * @param value String representation of the vector
+	 * @return Parsed Vector2f object
+	 */
 	public static Vector2f valueOf(String value) {
 		float val1 = 0;
 		float val2 = 0;
@@ -17,7 +38,7 @@ public record Vector2f(
 		while (value.length() > 0 && value.charAt(0) == '(') {
 			value = value.substring(1);
 		}
-		while (value.length() > 0 && value.charAt(0) == ')') {
+		while (value.length() > 0 && value.charAt(value.length() - 1) == ')') {
 			value = value.substring(0, value.length() - 1);
 		}
 		final String[] values = value.split(",| ");
@@ -416,7 +437,7 @@ public record Vector2f(
 	// Return one unit orthogonal vector of the current vector
 	@CheckReturnValue
 	public Vector2f unitOrthogonal() {
-		return (new Vector2f(this.x, -this.y)).safeNormalize();
+		return (new Vector2f(-this.y, this.x)).safeNormalize();
 	}
 	
 	/**

@@ -8,6 +8,20 @@ import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
+/**
+ * Immutable insets (padding/margin) representation.
+ *
+ * <p>Defines spacing from the edges of a rectangular area. Commonly used for padding, margins,
+ * or borders in UI layouts. Provides mathematical operations for manipulation and conversion.</p>
+ *
+ * @param top Top inset value in pixels
+ * @param right Right inset value in pixels
+ * @param bottom Bottom inset value in pixels
+ * @param left Left inset value in pixels
+ *
+ * @author Edouard DUPIN
+ * @since 0.1.0
+ */
 public record Insets(
 		float top,
 		float right,
@@ -15,18 +29,47 @@ public record Insets(
 		float left) {
 	final static Logger LOGGER = LoggerFactory.getLogger(Insets.class);
 	
+	/**
+	 * Converts insets to a 2D vector representing total horizontal and vertical spacing.
+	 *
+	 * @return Vector2f with x=(left+right) and y=(top+bottom)
+	 */
 	public Vector2f toVector2f() {
 		return new Vector2f(this.left + this.right, this.top + this.bottom);
 	}
 	
+	/**
+	 * Gets the origin point offset defined by left and bottom insets.
+	 *
+	 * @return Vector2f with coordinates (left, bottom)
+	 */
 	public Vector2f getOrigin() {
 		return new Vector2f(this.left, this.bottom);
 	}
 	
+	/**
+	 * Gets the end point offset defined by right and top insets.
+	 *
+	 * @return Vector2f with coordinates (right, top)
+	 */
 	public Vector2f getEnd() {
 		return new Vector2f(this.right, this.top);
 	}
 
+	/**
+	 * Parses insets from a string representation.
+	 *
+	 * <p>Supports formats similar to CSS:</p>
+	 * <ul>
+	 *   <li>Single value: "5" - all sides get same value</li>
+	 *   <li>Two values: "5 10" - top/bottom=5, left/right=10</li>
+	 *   <li>Three values: "5 10 15" - top=5, left/right=10, bottom=15</li>
+	 *   <li>Four values: "5 10 15 20" - top=5, right=10, bottom=15, left=20</li>
+	 * </ul>
+	 *
+	 * @param value String representation of insets
+	 * @return Parsed Insets object
+	 */
 	public static Insets valueOf(String value) {
 		float val1 = 0;
 		float val2 = 0;
@@ -36,7 +79,7 @@ public record Insets(
 		while (value.length() > 0 && value.charAt(0) == '(') {
 			value = value.substring(1);
 		}
-		while (value.length() > 0 && value.charAt(0) == ')') {
+		while (value.length() > 0 && value.charAt(value.length() - 1) == ')') {
 			value = value.substring(0, value.length() - 1);
 		}
 		final String[] values = value.split(",| ");

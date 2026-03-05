@@ -37,7 +37,7 @@ public record Vector4f(
 		while (value.length() > 0 && value.charAt(0) == '(') {
 			value = value.substring(1);
 		}
-		while (value.length() > 0 && value.charAt(0) == ')') {
+		while (value.length() > 0 && value.charAt(value.length() - 1) == ')') {
 			value = value.substring(0, value.length() - 1);
 		}
 		final String[] values = value.split(",| ");

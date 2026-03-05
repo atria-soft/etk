@@ -7,6 +7,21 @@ import org.slf4j.LoggerFactory;
 
 import edu.umd.cs.findbugs.annotations.CheckReturnValue;
 
+/**
+ * Immutable border radius representation for rectangular elements.
+ *
+ * <p>Defines the radius of each corner of a rectangle, allowing for rounded corners with different
+ * radii. Each corner can have an independent radius value. Provides mathematical operations for
+ * manipulation and comparison.</p>
+ *
+ * @param topLeft Radius of the top-left corner in pixels
+ * @param topRight Radius of the top-right corner in pixels
+ * @param bottomRight Radius of the bottom-right corner in pixels
+ * @param bottomLeft Radius of the bottom-left corner in pixels
+ *
+ * @author Edouard DUPIN
+ * @since 0.1.0
+ */
 public record BorderRadius(
 		float topLeft,
 		float topRight,
@@ -14,6 +29,20 @@ public record BorderRadius(
 		float bottomLeft) {
 	final static Logger LOGGER = LoggerFactory.getLogger(BorderRadius.class);
 
+	/**
+	 * Parses a BorderRadius from a string representation.
+	 *
+	 * <p>Supports formats:</p>
+	 * <ul>
+	 *   <li>Single value: "5" - all corners get same radius</li>
+	 *   <li>Two values: "5 10" - topLeft/bottomRight=5, topRight/bottomLeft=10</li>
+	 *   <li>Three values: "5 10 15" - topLeft=5, topRight/bottomLeft=10, bottomRight=15</li>
+	 *   <li>Four values: "5 10 15 20" - topLeft=5, topRight=10, bottomRight=15, bottomLeft=20</li>
+	 * </ul>
+	 *
+	 * @param value String representation of border radius
+	 * @return Parsed BorderRadius object
+	 */
 	public static BorderRadius valueOf(String value) {
 		float val1 = 0;
 		float val2 = 0;
@@ -23,7 +52,7 @@ public record BorderRadius(
 		while (value.length() > 0 && value.charAt(0) == '(') {
 			value = value.substring(1);
 		}
-		while (value.length() > 0 && value.charAt(0) == ')') {
+		while (value.length() > 0 && value.charAt(value.length() - 1) == ')') {
 			value = value.substring(0, value.length() - 1);
 		}
 		final String[] values = value.split(",| ");
