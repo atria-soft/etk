@@ -1,0 +1,202 @@
+================================================================================
+LISTE COMPLÈTE DES FICHIERS DE TESTS CRÉÉS POUR LE PROJET ETK
+================================================================================
+
+Répertoire de base: /home/edupin/dev/perso/jatria_soft/etk/src/test
+
+================================================================================
+STRUCTURE DES RÉPERTOIRES
+================================================================================
+
+etk/src/test/
+├── org/
+│   └── atriasoft/
+│       └── etk/
+│           ├── ColorTest.java                    (40 tests)
+│           ├── math/
+│           │   ├── ConstantTest.java             ( 6 tests)
+│           │   ├── FMathTest.java                (42 tests)
+│           │   ├── Vector2bTest.java             (22 tests)
+│           │   ├── Vector2fTest.java             (71 tests)
+│           │   ├── Vector2iTest.java             (57 tests)
+│           │   ├── Vector3bTest.java             (14 tests)
+│           │   ├── Vector3fTest.java             (66 tests)
+│           │   ├── Vector3iTest.java             (24 tests)
+│           │   └── Vector4fTest.java             (32 tests)
+│           ├── theme/                            (vide - à compléter)
+│           └── util/
+│               └── PairTest.java                 (18 tests)
+└── test/
+    └── atriasoft/
+        └── etk/
+            └── TestMatrix4.java                  (existant)
+
+================================================================================
+DÉTAILS DES FICHIERS CRÉÉS (11 nouveaux fichiers)
+================================================================================
+
+1. Package: org.atriasoft.etk (1 fichier)
+   ─────────────────────────────────────────────────────────────────────────
+
+   ColorTest.java
+   • Chemin: org/atriasoft/etk/ColorTest.java
+   • Tests: 40
+   • Lignes: ~350
+   • Couvre: Constructeurs, couleurs nommées (140+), valueOf(), get(),
+             with methods, toString(), toStringSharp()
+
+2. Package: org.atriasoft.etk.math (8 fichiers)
+   ─────────────────────────────────────────────────────────────────────────
+
+   ConstantTest.java
+   • Chemin: org/atriasoft/etk/math/ConstantTest.java
+   • Tests: 6
+   • Lignes: ~100
+   • Couvre: FLOAT_EPSILON, MACHINE_EPSILON, PI, PI_2
+
+   FMathTest.java
+   • Chemin: org/atriasoft/etk/math/FMathTest.java
+   • Tests: 42
+   • Lignes: ~500
+   • Couvre: Fonctions mathématiques, min/max, clamp/avg, comparaisons,
+             parsing, nextP2
+
+   Vector2bTest.java
+   • Chemin: org/atriasoft/etk/math/Vector2bTest.java
+   • Tests: 22
+   • Lignes: ~200
+   • Couvre: Vecteurs 2D booléens, valueOf(), comparaisons, constantes
+
+   Vector2fTest.java ⭐ (PLUS COMPLET)
+   • Chemin: org/atriasoft/etk/math/Vector2fTest.java
+   • Tests: 71
+   • Lignes: ~650
+   • Couvre: Vecteurs 2D float, toutes opérations arithmétiques et
+             vectorielles, comparaisons, axes, constantes
+
+   Vector2iTest.java
+   • Chemin: org/atriasoft/etk/math/Vector2iTest.java
+   • Tests: 57
+   • Lignes: ~550
+   • Couvre: Vecteurs 2D entiers, division entière, overflow
+
+   Vector3bTest.java
+   • Chemin: org/atriasoft/etk/math/Vector3bTest.java
+   • Tests: 14
+   • Lignes: ~150
+   • Couvre: Vecteurs 3D booléens, toutes combinaisons de constantes
+
+   Vector3fTest.java ⭐ (TRÈS COMPLET)
+   • Chemin: org/atriasoft/etk/math/Vector3fTest.java
+   • Tests: 66
+   • Lignes: ~700
+   • Couvre: Vecteurs 3D float, produit vectoriel, rotations,
+             interpolations, réflexions, matrices antisymétriques
+
+   Vector3iTest.java
+   • Chemin: org/atriasoft/etk/math/Vector3iTest.java
+   • Tests: 24
+   • Lignes: ~250
+   • Couvre: Vecteurs 3D entiers, opérations complètes
+
+   Vector4fTest.java
+   • Chemin: org/atriasoft/etk/math/Vector4fTest.java
+   • Tests: 32
+   • Lignes: ~350
+   • Couvre: Vecteurs 4D float, composante W, lerp
+
+3. Package: org.atriasoft.etk.util (1 fichier)
+   ─────────────────────────────────────────────────────────────────────────
+
+   PairTest.java
+   • Chemin: org/atriasoft/etk/util/PairTest.java
+   • Tests: 18
+   • Lignes: ~228
+   • Couvre: Factory method, equals(), hashCode(), with methods,
+             types génériques, paires imbriquées
+
+================================================================================
+FICHIERS DE DOCUMENTATION CRÉÉS (3 fichiers)
+================================================================================
+
+1. TEST_SUMMARY.md
+   • Chemin: /home/edupin/dev/perso/jatria_soft/etk/TEST_SUMMARY.md
+   • Contenu: Résumé détaillé avec métriques de qualité
+
+2. TESTS_CREATED.md
+   • Chemin: /home/edupin/dev/perso/jatria_soft/etk/TESTS_CREATED.md
+   • Contenu: Liste exhaustive avec statistiques complètes
+
+3. TEST_FILES_LIST.txt (ce fichier)
+   • Chemin: /home/edupin/dev/perso/jatria_soft/etk/TEST_FILES_LIST.txt
+   • Contenu: Liste structurée des fichiers de tests
+
+================================================================================
+STATISTIQUES GLOBALES
+================================================================================
+
+Fichiers de test créés:         11
+Méthodes de test (@Test):       392
+Lignes de code de test:         3,778
+Temps d'exécution estimé:       < 5 secondes
+
+Répartition:
+• Tests mathématiques:          334 tests (8 fichiers)
+• Tests principaux:             40 tests  (1 fichier)
+• Tests utilitaires:            18 tests  (1 fichier)
+
+Classes couvertes:              11 / 35  (31%)
+Classes mathématiques:          8 / 14   (57%)
+
+================================================================================
+COMMANDES UTILES
+================================================================================
+
+# Lister tous les fichiers de test
+find /home/edupin/dev/perso/jatria_soft/etk/src/test -name "*Test.java"
+
+# Compter le nombre total de tests
+find /home/edupin/dev/perso/jatria_soft/etk/src/test -name "*Test.java" \
+  -exec grep -c "@Test" {} \; | awk '{sum+=$1} END {print sum}'
+
+# Compter les lignes de code de test
+find /home/edupin/dev/perso/jatria_soft/etk/src/test -name "*Test.java" \
+  -exec wc -l {} + | tail -1
+
+# Exécuter tous les tests
+mvn test
+
+# Exécuter les tests d'un package spécifique
+mvn test -Dtest=org.atriasoft.etk.math.*Test
+
+# Générer un rapport de couverture
+mvn clean test jacoco:report
+
+================================================================================
+NOTES IMPORTANTES
+================================================================================
+
+✓ Tous les tests utilisent JUnit 5 (org.junit.jupiter.api)
+✓ Comparaison des floats avec EPSILON = 0.0001f
+✓ Noms de tests descriptifs avec @DisplayName
+✓ Tests organisés par sections avec commentaires
+✓ Couverture complète des méthodes publiques pour les classes testées
+✓ Tests des cas normaux ET des cas limites
+✓ Gestion appropriée des exceptions
+
+⚠ Bugs trouvés:
+  - Vector3b.toString() n'affiche que (x,y) au lieu de (x,y,z)
+  - Vector4f a des bugs dans certaines opérations (lignes 120-121, 198-199, 399-400)
+
+📋 Classes restant à tester: 24 classes
+   • Priorité HAUTE: Matrix2x3f, Matrix3f, Matrix4f, Quaternion, Transform3D
+   • Priorité MOYENNE: Dimension1f/2f/3f, Insets, ArraysTools
+   • Priorité BASSE: ConfigFont, Configs, Platform, Tools, Uri, Theme
+
+================================================================================
+FIN DU DOCUMENT
+================================================================================
+Créé le: 2026-03-05
+Auteur: Claude (Anthropic)
+Projet: ETK (Engineering Toolkit)
+================================================================================
