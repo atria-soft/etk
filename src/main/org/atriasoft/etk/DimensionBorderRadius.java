@@ -247,19 +247,19 @@ public record DimensionBorderRadius(
 
 		final Distance typeX = Distance.parseEndSmallString(contentX);
 		contentX = typeX.removeEndString(contentX);
-		final float tmpX = Float.valueOf(contentX);
+		final float tmpX = Float.parseFloat(contentX);
 
 		final Distance typeY = Distance.parseEndSmallString(contentY);
 		contentX = typeY.removeEndString(contentY);
-		final float tmpY = Float.valueOf(contentY);
+		final float tmpY = Float.parseFloat(contentY);
 
 		final Distance typeZ = Distance.parseEndSmallString(contentZ);
 		contentX = typeZ.removeEndString(contentZ);
-		final float tmpZ = Float.valueOf(contentZ);
+		final float tmpZ = Float.parseFloat(contentZ);
 		
 		final Distance typeW = Distance.parseEndSmallString(contentW);
 		contentX = typeW.removeEndString(contentZ);
-		final float tmpW = Float.valueOf(contentZ);
+		final float tmpW = Float.parseFloat(contentZ);
 
 		if (typeX != Distance.UNKNOW) {
 			return new DimensionBorderRadius(new BorderRadius(tmpX, tmpY, tmpZ, tmpW), typeX);

@@ -45,19 +45,19 @@ public record Vector3f(
 		if (values.length == 1) {
 			// no coma ...
 			// in every case, we parse the first element :
-			val1 = Float.valueOf(values[0]);
+			val1 = Float.parseFloat(values[0]);
 			val2 = val1;
 			val3 = val1;
 		} else if (values.length == 2) {
 			// no coma ...
 			// in every case, we parse the first element :
-			val1 = Float.valueOf(values[0]);
-			val2 = Float.valueOf(values[1]);
+			val1 = Float.parseFloat(values[0]);
+			val2 = Float.parseFloat(values[1]);
 			val3 = val2;
 		} else {
-			val1 = Float.valueOf(values[0]);
-			val2 = Float.valueOf(values[1]);
-			val3 = Float.valueOf(values[2]);
+			val1 = Float.parseFloat(values[0]);
+			val2 = Float.parseFloat(values[1]);
+			val3 = Float.parseFloat(values[2]);
 		}
 		return new Vector3f(val1, val2, val3);
 	}
@@ -612,9 +612,9 @@ public record Vector3f(
 	
 	@CheckReturnValue
 	public static Vector3f valueOf(final String valuesX, final String valuesY, final String valuesZ) {
-		final float val1 = Float.valueOf(valuesX);
-		final float val2 = Float.valueOf(valuesY);
-		final float val3 = Float.valueOf(valuesZ);
+		final float val1 = Float.parseFloat(valuesX);
+		final float val2 = Float.parseFloat(valuesY);
+		final float val3 = Float.parseFloat(valuesZ);
 		return new Vector3f(val1, val2, val3);
 	}
 	

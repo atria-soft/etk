@@ -273,15 +273,15 @@ public record Dimension3f(
 		
 		final Distance typeX = Distance.parseEndSmallString(contentX);
 		contentX = typeX.removeEndString(contentX);
-		final float tmpX = Float.valueOf(contentX);
+		final float tmpX = Float.parseFloat(contentX);
 		
 		final Distance typeY = Distance.parseEndSmallString(contentY);
 		contentX = typeY.removeEndString(contentY);
-		final float tmpY = Float.valueOf(contentY);
+		final float tmpY = Float.parseFloat(contentY);
 		
 		final Distance typeZ = Distance.parseEndSmallString(contentZ);
 		contentX = typeZ.removeEndString(contentZ);
-		final float tmpZ = Float.valueOf(contentZ);
+		final float tmpZ = Float.parseFloat(contentZ);
 		
 		if (typeX != Distance.UNKNOW) {
 			return new Dimension3f(new Vector3f(tmpX, tmpY, tmpZ), typeX);
