@@ -273,11 +273,11 @@ public record Dimension2f(
 	public static Dimension2f valueOf(String contentX, String contentY) {
 		final Distance typeX = Distance.parseEndSmallString(contentX);
 		contentX = typeX.removeEndString(contentX);
-		final float tmpX = Float.valueOf(contentX);
+		final float tmpX = Float.parseFloat(contentX);
 		
 		final Distance typeY = Distance.parseEndSmallString(contentY);
 		contentY = typeY.removeEndString(contentY);
-		final float tmpY = Float.valueOf(contentY);
+		final float tmpY = Float.parseFloat(contentY);
 		
 		if (typeX != Distance.UNKNOW) {
 			return new Dimension2f(new Vector2f(tmpX, tmpY), typeX);

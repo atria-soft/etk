@@ -251,19 +251,19 @@ public record DimensionInsets(
 
 		final Distance typeX = Distance.parseEndSmallString(contentX);
 		contentX = typeX.removeEndString(contentX);
-		final float tmpX = Float.valueOf(contentX);
+		final float tmpX = Float.parseFloat(contentX);
 
 		final Distance typeY = Distance.parseEndSmallString(contentX);
 		contentX = typeY.removeEndString(contentY);
-		final float tmpY = Float.valueOf(contentY);
+		final float tmpY = Float.parseFloat(contentY);
 		
 		final Distance typeZ = Distance.parseEndSmallString(contentX);
 		contentX = typeZ.removeEndString(contentZ);
-		final float tmpZ = Float.valueOf(contentZ);
+		final float tmpZ = Float.parseFloat(contentZ);
 
 		final Distance typeW = Distance.parseEndSmallString(contentX);
 		contentX = typeW.removeEndString(contentW);
-		final float tmpW = Float.valueOf(contentW);
+		final float tmpW = Float.parseFloat(contentW);
 
 		if (typeX != Distance.UNKNOW) {
 			return new DimensionInsets(new Insets(tmpX, tmpY, tmpZ, tmpW), typeX);

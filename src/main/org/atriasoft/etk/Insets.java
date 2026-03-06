@@ -89,27 +89,27 @@ public record Insets(
 		if (values.length == 1) {
 			// no coma ...
 			// in every case, we parse the first element :
-			val1 = Float.valueOf(values[0]);
+			val1 = Float.parseFloat(values[0]);
 			val2 = val1;
 			val3 = val1;
 			val4 = val1;
 		} else if (values.length == 2) {
 			// no coma ...
 			// in every case, we parse the first element :
-			val1 = Float.valueOf(values[0]);
-			val2 = Float.valueOf(values[1]);
+			val1 = Float.parseFloat(values[0]);
+			val2 = Float.parseFloat(values[1]);
 			val3 = val2;
 			val4 = val2;
 		} else if (values.length == 3) {
-			val1 = Float.valueOf(values[0]);
-			val2 = Float.valueOf(values[1]);
-			val3 = Float.valueOf(values[2]);
+			val1 = Float.parseFloat(values[0]);
+			val2 = Float.parseFloat(values[1]);
+			val3 = Float.parseFloat(values[2]);
 			val4 = val3;
 		} else {
-			val1 = Float.valueOf(values[0]);
-			val2 = Float.valueOf(values[1]);
-			val3 = Float.valueOf(values[2]);
-			val4 = Float.valueOf(values[3]);
+			val1 = Float.parseFloat(values[0]);
+			val2 = Float.parseFloat(values[1]);
+			val3 = Float.parseFloat(values[2]);
+			val4 = Float.parseFloat(values[3]);
 		}
 		return new Insets(val1, val2, val3, val4);
 	}
@@ -475,10 +475,10 @@ public record Insets(
 			final String valuesY,
 			final String valuesZ,
 			final String valuesW) {
-		final float val1 = Float.valueOf(valuesX);
-		final float val2 = Float.valueOf(valuesY);
-		final float val3 = Float.valueOf(valuesZ);
-		final float val4 = Float.valueOf(valuesW);
+		final float val1 = Float.parseFloat(valuesX);
+		final float val2 = Float.parseFloat(valuesY);
+		final float val3 = Float.parseFloat(valuesZ);
+		final float val4 = Float.parseFloat(valuesW);
 		return new Insets(val1, val2, val3, val4);
 	}
 	
