@@ -444,10 +444,11 @@ public class Uri {
 			out.append(":");
 		}
 		out.append(this.path);
-		final boolean first = true;
+		boolean first = true;
 		for (final Map.Entry<String, String> entry : this.properties.entrySet()) {
 			if (first) {
 				out.append("?");
+				first = false;
 			} else {
 				out.append("&");
 			}
