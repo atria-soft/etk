@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.security.CodeSource;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,97 +89,109 @@ public class Uri {
 		return filenames;
 	}
 	
+	/**
+	 * Open a resource: first in the application, then in the library named by the "lib" property.
+	 * The search is traced at TRACE level; a resource found nowhere logs a single warning.
+	 * @param uri Resource to open.
+	 * @return The open stream, or null when the resource does not exist.
+	 */
 	public static InputStream getStream(final Uri uri) {
-		LOGGER.error("????????????????????????????????????????????");
-		LOGGER.error("Load resource: {}", uri);
+		return Uri.findStream(uri, true);
+	}
+
+	/**
+	 * Search a resource in the application, then in its library.
+	 * @param uri Resource to search.
+	 * @param reportMissing true to log a warning when the resource is found nowhere (a probe such as
+	 *            {@link #exist()} passes false: a missing resource is an expected answer there).
+	 * @return The open stream, or null when the resource does not exist.
+	 */
+	private static InputStream findStream(final Uri uri, final boolean reportMissing) {
+		LOGGER.trace("Load resource: {}", uri);
+		if ("FILE".equals(uri.group)) {
+			try {
+				return new FileInputStream(new File(uri.getPath()));
+			} catch (final FileNotFoundException e) {
+				if (reportMissing) {
+					LOGGER.warn("Can not load resource '{}': {}", uri, e.getMessage());
+				} else {
+					LOGGER.trace("    file does not exist: {}", e.getMessage());
+				}
+				return null;
+			}
+		}
 		String offsetGroup = "";
 		if (uri.group != null) {
-			if (uri.group.equals("FILE")) {
-				LOGGER.error("Load resource direct file: {}", uri);
-				try {
-					return new FileInputStream(new File(uri.getPath()));
-				} catch (final FileNotFoundException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-					return null;
-				}
-			}
-			LOGGER.error("    find group: {}", uri.group);
-			final String ret = Uri.genericMap.get(uri.group);
-			if (ret != null) {
-				LOGGER.error("        ==> {}", ret);
-				offsetGroup = ret;
+			final String groupPath = Uri.genericMap.get(uri.group);
+			LOGGER.trace("    group {} ==> {}", uri.group, groupPath);
+			if (groupPath != null) {
+				offsetGroup = groupPath;
 			}
 		}
-		InputStream out = null;
+		final List<String> tried = new ArrayList<>();
 		if (Uri.applicationClass == null) {
-			LOGGER.error("    !! Application data class is not defined ...");
+			LOGGER.trace("    no application class defined");
 		} else {
-			String tmpPath = "/" + Uri.applicationBasePath + offsetGroup + uri.path;
-			tmpPath = tmpPath.replace("///", "/").replace("//", "/").replaceFirst("^/*", "");
-			LOGGER.error("(appl) Try to load '{}' in {}", tmpPath, Uri.applicationClass.getCanonicalName());
-			final URL realFileName = Uri.applicationClass.getClassLoader().getResource(tmpPath);
-			if (realFileName != null) {
-				LOGGER.error("(appl)    >>> {}", realFileName.getFile());
-			} else {
-				LOGGER.error("(appl)    ??? base folder: {}",
-						Uri.applicationClass.getProtectionDomain().getCodeSource().getLocation().getPath() + tmpPath);
+			final String path = Uri.cleanResourcePath(Uri.applicationBasePath + offsetGroup + uri.path);
+			final InputStream out = Uri.openResource("appl", Uri.applicationClass, path);
+			if (out != null) {
+				return out;
 			}
-			LOGGER.error("(appl)    {} getResourceAsStream({})", Uri.applicationClass.getCanonicalName(), tmpPath);
-
-			out = Uri.applicationClass.getResourceAsStream("/" + tmpPath);
-			
-			if (out == null) {
-				LOGGER.error("(appl) ==> element does not exist ... {} => {}", uri, tmpPath);
-				/*
-				try {
-					LOGGER.warn("elements: " + getResourceFiles(applicationClass,
-							BASE_RESOURCE_FOLDER + applicationBasePath + offsetGroup + "/*.*"));
-				} catch (final IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-				*/
-			}
+			tried.add("application:" + path);
 		}
-		if (out == null) {
-			// search in the libraries ...
-			if (uri.properties.get("lib") == null) {
-				LOGGER.error("    !! No library specified");
-				return null;
-			}
-			final LibraryElement libraryElement = Uri.libraries.get(uri.properties.get("lib"));
+		final String libName = uri.properties.get("lib");
+		if (libName == null) {
+			LOGGER.trace("    no library specified");
+		} else {
+			final LibraryElement libraryElement = Uri.libraries.get(libName);
 			if (libraryElement == null) {
-				LOGGER.error("     Can not get element in library");
-				return null;
-			}
-			//				try {
-			//					LOGGER.warn("elements: " + getResourceFiles(libraryElement.klass, libraryElement.basePath + offsetGroup + "/"));
-			//				} catch (IOException e) {
-			//					// TODO Auto-generated catch block
-			//					e.printStackTrace();
-			//				}
-			String tmpPath = "/" + libraryElement.basePath + offsetGroup + uri.path;
-			tmpPath = tmpPath.replace("///", "/").replace("//", "/").replaceFirst("^/*", "");
-			;
-			LOGGER.error("(lib)  Try to load '{}' in {}", tmpPath, libraryElement.klass.getCanonicalName());
-			final URL realFileName = libraryElement.klass.getClassLoader().getResource(tmpPath);
-			if (realFileName != null) {
-				LOGGER.error("(lib)     >>> {}", realFileName.getFile());
+				LOGGER.trace("    library '{}' is not registered", libName);
+				tried.add("unregistered library '" + libName + "'");
 			} else {
-				LOGGER.error("(lib)     ??? base folder: {}",
-						libraryElement.klass.getProtectionDomain().getCodeSource().getLocation().getPath() + tmpPath);
-			}
-			out = libraryElement.klass.getResourceAsStream("/" + tmpPath);
-			if (out == null) {
-				LOGGER.error("(lib)  ==> element does not exist ...");
+				final String path = Uri.cleanResourcePath(libraryElement.basePath + offsetGroup + uri.path);
+				final InputStream out = Uri.openResource("lib", libraryElement.klass, path);
+				if (out != null) {
+					return out;
+				}
+				tried.add(libName + ":" + path);
 			}
 		}
-		
-		if (out == null) {
-			LOGGER.warn("Can not load resource: '{}'", uri);
+		if (reportMissing) {
+			LOGGER.warn("Can not load resource '{}', tried: {}", uri, tried);
 		} else {
-			LOGGER.error("   =====> DATA LOADED <====== ");
+			LOGGER.trace("    resource does not exist, tried: {}", tried);
+		}
+		return null;
+	}
+
+	/**
+	 * Make a classpath resource path relative: no leading slash and no doubled slash.
+	 * @param path Path to clean.
+	 * @return The cleaned path.
+	 */
+	private static String cleanResourcePath(final String path) {
+		return path.replace("///", "/").replace("//", "/").replaceFirst("^/*", "");
+	}
+
+	/**
+	 * Open a resource of the classpath of a class, tracing where it is searched.
+	 * @param origin Short name of the search step in the trace ("appl" or "lib").
+	 * @param klass Class whose classpath holds the resource.
+	 * @param path Resource path, relative to the root of the classpath.
+	 * @return The open stream, or null when the resource is not in this classpath.
+	 */
+	private static InputStream openResource(final String origin, final Class<?> klass, final String path) {
+		final InputStream out = klass.getResourceAsStream("/" + path);
+		if (LOGGER.isTraceEnabled()) {
+			if (out != null) {
+				final URL realFileName = klass.getClassLoader().getResource(path);
+				LOGGER.trace("({}) '{}' in {} >>> {}", origin, path, klass.getCanonicalName(),
+						realFileName == null ? "?" : realFileName.getFile());
+			} else {
+				final CodeSource codeSource = klass.getProtectionDomain().getCodeSource();
+				LOGGER.trace("({}) '{}' in {} does not exist (base folder: {})", origin, path,
+						klass.getCanonicalName(), codeSource == null ? "?" : codeSource.getLocation().getPath());
+			}
 		}
 		return out;
 	}
@@ -335,8 +348,12 @@ public class Uri {
 		return new Uri(this.group, this.path, new HashMap<>(this.properties));
 	}
 	
+	/**
+	 * Check if the resource exists. A missing resource is an expected answer: it is not reported as a failure.
+	 * @return true when the resource can be opened.
+	 */
 	public boolean exist() {
-		final InputStream stream = Uri.getStream(this);
+		final InputStream stream = Uri.findStream(this, false);
 		if (stream == null) {
 			return false;
 		}

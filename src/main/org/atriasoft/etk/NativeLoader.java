@@ -31,7 +31,7 @@ public class NativeLoader {
 	 * @throws IOException If the library cannot be extracted or loaded
 	 */
     public static void load(final Uri fileToLoad) throws IOException {
-        LOGGER.error("Start load library native ...");
+        LOGGER.debug("Load native library: {}", fileToLoad);
         // in java the loading of .so need to be externalized to be loaded by the system as native library. then we copy in an external temporary folder and remove it when application close.
         try {
 			InputStream is = Uri.getStream(fileToLoad);
