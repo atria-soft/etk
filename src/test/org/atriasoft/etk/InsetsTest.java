@@ -122,6 +122,8 @@ class InsetsTest {
         Insets result = insets1.add(insets2);
         assertEquals(6.0f, result.top(), EPSILON);
         assertEquals(8.0f, result.right(), EPSILON);
+        assertEquals(10.0f, result.bottom(), EPSILON);
+        assertEquals(12.0f, result.left(), EPSILON);
     }
 
     @Test
@@ -167,6 +169,30 @@ class InsetsTest {
         assertEquals(10.0f, result.right(), EPSILON);
         assertEquals(15.0f, result.bottom(), EPSILON);
         assertEquals(20.0f, result.left(), EPSILON);
+    }
+
+    @Test
+    @DisplayName("multiply with Insets")
+    void testMultiplyInsets() {
+        Insets insets1 = new Insets(2.0f, 3.0f, 4.0f, 5.0f);
+        Insets insets2 = new Insets(2.0f, 3.0f, 4.0f, 5.0f);
+        Insets result = insets1.multiply(insets2);
+        assertEquals(4.0f, result.top(), EPSILON);
+        assertEquals(9.0f, result.right(), EPSILON);
+        assertEquals(16.0f, result.bottom(), EPSILON);
+        assertEquals(25.0f, result.left(), EPSILON);
+    }
+
+    @Test
+    @DisplayName("divide with Insets")
+    void testDivideInsets() {
+        Insets insets1 = new Insets(10.0f, 20.0f, 30.0f, 40.0f);
+        Insets insets2 = new Insets(2.0f, 4.0f, 6.0f, 8.0f);
+        Insets result = insets1.divide(insets2);
+        assertEquals(5.0f, result.top(), EPSILON);
+        assertEquals(5.0f, result.right(), EPSILON);
+        assertEquals(5.0f, result.bottom(), EPSILON);
+        assertEquals(5.0f, result.left(), EPSILON);
     }
 
     @Test

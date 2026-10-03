@@ -183,6 +183,8 @@ class BorderRadiusTest {
         BorderRadius result = br1.add(br2);
         assertEquals(6.0f, result.topLeft(), EPSILON);
         assertEquals(8.0f, result.topRight(), EPSILON);
+        assertEquals(10.0f, result.bottomRight(), EPSILON);
+        assertEquals(12.0f, result.bottomLeft(), EPSILON);
     }
 
     @Test
@@ -238,6 +240,20 @@ class BorderRadiusTest {
         BorderRadius result = br1.multiply(br2);
         assertEquals(4.0f, result.topLeft(), EPSILON);
         assertEquals(6.0f, result.topRight(), EPSILON);
+        assertEquals(8.0f, result.bottomRight(), EPSILON);
+        assertEquals(10.0f, result.bottomLeft(), EPSILON);
+    }
+
+    @Test
+    @DisplayName("multiply with BorderRadius keeps each corner apart")
+    void testMultiplyBorderRadiusPerCorner() {
+        BorderRadius br1 = new BorderRadius(2.0f, 3.0f, 4.0f, 5.0f);
+        BorderRadius br2 = new BorderRadius(2.0f, 3.0f, 4.0f, 5.0f);
+        BorderRadius result = br1.multiply(br2);
+        assertEquals(4.0f, result.topLeft(), EPSILON);
+        assertEquals(9.0f, result.topRight(), EPSILON);
+        assertEquals(16.0f, result.bottomRight(), EPSILON);
+        assertEquals(25.0f, result.bottomLeft(), EPSILON);
     }
 
     @Test
@@ -259,6 +275,8 @@ class BorderRadiusTest {
         BorderRadius result = br1.divide(br2);
         assertEquals(5.0f, result.topLeft(), EPSILON);
         assertEquals(5.0f, result.topRight(), EPSILON);
+        assertEquals(5.0f, result.bottomRight(), EPSILON);
+        assertEquals(5.0f, result.bottomLeft(), EPSILON);
     }
 
     @Test

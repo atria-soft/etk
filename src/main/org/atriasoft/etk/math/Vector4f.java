@@ -117,7 +117,7 @@ public record Vector4f(
 	 */
 	@CheckReturnValue
 	public Vector4f add(final Vector4f obj) {
-		return new Vector4f(this.x + obj.x, this.y + obj.y, this.z + obj.w, this.z + obj.w);
+		return new Vector4f(this.x + obj.x, this.y + obj.y, this.z + obj.z, this.w + obj.w);
 	}
 	
 	/**
@@ -195,7 +195,7 @@ public record Vector4f(
 	 */
 	@CheckReturnValue
 	public Vector4f divide(final Vector4f val) {
-		return new Vector4f(this.x / val.x, this.y / val.y, this.z / val.w, this.z / val.w);
+		return new Vector4f(this.x / val.x, this.y / val.y, this.z / val.z, this.w / val.w);
 	}
 	
 	/**
@@ -396,7 +396,7 @@ public record Vector4f(
 	 */
 	@CheckReturnValue
 	public Vector4f multiply(final Vector4f obj) {
-		return new Vector4f(this.x * obj.x, this.y * obj.y, this.z * obj.w, this.z * obj.w);
+		return new Vector4f(this.x * obj.x, this.y * obj.y, this.z * obj.z, this.w * obj.w);
 	}
 	
 	/**

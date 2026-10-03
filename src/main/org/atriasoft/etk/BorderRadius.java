@@ -135,7 +135,7 @@ public record BorderRadius(
 	@CheckReturnValue
 	public BorderRadius add(final BorderRadius obj) {
 		return new BorderRadius(this.topLeft + obj.topLeft, this.topRight + obj.topRight,
-				this.bottomRight + obj.bottomLeft, this.bottomRight + obj.bottomLeft);
+				this.bottomRight + obj.bottomRight, this.bottomLeft + obj.bottomLeft);
 	}
 
 	/**
@@ -198,7 +198,7 @@ public record BorderRadius(
 	@CheckReturnValue
 	public BorderRadius divide(final BorderRadius val) {
 		return new BorderRadius(this.topLeft / val.topLeft, this.topRight / val.topRight,
-				this.bottomRight / val.bottomLeft, this.bottomRight / val.bottomLeft);
+				this.bottomRight / val.bottomRight, this.bottomLeft / val.bottomLeft);
 	}
 
 	/**
@@ -368,7 +368,7 @@ public record BorderRadius(
 	@CheckReturnValue
 	public BorderRadius multiply(final BorderRadius obj) {
 		return new BorderRadius(this.topLeft * obj.topLeft, this.topRight * obj.topRight,
-				this.bottomRight * obj.bottomLeft, this.bottomRight * obj.bottomLeft);
+				this.bottomRight * obj.bottomRight, this.bottomLeft * obj.bottomLeft);
 	}
 	
 	/**

@@ -159,7 +159,7 @@ public record Insets(
 	 */
 	@CheckReturnValue
 	public Insets add(final Insets obj) {
-		return new Insets(this.top + obj.top, this.right + obj.right, this.bottom + obj.left, this.bottom + obj.left);
+		return new Insets(this.top + obj.top, this.right + obj.right, this.bottom + obj.bottom, this.left + obj.left);
 	}
 	
 	/**
@@ -215,7 +215,7 @@ public record Insets(
 	 */
 	@CheckReturnValue
 	public Insets divide(final Insets val) {
-		return new Insets(this.top / val.top, this.right / val.right, this.bottom / val.left, this.bottom / val.left);
+		return new Insets(this.top / val.top, this.right / val.right, this.bottom / val.bottom, this.left / val.left);
 	}
 	
 	/**
@@ -375,7 +375,7 @@ public record Insets(
 	 */
 	@CheckReturnValue
 	public Insets multiply(final Insets obj) {
-		return new Insets(this.top * obj.top, this.right * obj.right, this.bottom * obj.left, this.bottom * obj.left);
+		return new Insets(this.top * obj.top, this.right * obj.right, this.bottom * obj.bottom, this.left * obj.left);
 	}
 
 	/**

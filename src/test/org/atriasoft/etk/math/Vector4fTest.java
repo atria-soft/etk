@@ -104,6 +104,54 @@ class Vector4fTest {
     }
 
     @Test
+    @DisplayName("add vector")
+    void testAddVector() {
+        Vector4f v1 = new Vector4f(1.0f, 2.0f, 3.0f, 4.0f);
+        Vector4f v2 = new Vector4f(5.0f, 6.0f, 7.0f, 8.0f);
+        Vector4f result = v1.add(v2);
+        assertEquals(6.0f, result.x(), EPSILON);
+        assertEquals(8.0f, result.y(), EPSILON);
+        assertEquals(10.0f, result.z(), EPSILON);
+        assertEquals(12.0f, result.w(), EPSILON);
+    }
+
+    @Test
+    @DisplayName("less vector")
+    void testLessVector() {
+        Vector4f v1 = new Vector4f(5.0f, 6.0f, 7.0f, 8.0f);
+        Vector4f v2 = new Vector4f(1.0f, 2.0f, 3.0f, 4.0f);
+        Vector4f result = v1.less(v2);
+        assertEquals(4.0f, result.x(), EPSILON);
+        assertEquals(4.0f, result.y(), EPSILON);
+        assertEquals(4.0f, result.z(), EPSILON);
+        assertEquals(4.0f, result.w(), EPSILON);
+    }
+
+    @Test
+    @DisplayName("multiply vector")
+    void testMultiplyVector() {
+        Vector4f v1 = new Vector4f(2.0f, 3.0f, 4.0f, 5.0f);
+        Vector4f v2 = new Vector4f(2.0f, 3.0f, 4.0f, 5.0f);
+        Vector4f result = v1.multiply(v2);
+        assertEquals(4.0f, result.x(), EPSILON);
+        assertEquals(9.0f, result.y(), EPSILON);
+        assertEquals(16.0f, result.z(), EPSILON);
+        assertEquals(25.0f, result.w(), EPSILON);
+    }
+
+    @Test
+    @DisplayName("divide vector")
+    void testDivideVector() {
+        Vector4f v1 = new Vector4f(10.0f, 20.0f, 30.0f, 40.0f);
+        Vector4f v2 = new Vector4f(2.0f, 4.0f, 6.0f, 8.0f);
+        Vector4f result = v1.divide(v2);
+        assertEquals(5.0f, result.x(), EPSILON);
+        assertEquals(5.0f, result.y(), EPSILON);
+        assertEquals(5.0f, result.z(), EPSILON);
+        assertEquals(5.0f, result.w(), EPSILON);
+    }
+
+    @Test
     @DisplayName("divide by zero throws exception")
     void testDivideByZero() {
         Vector4f v = new Vector4f(6.0f, 8.0f, 10.0f, 12.0f);
