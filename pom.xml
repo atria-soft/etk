@@ -92,27 +92,6 @@
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>3.2.5</version>
 			</plugin>
-			<!-- Code coverage -->
-			<plugin>
-				<groupId>org.jacoco</groupId>
-				<artifactId>jacoco-maven-plugin</artifactId>
-				<version>0.8.12</version>
-				<executions>
-					<execution>
-						<id>prepare-agent</id>
-						<goals>
-							<goal>prepare-agent</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>report</id>
-						<phase>test</phase>
-						<goals>
-							<goal>report</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
 		    <plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<configuration>
@@ -158,6 +137,40 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<!--
+			Code coverage, on demand: mvn test -Pcoverage (report in target/site/jacoco).
+			JaCoCo must know the class file version of the JDK in use, so it breaks the build on
+			each JDK upgrade until a new release supports it: it stays out of the default build.
+		-->
+		<profile>
+			<id>coverage</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.jacoco</groupId>
+						<artifactId>jacoco-maven-plugin</artifactId>
+						<version>0.8.15</version>
+						<executions>
+							<execution>
+								<id>prepare-agent</id>
+								<goals>
+									<goal>prepare-agent</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>report</id>
+								<phase>test</phase>
+								<goals>
+									<goal>report</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 	<!-- Generate Java-docs As Part Of Project Reports -->
 	<reporting>
 		<plugins>
