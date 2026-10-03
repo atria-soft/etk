@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -232,22 +233,37 @@ public class Uri {
 		Uri.genericMap.put(groupName.toUpperCase(), basePath);
 	}
 	
-	public static Uri valueOf(String value) {
-		String group = null;
-		String path = null;
-		final Map<String, String> prop = new HashMap<>();
-		if (value.contains(":")) {
-			final String[] ret = value.split(":", 2);
-			group = ret[0].toUpperCase();
-			value = ret[1];
-		} else {
+	/**
+	 * Parse an URI written as "GROUP:path?key=value&amp;key2=value2" (the reverse of {@link #toString()}).
+	 * <ul>
+	 * <li>No group separator before the properties: the group is "DATA".</li>
+	 * <li>An empty group (":path") means no group.</li>
+	 * <li>A property without '=' gets an empty value; the "lib" value is lower-cased.</li>
+	 * </ul>
+	 * The format has no escaping: the path can not contain '?', a property key can not contain '=' or '&amp;'
+	 * and a property value can not contain '&amp;'.
+	 * @param value String to parse.
+	 * @return The parsed URI.
+	 */
+	public static Uri valueOf(final String value) {
+		final int propertiesIndex = value.indexOf('?');
+		final String location = propertiesIndex == -1 ? value : value.substring(0, propertiesIndex);
+		final int groupIndex = location.indexOf(':');
+		final String group;
+		final String path;
+		if (groupIndex == -1) {
 			group = "DATA";
+			path = location;
+		} else {
+			group = location.substring(0, groupIndex);
+			path = location.substring(groupIndex + 1);
 		}
-		final int index = value.indexOf('?');
-		if (index != -1) {
-			final String valuesMetadata = value.substring(index + 1);
-			final String[] elementMetaData = valuesMetadata.split("&");
-			for (final String element : elementMetaData) {
+		final Map<String, String> prop = new HashMap<>();
+		if (propertiesIndex != -1) {
+			for (final String element : value.substring(propertiesIndex + 1).split("&")) {
+				if (element.isEmpty()) {
+					continue;
+				}
 				final String[] keyVal = element.split("=", 2);
 				if (keyVal.length == 1) {
 					prop.put(keyVal[0], "");
@@ -257,9 +273,6 @@ public class Uri {
 					prop.put(keyVal[0], keyVal[1]);
 				}
 			}
-			path = value.substring(0, index);
-		} else {
-			path = value;
 		}
 		return new Uri(group, path, prop);
 	}
@@ -317,23 +330,34 @@ public class Uri {
 	}
 	
 	public Uri(final String group, final String path) {
-		if (group == null) {
-			this.group = null;
-		} else {
-			this.group = group.toUpperCase();
-		}
+		this.group = Uri.normalizeGroup(group);
 		this.path = path;
 		this.properties = new HashMap<>();
 	}
-	
+
+	/**
+	 * Create an URI.
+	 * @param group Group of the URI (upper-cased; null or empty for no group).
+	 * @param path Path of the resource.
+	 * @param properties Properties of the URI (copied; a null value is stored as an empty value).
+	 */
 	public Uri(final String group, final String path, final Map<String, String> properties) {
-		if (group == null) {
-			this.group = null;
-		} else {
-			this.group = group.toUpperCase();
-		}
+		this.group = Uri.normalizeGroup(group);
 		this.path = path;
 		this.properties = new HashMap<>(properties);
+		this.properties.replaceAll((final String key, final String value) -> value == null ? "" : value);
+	}
+
+	/**
+	 * Normalize a group name: upper-cased, and null when empty.
+	 * @param group Group to normalize.
+	 * @return The normalized group, or null for no group.
+	 */
+	private static String normalizeGroup(final String group) {
+		if (group == null || group.isEmpty()) {
+			return null;
+		}
+		return group.toUpperCase();
 	}
 	
 	public Uri(final String group, final String path, final String lib) {
@@ -432,20 +456,31 @@ public class Uri {
 		return withPath(this.path + "/" + value);
 	}
 	
+	/**
+	 * Set a property.
+	 * @param key Name of the property.
+	 * @param value Value of the property (null is stored as an empty value).
+	 */
 	public void setProperty(final String key, final String value) {
-		this.properties.put(key, value);
+		this.properties.put(key, value == null ? "" : value);
 	}
-	
+
+	/**
+	 * Write the URI as "GROUP:path?key=value&amp;key2=value2", read back by {@link #valueOf(String)}.
+	 * Properties are sorted by key so that equal URIs give the same string (used as cache key); an URI without
+	 * group starts with ':'.
+	 * @return The string form of the URI.
+	 */
 	@Override
 	public String toString() {
 		final StringBuilder out = new StringBuilder();
 		if (this.group != null) {
 			out.append(this.group);
-			out.append(":");
 		}
+		out.append(":");
 		out.append(this.path);
 		boolean first = true;
-		for (final Map.Entry<String, String> entry : this.properties.entrySet()) {
+		for (final Map.Entry<String, String> entry : new TreeMap<>(this.properties).entrySet()) {
 			if (first) {
 				out.append("?");
 				first = false;
@@ -453,23 +488,29 @@ public class Uri {
 				out.append("&");
 			}
 			out.append(entry.getKey());
-			final String value = entry.getValue();
-			if (value != null) {
-				out.append("=");
-				out.append(value);
-			}
+			out.append("=");
+			out.append(entry.getValue());
 		}
 		return out.toString();
 	}
-	
+
 	// Format : DATA:jlfqkjsdflkjqs/sqldkhjflqksdjf/lll.png?lib=ewol
 	public Uri withGroup(final String group) {
 		return new Uri(group, this.path, new HashMap<>(this.properties));
 	}
-	
+
+	/**
+	 * Get a copy of this URI in another library.
+	 * @param lib Name of the library (lower-cased like every library name), null to remove the library.
+	 * @return The new URI.
+	 */
 	public Uri withLib(final String lib) {
 		final Map<String, String> tmp = new HashMap<>(this.properties);
-		tmp.put("lib", lib);
+		if (lib == null) {
+			tmp.remove("lib");
+		} else {
+			tmp.put("lib", lib.toLowerCase());
+		}
 		return new Uri(this.group, this.path, tmp);
 	}
 	
