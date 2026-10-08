@@ -1,7 +1,6 @@
 # ETK - Edouard's ToolKit
 
 [![License: MPL 2.0](https://img.shields.io/badge/License-MPL%202.0-brightgreen.svg)](https://opensource.org/licenses/MPL-2.0)
-[![Maven Central](https://img.shields.io/badge/maven-0.1.0-blue.svg)](https://gitea.atria-soft.org/api/packages/org.atriasoft/maven)
 
 ETK (Edouard's ToolKit) est une bibliothèque Java fournissant des outils mathématiques et utilitaires pour le développement d'applications graphiques et de jeux.
 
@@ -41,18 +40,8 @@ ETK (Edouard's ToolKit) est une bibliothèque Java fournissant des outils mathé
 
 ### Maven
 
-Ajoutez le dépôt dans votre `pom.xml`:
-
-```xml
-<repositories>
-  <repository>
-    <id>gitea</id>
-    <url>https://gitea.atria-soft.org/api/packages/org.atriasoft/maven</url>
-  </repository>
-</repositories>
-```
-
-Puis ajoutez la dépendance:
+etk n'est publié sur aucun dépôt Maven distant : installez-le dans votre dépôt local (voir
+[Build depuis les Sources](#build-depuis-les-sources)), puis ajoutez la dépendance:
 
 ```xml
 <dependency>
@@ -422,7 +411,7 @@ Assurez-vous que tous les tests passent avant de soumettre:
 mvn clean test
 ```
 
-## Build et Déploiement
+## Build
 
 ### Build Local
 
@@ -449,19 +438,6 @@ mvn javadoc:jar
 # Tout générer
 mvn clean package source:jar javadoc:jar
 ```
-
-### Déploiement
-
-Le déploiement se fait automatiquement vers le dépôt Gitea configuré:
-
-```bash
-mvn deploy
-```
-
-Cela génère et déploie:
-- Le JAR principal
-- Le JAR avec sources (`-sources.jar`)
-- Le JAR avec JavaDoc (`-javadoc.jar`)
 
 ## Dépendances
 
@@ -508,4 +484,3 @@ Pour toute question ou problème:
 - [Rapport de Couverture](target/site/jacoco/)
 - [Rapport d'Audit JavaDoc](JAVADOC_AUDIT_REPORT.md)
 - [Documentation des Tests](TESTS_CREATED.md)
-- [Dépôt Maven](https://gitea.atria-soft.org/api/packages/org.atriasoft/maven)

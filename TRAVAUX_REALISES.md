@@ -487,9 +487,6 @@ mvn clean package -Djacoco.skip=true
 
 # Installation locale
 mvn clean install -Djacoco.skip=true
-
-# Déploiement vers Gitea
-mvn deploy
 ```
 
 ---

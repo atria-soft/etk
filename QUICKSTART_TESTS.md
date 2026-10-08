@@ -94,7 +94,6 @@ mvn clean test jacoco:report
 |---------|-------------|
 | `TEST_SUMMARY.md` | Résumé détaillé avec métriques |
 | `TESTS_CREATED.md` | Liste exhaustive et statistiques |
-| `TEST_FILES_LIST.txt` | Structure et organisation |
 | `QUICKSTART_TESTS.md` | Ce guide rapide |
 
 ## 💡 Exemples de Tests
