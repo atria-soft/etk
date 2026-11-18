@@ -277,6 +277,22 @@ public record Quaternion(
 		return (new Quaternion(x, y, z, w)).safeNormalize();
 	}
 
+	/** Hamilton product of this quaternion by the other, without normalisation.
+	 * Unlike {@link #multiply(Quaternion)}, the result keeps its magnitude: use it when one operand is not a
+	 * rotation, for example the time derivative of an orientation {@code 0.5 * (0, w) * q}, where |w| matters.
+	 * @param obj The other quaternion
+	 * @return New quaternion holding the raw product */
+	@CheckReturnValue
+	public Quaternion multiplyRaw(final Quaternion obj) {
+		final Vector3f base = getVectorV();
+		final Vector3f crossValue = base.cross(obj.getVectorV());
+		final float x = this.w * obj.x + obj.w * this.x + crossValue.x();
+		final float y = this.w * obj.y + obj.w * this.y + crossValue.y();
+		final float z = this.w * obj.z + obj.w * this.z + crossValue.z();
+		final float w = this.w * obj.w - base.dot(obj.getVectorV());
+		return new Quaternion(x, y, z, w);
+	}
+
 	/** Operator* with a vector. This methods rotates a point given the rotation of a quaternion
 	 * @param point Point to move
 	 * @return Point with the updated position */
