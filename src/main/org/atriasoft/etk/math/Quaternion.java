@@ -268,13 +268,7 @@ public record Quaternion(
 	 * @return Local reference of the quaternion */
 	@CheckReturnValue
 	public Quaternion multiply(final Quaternion obj) {
-		final Vector3f base = getVectorV();
-		final Vector3f crossValue = base.cross(obj.getVectorV());
-		final float x = this.w * obj.x + obj.w * this.x + crossValue.x();
-		final float y = this.w * obj.y + obj.w * this.y + crossValue.y();
-		final float z = this.w * obj.z + obj.w * this.z + crossValue.z();
-		final float w = this.w * obj.w - base.dot(obj.getVectorV());
-		return (new Quaternion(x, y, z, w)).safeNormalize();
+		return multiplyRaw(obj).safeNormalize();
 	}
 
 	/** Hamilton product of this quaternion by the other, without normalisation.

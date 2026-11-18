@@ -1,3 +1,5 @@
 2026-11-18 Quaternion.multiplyRaw(Quaternion): Hamilton product without normalisation, added for the
   orientation derivative 0.5*(0,w)*q of ephysics (multiply() normalises and loses |w|). multiply() keeps its
   normalising semantics on purpose: cameras, ege and the maths rely on it. Additive change only.
+
+2026-11-18 Quaternion.multiply now is multiplyRaw(obj).safeNormalize() (one Hamilton product, same behaviour).
